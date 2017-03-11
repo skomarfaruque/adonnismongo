@@ -3,12 +3,17 @@ const User = use('App/Model/User')
 
 class UserController {
 
-  * index (req, res) {
-    let user = yield User.create({
+  async index (req, res) {
+    let user = await User.create({
       name: 'user',
       password: 'pass'
     })
-    res.send(user)
+    return res.send(user)
+  }
+
+  async allUsers (req, res) {
+    let users = await User.find()
+    return res.send(users)
   }
 }
 

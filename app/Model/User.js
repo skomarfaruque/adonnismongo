@@ -4,11 +4,11 @@
  *  @var Mongoose mongoose
  */
 const mongoose = use('Mongoose')
-
-const Schema = mongoose.Schema
-const ObjectId = Schema.ObjectId
-let postSchema = new Schema({
-  user: ObjectId,
+const Hash = use('Hash')
+let user = mongoose.Schema({
+  user: {
+    type: 'ObjectId'
+  },
   name: String,
   password: String,
   created: {
@@ -17,4 +17,9 @@ let postSchema = new Schema({
   }
 })
 
-module.exports = mongoose.model('User', postSchema)
+user.pre('save', async function (next) {
+  this.password = await Hash.make(this.password)
+  return next(true)
+})
+
+module.exports = mongoose.model('User', user)
