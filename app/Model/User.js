@@ -10,6 +10,10 @@ let user = mongoose.Schema({
     type: 'ObjectId'
   },
   name: String,
+  email: {
+    type: String,
+    unique: true
+  },
   password: String,
   created: {
     type: Date,

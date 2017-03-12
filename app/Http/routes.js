@@ -16,6 +16,9 @@
 */
 
 const Route = use('Route')
-Route.get('/api/user', 'UserController.index')
-Route.get('/api/users', 'UserController.allUsers')
+Route.group('api', () => {
+  Route.resource('users', 'UserController').except('create', 'edit')
+}).prefix('api')
+// Route.post('/api/user', 'UserController.create')
+// Route.get('/api/users', 'UserController.all')
 Route.any('*', 'NuxtController.render')
