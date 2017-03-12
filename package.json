@@ -25,8 +25,6 @@
     "adonis-mongoose": "0.0.1",
     "adonis-websocket": "^1.0.2",
     "cross-env": "^3.1.4",
-    "mongodb": "^2.2.24",
-    "mongoose": "^4.8.6",
     "nuxt": "latest",
     "standard": "^8.6.0",
     "youch": "^2.0.4"
