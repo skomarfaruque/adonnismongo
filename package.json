@@ -24,7 +24,10 @@
     "adonis-middleware": "^1.0.10",
     "adonis-mongoose": "0.0.1",
     "adonis-websocket": "^1.0.2",
+    "axios": "^0.15.3",
+    "bulma": "^0.3.2",
     "cross-env": "^3.1.4",
+    "material-design-icons": "^3.0.1",
     "nuxt": "latest",
     "standard": "^8.6.0",
     "youch": "^2.0.4"
@@ -45,7 +48,9 @@
     "eslint-plugin-html": "^2.0.0",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
+    "node-sass": "^4.5.0",
     "nodemon": "^1.11.0",
+    "sass-loader": "^6.0.3",
     "standard": "^8.6.0"
   }
 }

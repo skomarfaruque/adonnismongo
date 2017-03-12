@@ -1,5 +1,11 @@
 <template>
-  <footer>
-    Visit our website for more documentation : <a href="https://nuxtjs.org" target="_blank">nuxtjs.org</a>
+  <footer class="global-footer">
+    Developed by : <a href="http://lolobyte.com" target="_blank">LOLOBYTE</a>
   </footer>
 </template>
+
+<style>
+  .global-footer {
+    
+  }
+</style>

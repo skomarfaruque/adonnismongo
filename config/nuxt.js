@@ -7,7 +7,7 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'Adonuxt',
+    title: 'Back-End Application',
     meta: [
       {
         charset: 'utf-8'
@@ -33,13 +33,30 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: ['~assets/css/main.css'],
+  css: [
+    'material-design-icons/iconfont/material-icons.css',
+    { src: 'bulma', lang: 'sass' },
+    { src: '~assets/css/main.scss', lang: 'scss' }
+  ],
   /*
   ** Customize the progress-bar color
   */
   loading: { color: '#744d82' },
+  /**
+   * Environment variables
+   */
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
   /*
   ** Point to resources
   */
-  srcDir: resolve(__dirname, '..', 'resources')
+  srcDir: resolve(__dirname, '..', 'resources'),
+  /**
+   * Vendors
+   */
+  build: {
+    vendor: ['axios']
+  },
+  plugins: ['~/plugins/axios']
 }
