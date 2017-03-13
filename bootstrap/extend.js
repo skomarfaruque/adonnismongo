@@ -1,21 +1,51 @@
 'use strict'
 
-/*
-|--------------------------------------------------------------------------
-| Extend Providers
-|--------------------------------------------------------------------------
-|
-| Some providers give options to be extended like SessionProvider. In this
-| file you can easily track which providers are extended.
-|
-| @note - Here you do not have access to any providers, which means this file
-| is called before loading service providers. But have access to the Ioc
-| container and you can use it extend providers, which are about to get
-| registered.
-|
-| @example
-| Ioc.extend('Adonis/Src/Session', 'redis', function (app) {
-|   // your redis driver implementation
-| })
-|
-*/
+const Ioc = require('adonis-fold').Ioc
+
+
+
+class MongoSerializer {
+  constructor (Hash) {
+    this.user = use('App/Model/User')
+    this.hash = Hash
+  }
+  /**
+   * dependencies to be injected by the IoC container
+   * @return {Array}
+   */
+  static get inject () {
+    return ['Adonis/Src/Hash']
+  }
+
+  * findById (id, options) {
+    return yield this.user.findOne({ email: id })
+  }
+
+  * findByCredentials (email, options) {
+    const user = yield this.user.findOne({ email: email })
+    return user
+  }
+
+  * validateCredentials (user, password, options) {
+    if (!user || !user.password) {
+      return false
+    }
+    const actualPassword = user.password
+    try {
+      return yield this.hash.verify(password, actualPassword)
+    } catch (e) {
+      return false
+    }
+  }
+
+  primaryKey (authenticatorOptions) {
+    return authenticatorOptions.uid
+  }
+
+
+
+}
+Ioc.extend('Adonis/Src/AuthManager', 'Mongo', function (app) {
+  const mongoSerializer = make(MongoSerializer)
+  return mongoSerializer
+}, 'serializer')

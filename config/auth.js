@@ -62,7 +62,7 @@ module.exports = {
   |
   */
   jwt: {
-    serializer: 'Lucid',
+    serializer: 'Mongo',
     model: 'App/Model/User',
     scheme: 'jwt',
     uid: 'email',

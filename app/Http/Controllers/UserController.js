@@ -13,7 +13,7 @@ class UserController {
   }
 
   * store (req, res) {
-    let obj = req.only('name', 'password')
+    let obj = req.only('name', 'email', 'password')
     let user = yield User.create(obj)
     res.send(user)
   }
@@ -25,6 +25,22 @@ class UserController {
   * destroy (req, res) {
     res.send('destroy')
   }
+
+  /**
+   * Authentication Related functions
+   */
+  * login (req, res) {
+    const email = req.input('email')
+    const password = req.input('password')
+    const token = yield req.auth.attempt(email, password)
+
+    if (token) {
+      res.send(token)
+    }
+
+    res.unauthorized('Invalid credentails')
+  }
+
 }
 
 module.exports = UserController
