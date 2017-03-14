@@ -2,6 +2,17 @@
 
 import axios from 'axios'
 
-export default axios.create({
+const ax = axios.create({
   baseURL: process.env.baseUrl
 })
+
+ax.setBearer = function (token) {
+  this.interceptors.request.use(function (config) {
+    config.headers.Authorization = `Bearer ${token}`
+    return config
+  }, function (err) {
+    return Promise.reject(err)
+  })
+}
+
+export default ax

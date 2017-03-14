@@ -58,5 +58,5 @@ module.exports = {
   build: {
     vendor: ['axios']
   },
-  plugins: ['~/plugins/axios']
+  plugins: ['~/plugins/axios', '~/plugins/cookie']
 }

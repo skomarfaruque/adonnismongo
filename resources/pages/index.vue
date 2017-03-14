@@ -45,6 +45,7 @@
 <script>    
   export default {
     layout: 'header-less',
+    middleware: 'auth',
     data () {
       return {
         formError: null,
@@ -62,6 +63,7 @@
           this.email = ''
           this.password = ''
           this.formError = null
+          this.$router.push('/about')
         })
         .catch((e) => {
           this.formError = e.message

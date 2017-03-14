@@ -5,7 +5,7 @@
     <h1 class="title">
       This page is loaded from the {{ name }}
     </h1>
-    <p> {{ auth }} </p>
+    <p v-for="l in list"> {{ l.email }} </p>
     <h2 class="info" v-if="name === 'client'">
       Please refresh the page
     </h2>
@@ -16,18 +16,22 @@
 </template>
 {{{{/raw}}}}
 <script>
+import axios from '~/plugins/axios'
 export default {
-  async data ({ req }) {
+  async data ({ store, req }) {
+    axios.setBearer(store.state.authUser)
+    const { data } = await axios.get('api/users')
     return {
       name: req ? 'server' : 'client',
-      auth: req ? await req.session.get('token') : ''
+      list: data
     }
   },
   head () {
     return {
       title: `About Page (${this.name}-side)`
     }
-  }
+  },
+  middelware: 'auth'
 }
 </script>
 

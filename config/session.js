@@ -47,7 +47,7 @@ module.exports = {
   | by setting below value to true. Also it will disregard age parameter.
   |
   */
-  clearWithBrowser: false,
+  // clearWithBrowser: false,
 
   /*
   |--------------------------------------------------------------------------
@@ -58,7 +58,7 @@ module.exports = {
   | by document.cookie.
   |
   */
-  httpOnly: true,
+  // httpOnly: true,
 
   /*
   |--------------------------------------------------------------------------

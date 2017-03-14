@@ -21,6 +21,11 @@ Route.group('api', () => {
   Route.post('user/login', 'UserController.login')
   Route.post('user/assign-role', 'UserController.assignRole')
   Route.resource('users', 'UserController').except('create', 'store', 'edit').middleware('auth')
+  Route.post('/auth', function* (request, response) {
+    const session = yield request.session.all()
+    const body = yield request.all()
+    response.ok({body, session})
+  })
 }).prefix('api')
 // Route.post('/api/user', 'UserController.create')
 // Route.get('/api/users', 'UserController.all')

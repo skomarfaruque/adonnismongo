@@ -36,7 +36,6 @@ class UserController {
     const token = yield req.auth.attempt(email, password)
 
     if (token) {
-      yield req.session.put('token', token)
       return res.send(token)
     }
 

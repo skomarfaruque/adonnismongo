@@ -1,6 +1,8 @@
 'use strict'
 
 import axios from '~/plugins/axios'
+import cookie from '~/plugins/cookie'
+
 
 export const state = {
   authUser: null
@@ -14,9 +16,9 @@ export const mutations = {
 
 export const actions = {
   nuxtServerInit ({ commit }, { req }) {
-    if (req.session) {
+    if (req) {
       try {
-        var token = 'hello'
+        const token = cookie.get('backend-app', req.headers.cookie)
         commit('SET_USER', token)
       } catch (e) {
         return false
@@ -30,6 +32,7 @@ export const actions = {
     })
     .then((res) => {
       commit('SET_USER', res.data)
+      cookie.set('backend-app', res.data, 1)
     })
     .catch((error) => {
       if (error.response.status === 401) {
