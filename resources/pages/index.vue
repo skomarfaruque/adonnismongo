@@ -68,9 +68,6 @@
         .catch((e) => {
           this.formError = e.message
         })
-      },
-      logout () {
-        this.$store.dispatch('logout')
       }
     }
   }  

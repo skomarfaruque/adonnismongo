@@ -66,7 +66,7 @@
 
 <script>
 export default {
-  middelware: 'auth',
+  middleware: 'auth',
   head () {
     return {
       title: `Dashboard Page`

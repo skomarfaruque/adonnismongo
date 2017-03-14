@@ -24,9 +24,20 @@
             </figure>
             Profile
           </a>
-          <nuxt-link class="nav-item is-tab" to="/">Log out</nuxt-link>
+          <a href="javascript:" class="nav-item is-tab" @click="logout">Log out</a>
         </div>
       </div>
     </nav>
   </header>
 </template>
+
+<script>
+  export default {
+    methods: {
+      logout () {
+        this.$store.dispatch('logout')
+        this.$router.push('/')
+      }
+    }
+  }
+</script>

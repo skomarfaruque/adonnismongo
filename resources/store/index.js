@@ -3,7 +3,6 @@
 import axios from '~/plugins/axios'
 import cookie from '~/plugins/cookie'
 
-
 export const state = {
   authUser: null,
   heading: {
@@ -27,7 +26,9 @@ export const actions = {
     if (req) {
       try {
         const token = cookie.get('backend-app', req.headers.cookie)
-        commit('SET_USER', token)
+        if (token && token.length > 0) {
+          commit('SET_USER', token)
+        }
       } catch (e) {
         return false
       }
@@ -50,10 +51,8 @@ export const actions = {
   },
 
   logout ({ commit }) {
-    return axios.post('/api/logout')
-    .then(() => {
-      commit('SET_USER', null)
-    })
+    commit('SET_USER', null)
+    cookie.set('backend-app', '')
   }
 
 }

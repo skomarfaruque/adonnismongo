@@ -29,7 +29,7 @@ export default {
       title: `About Page (${this.name}-side)`
     }
   },
-  middelware: 'auth'
+  middleware: 'auth'
 }
 </script>
 

@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  middelware: 'auth',
+  middleware: 'auth',
   head () {
     return {
       title: `About Page (${this.name}-side)`
