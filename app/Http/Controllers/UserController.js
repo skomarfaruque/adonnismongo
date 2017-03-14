@@ -36,7 +36,8 @@ class UserController {
     const token = yield req.auth.attempt(email, password)
 
     if (token) {
-      res.send(token)
+      yield req.session.put('token', token)
+      return res.send(token)
     }
 
     res.unauthorized('Invalid credentails')

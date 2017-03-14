@@ -6,6 +6,9 @@
   padding: 20px;
   text-align: center;
   border-top: 1px solid #ddd;
+  max-height: 65px;
+  z-index: 99999;
+  background: white;
 }
 
 .page-enter-active, .page-leave-active

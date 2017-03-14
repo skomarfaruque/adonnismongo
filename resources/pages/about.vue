@@ -5,6 +5,7 @@
     <h1 class="title">
       This page is loaded from the {{ name }}
     </h1>
+    <p> {{ auth }} </p>
     <h2 class="info" v-if="name === 'client'">
       Please refresh the page
     </h2>
@@ -16,9 +17,10 @@
 {{{{/raw}}}}
 <script>
 export default {
-  data ({ req }) {
+  async data ({ req }) {
     return {
-      name: req ? 'server' : 'client'
+      name: req ? 'server' : 'client',
+      auth: req ? await req.session.get('token') : ''
     }
   },
   head () {

@@ -10,14 +10,14 @@
         <div class="card-content">
           <div class="content">
             <p class="control has-icon has-icon-right">
-              <input class="input" type="text" placeholder="Email input" value="hello@">
+              <input class="input" type="email" placeholder="Email input" v-model="email">
               <span class="icon is-small">
                 <i class="fa material-icons">email</i>
               </span>
               <span class="help is-danger is-hidden">This email is invalid</span>
             </p>
             <p class="control has-icon has-icon-right">
-              <input class="input" type="password" placeholder="Password" value="hello@">
+              <input class="input" type="password" placeholder="Password" v-model="password">
               <span class="icon is-small">
                 <i class="fa material-icons">vpn_key</i>
               </span>
@@ -26,7 +26,7 @@
           </div>
         </div>
         <footer class="card-footer">
-          <a href="javascript:" class="button is-primary card-footer-item" @click="signin">Sign in</a>
+          <a href="javascript:" class="button is-primary card-footer-item" @click="login">Sign in</a>
           <a href="javascript:" class="button is-primary card-footer-item">Forgot Password</a>
         </footer>
       </div>
@@ -43,19 +43,32 @@
   }
 </style>
 <script>    
-  import axios from '~/plugins/axios'
-
   export default {
     layout: 'header-less',
-    // async data() {
-    //   let { data } = await axios.get(`api/users`)
-    //   return {
-    //     list: data
-    //   }
-    // }
+    data () {
+      return {
+        formError: null,
+        email: 'admin@email.com',
+        password: '123456'
+      }
+    },
     methods: {
-      signin () {
-        this.$router.push({ path: '/about'} )
+      login () {
+        this.$store.dispatch('login', {
+          email: this.email,
+          password: this.password
+        })
+        .then(() => {
+          this.email = ''
+          this.password = ''
+          this.formError = null
+        })
+        .catch((e) => {
+          this.formError = e.message
+        })
+      },
+      logout () {
+        this.$store.dispatch('logout')
       }
     }
   }  
