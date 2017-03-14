@@ -16,6 +16,8 @@ const userSchema = mongoose.Schema({
     type: 'ObjectId',
     ref: 'Role'
   },
+  reset_token: String,
+  reset_exp: Date,
   created: {
     type: Date,
     default: Date.now

@@ -53,6 +53,19 @@ export const actions = {
   logout ({ commit }) {
     commit('SET_USER', null)
     cookie.set('backend-app', '')
+  },
+  forgotpassword ({ commit }, { email }) {
+    return axios.post('api/user/forgotpassword', {
+      email
+    })
+    .then((res) => {
+      return true
+    })
+    .catch((error) => {
+      if (error.response.status === 404) {
+        throw new Error('Not found!')
+      }
+    })
   }
 
 }

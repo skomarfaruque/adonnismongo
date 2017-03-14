@@ -4,20 +4,20 @@
       <div class="card">
         <header class="card-header">
           <p class="card-header-title is-medium">
-            Sign in
+            Enter New Password
           </p>
         </header>
         <div class="card-content">
           <div class="content">
             <p class="control has-icon has-icon-right">
-              <input class="input" type="email" placeholder="Email input" v-model="email">
+              <input class="input" type="password" placeholder="New Password">
               <span class="icon is-small">
-                <i class="fa material-icons">email</i>
+                <i class="fa material-icons">vpn_key</i>
               </span>
               <span class="help is-danger is-hidden">This email is invalid</span>
             </p>
             <p class="control has-icon has-icon-right">
-              <input class="input" type="password" placeholder="Password" v-model="password">
+              <input class="input" type="password" placeholder="Confirm Password">
               <span class="icon is-small">
                 <i class="fa material-icons">vpn_key</i>
               </span>
@@ -26,8 +26,7 @@
           </div>
         </div>
         <footer class="card-footer">
-          <a href="javascript:" class="button is-primary card-footer-item" @click="login">Sign in</a>
-          <nuxt-link class="button is-primary card-footer-item" to="/user/forgotpassword">Forgot Password</nuxt-link>
+          <a href="javascript:" class="button is-primary card-footer-item">Confirm</a>
         </footer>
       </div>
     </div>
@@ -37,38 +36,14 @@
 <style scoped>
   .card {
     margin-top: 120px;
-    margin-bottom: 100px;
   }
   .card-footer {
     padding: 10px;
   }
 </style>
-<script>    
+
+<script>
   export default {
-    layout: 'header-less',
-    data () {
-      return {
-        formError: null,
-        email: 'admin@email.com',
-        password: '123456'
-      }
-    },
-    methods: {
-      login () {
-        this.$store.dispatch('login', {
-          email: this.email,
-          password: this.password
-        })
-        .then(() => {
-          this.email = ''
-          this.password = ''
-          this.formError = null
-          this.$router.push('/dashboard')
-        })
-        .catch((e) => {
-          this.formError = e.message
-        })
-      }
-    }
-  }  
+    layout: 'header-less'
+  }
 </script>
