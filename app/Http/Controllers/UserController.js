@@ -1,5 +1,6 @@
 'use strinct'
 const User = use('App/Model/User')
+const Role = use('App/Model/Role')
 
 class UserController {
 
@@ -39,6 +40,17 @@ class UserController {
     }
 
     res.unauthorized('Invalid credentails')
+  }
+
+  * assignRole (req, res) {
+    const roleName = req.input('role_name')
+    const userEmail = req.input('user_email')
+    const role = yield Role.findOne({ name: roleName })
+    const user = yield User.findOne({ email: userEmail })
+    user.role = role
+    yield user.save()
+
+    res.send(user)
   }
 
 }

@@ -6,15 +6,16 @@
 const mongoose = use('Mongoose')
 const Hash = use('Hash')
 let user = mongoose.Schema({
-  user: {
-    type: 'ObjectId'
-  },
   name: String,
   email: {
     type: String,
     unique: true
   },
   password: String,
+  role: {
+    type: 'ObjectId',
+    ref: 'Role'
+  },
   created: {
     type: Date,
     default: Date.now

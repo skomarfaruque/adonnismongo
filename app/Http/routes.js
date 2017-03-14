@@ -19,6 +19,7 @@ const Route = use('Route')
 Route.group('api', () => {
   Route.post('user/signup', 'UserController.store')
   Route.post('user/login', 'UserController.login')
+  Route.post('user/assign-role', 'UserController.assignRole')
   Route.resource('users', 'UserController').except('create', 'store', 'edit').middleware('auth')
 }).prefix('api')
 // Route.post('/api/user', 'UserController.create')

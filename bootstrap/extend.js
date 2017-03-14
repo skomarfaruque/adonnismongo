@@ -18,12 +18,20 @@ class MongoSerializer {
   }
 
   * findById (id, options) {
-    return yield this.user.findOne({ email: id })
+    try {
+      return yield this.user.findOne({ email: id })
+    } catch (e) {
+      return false
+    }
   }
 
   * findByCredentials (email, options) {
-    const user = yield this.user.findOne({ email: email })
-    return user
+    try {
+      const user = yield this.user.findOne({ email: email })
+      return user
+    } catch (e) {
+      return false
+    }
   }
 
   * validateCredentials (user, password, options) {
