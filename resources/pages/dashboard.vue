@@ -69,7 +69,7 @@ export default {
   middelware: 'auth',
   head () {
     return {
-      title: `About Page (${this.name}-side)`
+      title: `Dashboard Page`
     }
   },
   fetch ({ store }) {
