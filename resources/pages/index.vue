@@ -37,6 +37,7 @@
 <style scoped>
   .card {
     margin-top: 120px;
+    margin-bottom: 100px;
   }
   .card-footer {
     padding: 10px;
@@ -63,7 +64,7 @@
           this.email = ''
           this.password = ''
           this.formError = null
-          this.$router.push('/about')
+          this.$router.push('/dashboard')
         })
         .catch((e) => {
           this.formError = e.message

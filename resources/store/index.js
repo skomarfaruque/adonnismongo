@@ -5,12 +5,20 @@ import cookie from '~/plugins/cookie'
 
 
 export const state = {
-  authUser: null
+  authUser: null,
+  heading: {
+    title: '',
+    subtitle: ''
+  }
 }
 
 export const mutations = {
   SET_USER: function (state, user) {
     state.authUser = user
+  },
+  SET_HEAD: function (state, heading) {
+    state.heading.title = heading[0]
+    state.heading.subtitle = heading[1]
   }
 }
 
