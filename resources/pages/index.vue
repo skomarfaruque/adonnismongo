@@ -46,7 +46,6 @@
 <script>    
   export default {
     layout: 'header-less',
-    middleware: 'auth',
     data () {
       return {
         formError: null,
