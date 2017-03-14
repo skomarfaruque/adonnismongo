@@ -2,8 +2,11 @@
 
 const mongoose = use('Mongoose')
 
-let role = mongoose.Schema({
-  name: String,
+const roleSchema = mongoose.Schema({
+  name: {
+    type: String,
+    unique: true
+  },
   permissions: [String],
   created: {
     type: Date,
@@ -11,4 +14,7 @@ let role = mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model('Role', role)
+const Role = mongoose.model('Role', roleSchema)
+Role.ensureIndexes()
+
+module.exports = Role

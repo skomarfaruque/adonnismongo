@@ -5,7 +5,7 @@
  */
 const mongoose = use('Mongoose')
 const Hash = use('Hash')
-let user = mongoose.Schema({
+const userSchema = mongoose.Schema({
   name: String,
   email: {
     type: String,
@@ -22,9 +22,12 @@ let user = mongoose.Schema({
   }
 })
 
-user.pre('save', async function (next) {
+userSchema.pre('save', async function (next) {
   this.password = await Hash.make(this.password)
   return next(true)
 })
 
-module.exports = mongoose.model('User', user)
+const User = mongoose.model('User', userSchema)
+User.ensureIndexes()
+
+module.exports = User

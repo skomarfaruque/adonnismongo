@@ -17,7 +17,17 @@
 class DatabaseSeeder {
 
   * run () {
-    // yield Factory.model('App/Model/User').create(5)
+    const role = yield use('App/Model/Role').create({
+      name: 'Admin',
+      permissions: ['user-create', 'user-update', 'user-delete']
+    })
+    yield use('App/Model/User').create({
+      name: 'Admin',
+      email: 'admin@email.com',
+      password: '123456',
+      role: role
+    })
+    return true
   }
 
 }

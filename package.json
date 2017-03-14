@@ -12,7 +12,8 @@
     "build": "node ./ace nuxtbuild",
     "start": "cross-env NODE_ENV=production node server.js",
     "precommit": "npm run lint",
-    "lint": "standard && eslint --ext .js,.vue resources/"
+    "lint": "standard && eslint --ext .js,.vue resources/",
+    "db": "node ./ace db:seed"
   },
   "dependencies": {
     "adonis-ace": "^3.0.6",
