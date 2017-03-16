@@ -35,7 +35,7 @@ export const actions = {
     }
   },
   login ({ commit }, { email, password }) {
-    return axios.post('api/user/login', {
+    return axios.post('user/login', {
       email,
       password
     })
@@ -55,7 +55,7 @@ export const actions = {
     cookie.set('backend-app', '')
   },
   forgotpassword ({ commit }, { email }) {
-    return axios.post('api/user/forgotpassword', {
+    return axios.post('user/forgotpassword', {
       email
     })
     .then((res) => {

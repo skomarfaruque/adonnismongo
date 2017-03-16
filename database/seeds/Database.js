@@ -17,15 +17,25 @@
 class DatabaseSeeder {
 
   * run () {
-    const role = yield use('App/Model/Role').create({
+    const role = use('App/Model/Role')
+    yield role.remove({})
+    const roles = yield role.create([{
       name: 'Admin',
-      permissions: ['user-create', 'user-update', 'user-delete']
-    })
-    yield use('App/Model/User').create({
+      permissions: ['user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
+    }, {
+      name: 'Staff',
+      permissions: ['user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
+    }, {
+      name: 'Agent',
+      permissions: ['book-create', 'book-update', 'book-delete']
+    }])
+    const user = use('App/Model/User')
+    yield user.remove({})
+    yield user.create({
       name: 'Admin',
       email: 'admin@email.com',
       password: '123456',
-      role: role
+      role: roles[0]
     })
     return true
   }

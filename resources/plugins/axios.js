@@ -3,7 +3,7 @@
 import axios from 'axios'
 
 const ax = axios.create({
-  baseURL: process.env.baseUrl
+  baseURL: `/api`
 })
 
 ax.setBearer = function (token) {

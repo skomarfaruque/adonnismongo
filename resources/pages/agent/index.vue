@@ -15,7 +15,7 @@
         <thead>
           <tr>
             <th>
-              Customer Name
+              Agent Name
             </th>
             <th>
               Email
@@ -60,7 +60,7 @@ export default {
     }
   },
   fetch ({ store }) {
-    store.commit('SET_HEAD', ['Existing Customer', 'View list of the customers.'])
+    store.commit('SET_HEAD', ['Agent', 'View list of the agents.'])
   },
   async data ({ store }) {
     axios.setBearer(store.state.authUser)

@@ -16,6 +16,11 @@ const userSchema = mongoose.Schema({
     type: 'ObjectId',
     ref: 'Role'
   },
+  address: String,
+  city: String,
+  zipcode: String,
+  state: String,
+  country: String,
   reset_token: String,
   reset_exp: Date,
   created: {

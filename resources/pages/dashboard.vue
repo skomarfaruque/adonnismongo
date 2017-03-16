@@ -59,6 +59,14 @@
           </nuxt-link>
         </div>
       </div>
+      <div class="tile is-horizontal">
+        <div class="tile is-parent">
+          <nuxt-link class="tile is-child notification is-primary" to="/agent">
+            <p class="title">Agent</p>
+            <p class="subtitle">View list of the agents</p>
+          </nuxt-link>
+        </div>
+      </div>
     </div>
 
   </section>

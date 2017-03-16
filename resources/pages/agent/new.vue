@@ -1,7 +1,7 @@
 <template>
   <section>
-    <div class="columns box">
-      <div class="column is-7">
+    <div class="columns">
+      <div class="column is-7 box">
         <label class="label">Name</label>
         <p class="control">
           <input class="input" type="text" placeholder="Text input">
@@ -21,15 +21,16 @@
 </template>
 
 <script>
-export default {
-  middleware: 'auth',
-  head () {
-    return {
-      title: `New Customer Page (${this.name}-side)`
+  export default {
+    middleware: 'auth',
+    head () {
+      return {
+        title: `About Page (${this.name}-side)`
+      }
+    },
+    fetch ({ store }) {
+      store.commit('SET_HEAD', ['New Agent', 'Create an agent.'])
     }
-  },
-  fetch ({ store }) {
-    store.commit('SET_HEAD', ['New Customer', 'Add a new customer.'])
   }
-}
+
 </script>

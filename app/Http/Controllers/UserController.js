@@ -54,7 +54,7 @@ class UserController {
     date.setDate(date.getDate() + 7)
     user.reset_exp = date
     yield user.save()
-    const resetUrl = `http://localhost:3000/reset?re=${user.password_reset_token}`
+    const resetUrl = `http://localhost:3000/reset?re=${user.reset_token}`
     yield Mail.Raw('', {}, (message) => {
       message.to(email, email)
       message.from('no-reply@backportal.com')
@@ -67,6 +67,7 @@ class UserController {
 
   * resetPassword (req, res) {
     const resetToken = req.input('re')
+    const newPassword = req.input('password')
     const user = yield User.findOne({ reset_token: resetToken })
 
     if (!user) {
@@ -75,11 +76,12 @@ class UserController {
     if (user.reset_exp < new Date()) {
       return res.send('Reset link expired!')
     }
+    user.password = yield Hash.make(newPassword)
     user.reset_token = ''
     user.reset_exp = null
     yield user.save()
 
-    return res.redirect('/user/passwordreset')
+    return res.send({ success: true })
   }
 
   * assignRole (req, res) {

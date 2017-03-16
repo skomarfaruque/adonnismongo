@@ -7,12 +7,9 @@
       <div class="columns">
       </div>
       <div class="columns">
-        <div class="column is-10">
+        <div class="column is-full">
           <Breadcrumb />
           <nuxt/>
-        </div>
-        <div class="column is-2">
-          <wanthelp class="need-help"/>
         </div>
       </div>
     </div>
