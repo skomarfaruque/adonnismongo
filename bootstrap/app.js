@@ -32,7 +32,7 @@ const providers = [
   'adonis-websocket/providers/WsProvider',
   'adonis-mail-provider/providers/MailProvider',
   path.join(__dirname, '../providers/MongoProvider')
-  ]
+]
 
 /*
 |--------------------------------------------------------------------------
