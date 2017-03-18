@@ -18,12 +18,12 @@
         </span>
         <div class="nav-right nav-menu">
           <a class="nav-item is-tab is-hidden-tablet is-active">Home</a>
-          <a class="nav-item is-tab">
+          <nuxt-link class="nav-item is-tab" to="/user/profile/me">
             <figure class="icon" style="margin-right: 8px;">
               <i class="fa material-icons">face</i>
             </figure>
             Profile
-          </a>
+          </nuxt-link>
           <a href="javascript:" class="nav-item is-tab" @click="logout">Log out</a>
         </div>
       </div>

@@ -19,7 +19,9 @@ class MongoSerializer {
 
   * findById (id, options) {
     try {
-      return yield this.user.findOne({ email: id })
+      let user = yield this.user.findOne({ email: id })
+      user.password = ''
+      return user
     } catch (e) {
       return false
     }

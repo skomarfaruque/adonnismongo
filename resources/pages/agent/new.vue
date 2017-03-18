@@ -1,14 +1,14 @@
 <template>
   <section>
     <div class="columns">
-      <div class="column is-7 box">
+      <div class="column is-6">
         <label class="label">Name</label>
         <p class="control">
-          <input class="input" type="text" placeholder="Text input">
+          <input class="input" type="text" placeholder="Agent Name">
         </p>
         <label class="label">Email</label>
         <p class="control">
-          <input class="input" type="text" placeholder="Text input">
+          <input class="input" type="text" placeholder="Email">
         </p>
         <label class="label">Address</label>
         <p class="control">
@@ -25,7 +25,7 @@
     middleware: 'auth',
     head () {
       return {
-        title: `About Page (${this.name}-side)`
+        title: `New Agent Page (${this.name}-side)`
       }
     },
     fetch ({ store }) {

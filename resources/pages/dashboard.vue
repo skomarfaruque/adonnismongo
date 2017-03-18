@@ -9,9 +9,9 @@
           </nuxt-link>
         </div>
         <div class="tile is-parent is-6">
-          <nuxt-link class="tile is-child notification is-primary" to="/customer/new">
-            <p class="title">New Customer</p>
-            <p class="subtitle">Add a new customer.</p>
+          <nuxt-link class="tile is-child notification is-primary" to="/agent">
+            <p class="title">Agent</p>
+            <p class="subtitle">View list of the agents</p>
           </nuxt-link>
         </div>       
         
@@ -56,14 +56,6 @@
           <nuxt-link class="tile is-child notification is-primary" to="/store">
             <p class="title">Store</p>
             <p class="subtitle">Buy something for your service needs.</p>
-          </nuxt-link>
-        </div>
-      </div>
-      <div class="tile is-horizontal">
-        <div class="tile is-parent">
-          <nuxt-link class="tile is-child notification is-primary" to="/agent">
-            <p class="title">Agent</p>
-            <p class="subtitle">View list of the agents</p>
           </nuxt-link>
         </div>
       </div>

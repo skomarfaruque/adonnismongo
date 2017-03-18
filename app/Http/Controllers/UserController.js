@@ -1,4 +1,4 @@
-'use strinct'
+'use strict'
 const User = use('App/Model/User')
 const Role = use('App/Model/Role')
 const Mail = use('Mail')
@@ -11,7 +11,8 @@ class UserController {
   }
 
   * show (req, res) {
-    res.send('show')
+    let user = req.currentUser
+    res.ok(user)
   }
 
   * store (req, res) {

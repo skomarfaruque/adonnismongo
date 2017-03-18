@@ -23,6 +23,7 @@ const userSchema = mongoose.Schema({
   country: String,
   reset_token: String,
   reset_exp: Date,
+  photo: String,
   created: {
     type: Date,
     default: Date.now
