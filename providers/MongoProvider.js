@@ -1,0 +1,30 @@
+'use strict'
+
+const ServiceProvider = require('adonis-fold').ServiceProvider
+const Mongoose = require('mongoose')
+
+class MongoProvider extends ServiceProvider {
+
+  * register () {
+    this.app.singleton('Adonis/Addons/Mongoose', function (app) {
+        const Config = app.use('Adonis/Src/Config')
+        const mongoHost = Config.get('mongo.host', '127.0.0.1')
+        const mongoPort = Config.get('mongo.port', '27017')
+        const mongoDb = Config.get('mongo.db', 'test')
+        const mongoUser = Config.get('mongo.user', '')
+        const mongoPass = Config.get('mongo.pass', '')
+
+        const connectUri = `${mongoHost}:${mongoPort}/${mongoDb}`
+        const connectionString = (mongoUser !== '' || mongoPass !== '') ? `${mongoUser}:${mongoPass}@${connectUri}` : connectUri
+        Mongoose.Promise = global.Promise
+        Mongoose.connect(connectionString)
+
+        return Mongoose
+    })
+  }
+
+
+
+}
+
+module.exports = MongoProvider
