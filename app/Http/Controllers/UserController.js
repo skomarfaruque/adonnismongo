@@ -3,6 +3,7 @@ const User = use('App/Model/User')
 const Role = use('App/Model/Role')
 const Mail = use('Mail')
 const Hash = use('Hash')
+const Env = use('Env')
 class UserController {
 
   * index (req, res) {
@@ -44,6 +45,35 @@ class UserController {
     res.unauthorized('Invalid credentails')
   }
 
+  * sendInvitation (req, res) {
+    const name = req.input('name')
+    const email = req.input('email')
+    const resetToken = yield Hash.make(email)
+
+    let user = yield User.create({ name, email, reset_token: resetToken })
+
+    const resetUrl = `${Env.get('HOST')}:${Env.get('PORT')}/signup/confirmation?token=${user.reset_token}`
+
+    res.ok(resetUrl)
+  }
+
+  * signupConfirm (req, res) {
+    const token = req.input('token')
+    const password = req.input('password')
+    const user = yield User.findOne({ secret_token: token })
+
+    if (!user) {
+      res.send({ success: false, message: 'Email account not found' })
+    }
+    if (!user.password || user.password.length === 0) {
+      user.password = password
+    }
+    user.email_confirmed = true
+
+    user.save()
+    res.send({ success: true, message: 'User Signup successfull' })
+  }
+
   * forgotPassword (req, res) {
     const email = req.input('email')
     const user = yield User.findOne({ email })
@@ -55,7 +85,7 @@ class UserController {
     date.setDate(date.getDate() + 7)
     user.reset_exp = date
     yield user.save()
-    const resetUrl = `http://localhost:3000/reset?re=${user.reset_token}`
+    const resetUrl = `${Env.get('HOST')}:${Env.get('PORT')}/reset?re=${user.reset_token}`
     yield Mail.Raw('', {}, (message) => {
       message.to(email, email)
       message.from('no-reply@backportal.com')

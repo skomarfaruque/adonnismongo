@@ -1,7 +1,7 @@
 <template>
   <section class="container">
-    <div class="column is-one-third is-offset-one-third">
-      <div class="card">
+    <div class="column is-half is-offset-one-quarter">
+      <div class="card" v-if="!confirmed">
         <header class="card-header">
           <p class="card-header-title is-medium">
             Enter New Password
@@ -26,8 +26,16 @@
           </div>
         </div>
         <footer class="card-footer">
-          <a href="javascript:" class="button is-primary card-footer-item">Confirm</a>
+          <a href="javascript:" class="button is-primary card-footer-item" @click="sendConfirmation">Confirm</a>
         </footer>
+      </div>
+      <div class="card box" v-else>
+        <h1 class="title">
+          Confirmed!
+        </h1>
+        <h2 class="subtitle">
+          Your account is now confirmed and you can sign in from <a href="/">here</a>
+        </h2>
       </div>
     </div>
   </section>
@@ -43,7 +51,27 @@
 </style>
 
 <script>
+  import axios from '~/plugins/axios'
   export default {
-    layout: 'header-less'
+    layout: 'header-less',
+    data ({ query }) {
+      return {
+        token: query.token,
+        password: '',
+        pass: query.pass,
+        confirmed:  false
+      }
+    },
+    created () {
+      if (this.pass && this.pass === '1') {
+        this.sendConfirmation()
+      }
+    },
+    methods: {
+      async sendConfirmation () {
+        let { data } = await axios.post('user/signup/cofirmation', { token: this.token, password: this.password })
+        this.confirmed = data.success
+      }
+    }
   }
 </script>

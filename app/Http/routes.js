@@ -19,6 +19,8 @@ const Route = use('Route')
 Route.group('api', () => {
   Route.post('user/signup', 'UserController.store')
   Route.post('user/login', 'UserController.login')
+  Route.post('user/signup/cofirmation', 'UserController.signupConfirm')
+  Route.post('user/invitation', 'UserController.sendInvitation')
   Route.post('user/assign-role', 'UserController.assignRole')
   Route.post('user/forgot-password', 'UserController.forgotPassword')
   Route.post('user/reset-password', 'UserController.resetPassword')

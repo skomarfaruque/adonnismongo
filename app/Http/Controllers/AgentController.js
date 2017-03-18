@@ -29,7 +29,6 @@ class AgentController {
   * destroy (req, res) {
     res.send('destroy')
   }
-
 }
 
 module.exports = AgentController

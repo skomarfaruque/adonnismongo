@@ -24,6 +24,11 @@ const userSchema = mongoose.Schema({
   reset_token: String,
   reset_exp: Date,
   photo: String,
+  email_confirmed: {
+    type: Boolean,
+    default: false
+  },
+  confirm_date: Date,
   created: {
     type: Date,
     default: Date.now

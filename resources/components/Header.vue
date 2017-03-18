@@ -5,7 +5,7 @@
         <div class="nav-left">
           <a class="nav-item">
             <figure class="icon is-medium" style="margin-right: 8px;">
-              <i class="fa material-icons">home</i>
+              <i class="fa material-icons">menu</i>
             </figure>
             Back Portal
           </a>
