@@ -52,31 +52,31 @@
 </style>
 <script>
   import axios from '~/plugins/axios'
-export default {
-  middleware: 'auth',
-  head () {
-    return {
-      title: `Agent Page`
-    }
-  },
-  fetch ({ store }) {
-    store.commit('SET_HEAD', ['Agent', 'View list of the agents.'])
-  },
-  async data ({ store }) {
-    axios.setBearer(store.state.authUser)
-
-    let { data } = await axios.get('users')
-    return {
-      list: data
-    }
-  },
-  methods: {
-    remove (item, ind) {
-
+  export default {
+    middleware: 'auth',
+    head () {
+      return {
+        title: `Agent Page`
+      }
     },
-    edit (item, ind) {
+    fetch ({ store }) {
+      store.commit('SET_HEAD', ['Agent', 'View list of the agents.'])
+    },
+    async data ({ store }) {
+      axios.setBearer(store.state.authUser)
 
+      let { data } = await axios.get('users')
+      return {
+        list: data
+      }
+    },
+    methods: {
+      remove (item, ind) {
+
+      },
+      edit (item, ind) {
+
+      }
     }
   }
-}
 </script>

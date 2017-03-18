@@ -46,7 +46,7 @@ module.exports = {
    * Environment variables
    */
   env: {
-    baseUrl: process.env.BASE_URL || 'http://103.232.103.103'
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
   },
   /*
   ** Point to resources
