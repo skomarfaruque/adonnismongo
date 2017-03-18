@@ -8,6 +8,10 @@ const roleSchema = mongoose.Schema({
     unique: true
   },
   permissions: [String],
+  users: [{
+    type: 'ObjectId',
+    ref: 'User'
+  }],
   created: {
     type: Date,
     default: Date.now

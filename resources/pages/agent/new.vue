@@ -4,23 +4,20 @@
       <div class="column is-6">
         <label class="label">Name</label>
         <p class="control">
-          <input class="input" type="text" placeholder="Agent Name">
+          <input class="input" v-model="name" type="text" placeholder="Agent Name">
         </p>
         <label class="label">Email</label>
         <p class="control">
-          <input class="input" type="text" placeholder="Email">
+          <input class="input" v-model="email" type="text" placeholder="Email">
         </p>
-        <label class="label">Address</label>
-        <p class="control">
-          <input class="input" type="text" placeholder="Text input">
-        </p>
-        <a href="javascript:" class="button is-primary">Send Invitation</a>
+        <a href="javascript:" class="button is-primary" @click="sendInvitation">Send Invitation</a>
       </div>
     </div>
   </section>
 </template>
 
 <script>
+  import axios from '~/plugins/axios'
   export default {
     middleware: 'auth',
     head () {
@@ -30,6 +27,18 @@
     },
     fetch ({ store }) {
       store.commit('SET_HEAD', ['New Agent', 'Create an agent.'])
+    },
+    data ({ store }) {
+      axios.setBearer(store.state.authUser)
+      return {
+        name: '',
+        email: ''
+      }
+    },
+    methods: {
+      async sendInvitation () {
+        let { data } = await axios.post('user/invitation', this.data)
+      }
     }
   }
 

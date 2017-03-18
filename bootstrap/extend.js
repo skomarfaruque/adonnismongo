@@ -3,9 +3,9 @@
 const Ioc = require('adonis-fold').Ioc
 
 
-
 class MongoSerializer {
   constructor (Hash) {
+    use('App/Model/Role')
     this.user = use('App/Model/User')
     this.hash = Hash
   }
@@ -19,8 +19,7 @@ class MongoSerializer {
 
   * findById (id, options) {
     try {
-      let user = yield this.user.findOne({ email: id })
-      user.password = ''
+      let user = yield this.user.findOne({ email: id }, 'name email role').populate('role', 'name permissions').exec()
       return user
     } catch (e) {
       return false

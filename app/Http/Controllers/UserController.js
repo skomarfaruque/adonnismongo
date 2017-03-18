@@ -56,7 +56,10 @@ class UserController {
 
     res.ok(resetUrl)
   }
-
+  /**
+   * When user get email confirmation they will come the confirmation
+   * page and send token and password to this API
+  */
   * signupConfirm (req, res) {
     const token = req.input('token')
     const password = req.input('password')
@@ -73,7 +76,9 @@ class UserController {
     user.save()
     res.send({ success: true, message: 'User Signup successfull' })
   }
-
+  /**
+   * Send forget password request to the users email account
+   */
   * forgotPassword (req, res) {
     const email = req.input('email')
     const user = yield User.findOne({ email })
@@ -95,7 +100,9 @@ class UserController {
 
     return res.send({ success: true })
   }
-
+  /**
+   * Password Reset for user
+   */
   * resetPassword (req, res) {
     const resetToken = req.input('re')
     const newPassword = req.input('password')
@@ -114,7 +121,9 @@ class UserController {
 
     return res.send({ success: true })
   }
-
+  /**
+   * Assign a role to the user
+   */
   * assignRole (req, res) {
     const roleName = req.input('role_name')
     const userEmail = req.input('user_email')
