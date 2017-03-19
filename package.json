@@ -25,11 +25,11 @@
     "adonis-mail-provider": "^2.0.2",
     "adonis-middleware": "^1.0.10",
     "adonis-websocket": "^1.0.2",
-    "mongoose": "^4.9.0",
     "axios": "^0.15.3",
     "bulma": "^0.3.2",
     "cross-env": "^3.1.4",
     "material-design-icons": "^3.0.1",
+    "mongoose": "^4.9.0",
     "nuxt": "latest",
     "standard": "^8.6.0",
     "youch": "^2.0.4"

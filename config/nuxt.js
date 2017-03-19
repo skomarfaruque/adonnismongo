@@ -27,6 +27,15 @@ module.exports = {
         rel: 'icon',
         type: 'image/x-icon',
         href: 'favicon.ico'
+      },
+      {
+        rel: 'stylesheet',
+        href: '/calendar/dhtmlxscheduler.css'
+      }
+    ],
+    script: [
+      {
+        src: '/calendar/dhtmlxscheduler.js'
       }
     ]
   },
@@ -58,5 +67,5 @@ module.exports = {
   build: {
     vendor: ['axios']
   },
-  plugins: ['~/plugins/axios', '~/plugins/cookie']
+  plugins: ['~/plugins/cookie', '~/plugins/axios']
 }
