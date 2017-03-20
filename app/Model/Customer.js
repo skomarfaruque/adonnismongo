@@ -5,7 +5,10 @@ const mongoose = use('Mongoose')
 const customerSchema = mongoose.Schema({
   name: String,
   email: String,
-  synced: Boolean,
+  synced: {
+    type: Boolean,
+    default: false
+  },
   created: {
     type: Date,
     default: Date.now
