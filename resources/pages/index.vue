@@ -12,14 +12,14 @@
             <p class="control has-icon has-icon-right">
               <input class="input" type="email" placeholder="Email input" v-model="email">
               <span class="icon is-small">
-                <i class="fa material-icons">email</i>
+                <i class="fa fa-envelope" aria-hidden="true"></i>
               </span>
               <span class="help is-danger is-hidden">This email is invalid</span>
             </p>
             <p class="control has-icon has-icon-right">
               <input class="input" type="password" placeholder="Password" v-model="password">
               <span class="icon is-small">
-                <i class="fa material-icons">vpn_key</i>
+                <i class="fa fa-lock" aria-hidden="true"></i>
               </span>
               <span class="help is-danger is-hidden">Email and Password do not match!</span>
             </p>

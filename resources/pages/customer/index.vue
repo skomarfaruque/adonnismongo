@@ -6,7 +6,7 @@
       </div>
       <div class="level-right">   
         <div class="level-item">
-          <nuxt-link href="javascript:" class="button is-primary" title="Add New" to="/agent/new"> <i class="material-icons">add</i> </nuxt-link>
+          <nuxt-link href="javascript:" class="button is-primary" title="Add New" to="/customer/new"> <i class="fa fa-plus"></i> </nuxt-link>
         </div>
       </div>
     </div>
@@ -30,8 +30,8 @@
             <td>{{ item.name }}</td>
             <td>{{ item.email }}</td>
             <td class="action">
-              <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Delete"> <i class="material-icons">delete</i> </a>
-				      <a class="button is-primary" :href="`/agent/edit/item.id`" @click="edit(item, ind)" title="Edit"><i class="material-icons">mode_edit</i> </a>
+              <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Delete"> <i class="fa fa-trash"></i> </a>
+				      <a class="button is-primary" :href="`/agent/edit/item.id`" @click="edit(item, ind)" title="Edit"><i class="fa fa-pencil"></i> </a>
             </td>
           </tr>
         </tbody>

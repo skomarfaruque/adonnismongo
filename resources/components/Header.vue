@@ -4,8 +4,8 @@
       <div class="container">
         <div class="nav-left">
           <a class="nav-item">
-            <figure class="icon is-medium" style="margin-right: 8px;">
-              <i class="fa material-icons">menu</i>
+            <figure class="icon" style="margin-right: 8px;">
+              <i class="fa fa-bars" aria-hidden="true"></i>
             </figure>
             Back Portal
           </a>
@@ -19,8 +19,8 @@
         <div class="nav-right nav-menu">
           <a class="nav-item is-tab is-hidden-tablet is-active">Home</a>
           <nuxt-link class="nav-item is-tab" to="/user/profile/me">
-            <figure class="icon" style="margin-right: 8px;">
-              <i class="fa material-icons">face</i>
+            <figure class="icon" style="margin-right: 2px;">
+              <i class="fa fa-user" aria-hidden="true"></i>
             </figure>
             Profile
           </nuxt-link>

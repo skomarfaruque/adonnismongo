@@ -30,6 +30,10 @@ module.exports = {
       },
       {
         rel: 'stylesheet',
+        href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
+      },
+      {
+        rel: 'stylesheet',
         href: '/calendar/dhtmlxscheduler.css'
       }
     ],
@@ -43,7 +47,6 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    'material-design-icons/iconfont/material-icons.css',
     { src: 'bulma', lang: 'sass' },
     { src: '~assets/css/main.scss', lang: 'scss' }
   ],

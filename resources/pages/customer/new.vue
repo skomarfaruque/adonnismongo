@@ -1,7 +1,7 @@
 <template>
   <section>
-    <div class="columns box">
-      <div class="column is-7">
+    <div class="columns">
+      <div class="column is-6">
         <label class="label">Name</label>
         <p class="control">
           <input class="input" type="text" placeholder="Text input">
