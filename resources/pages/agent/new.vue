@@ -22,7 +22,7 @@
     middleware: 'auth',
     head () {
       return {
-        title: `New Agent Page (${this.name}-side)`
+        title: `New Agent Page`
       }
     },
     fetch ({ store }) {
@@ -37,7 +37,8 @@
     },
     methods: {
       async sendInvitation () {
-        let { data } = await axios.post('user/invitation', this.data)
+        console.log(this.$data)
+        let { data } = await axios.post('user/invitation', this.$data)
       }
     }
   }

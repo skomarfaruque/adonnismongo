@@ -44,13 +44,16 @@ class UserController {
 
     res.unauthorized('Invalid credentails')
   }
-
+  /**
+   * Send invitation by staff or another angent to add another agent
+   */
   * sendInvitation (req, res) {
     const name = req.input('name')
     const email = req.input('email')
-    const resetToken = yield Hash.make(email)
 
-    let user = yield User.create({ name, email, reset_token: resetToken })
+    const resetToken = yield Hash.make(email)
+    const role = yield Role.findOne({ name: 'Agent' })
+    const user = yield User.create({ name: name, email: email, reset_token: resetToken, role: role })
 
     const resetUrl = `${Env.get('HOST')}:${Env.get('PORT')}/signup/confirmation?token=${user.reset_token}`
 
@@ -63,14 +66,15 @@ class UserController {
   * signupConfirm (req, res) {
     const token = req.input('token')
     const password = req.input('password')
-    const user = yield User.findOne({ secret_token: token })
-
+    const user = yield User.findOne({ reset_token: token })
+    console.log(user)
     if (!user) {
       res.send({ success: false, message: 'Email account not found' })
     }
     if (!user.password || user.password.length === 0) {
       user.password = password
     }
+    user.reset_token = ''
     user.email_confirmed = true
 
     user.save()
@@ -114,7 +118,7 @@ class UserController {
     if (user.reset_exp < new Date()) {
       return res.send('Reset link expired!')
     }
-    user.password = yield Hash.make(newPassword)
+    user.password = newPassword
     user.reset_token = ''
     user.reset_exp = null
     yield user.save()

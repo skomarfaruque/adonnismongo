@@ -10,18 +10,18 @@
         <div class="card-content">
           <div class="content">
             <p class="control has-icon has-icon-right">
-              <input class="input" type="password" placeholder="New Password">
+              <input class="input" type="password" v-model="password" placeholder="New Password">
               <span class="icon is-small">
-                <i class="fa material-icons">vpn_key</i>
+                <i class="fa fa-lock"></i>
               </span>
               <span class="help is-danger is-hidden">This email is invalid</span>
             </p>
             <p class="control has-icon has-icon-right">
               <input class="input" type="password" placeholder="Confirm Password">
               <span class="icon is-small">
-                <i class="fa material-icons">vpn_key</i>
+                <i class="fa fa-lock"></i>
               </span>
-              <span class="help is-danger is-hidden">Email and Password do not match!</span>
+              <span class="help is-danger is-hidden">Email aSnd Password do not match!</span>
             </p>
           </div>
         </div>
