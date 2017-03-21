@@ -16,17 +16,29 @@
 */
 
 const Route = use('Route')
-Route.group('api', () => {
-  Route.post('user/signup', 'UserController.store')
-  Route.post('user/login', 'UserController.login')
-  Route.post('user/signup/cofirmation', 'UserController.signupConfirm')
-  Route.post('user/invitation', 'UserController.sendInvitation')
-  Route.post('user/assign-role', 'UserController.assignRole')
-  Route.post('user/forgot-password', 'UserController.forgotPassword')
-  Route.post('user/reset-password', 'UserController.resetPassword')
-  Route.resource('users', 'UserController').except('create', 'store', 'edit').middleware('auth')
-  Route.resource('agents', 'AgentController').except('create', 'edit').middleware('auth')
-}).prefix('api')
+Route.group('user', () => {
+  Route.post('signup', 'UserController.store')
+  Route.post('login', 'UserController.login')
+  Route.post('signup/cofirmation', 'UserController.signupConfirm')
+  Route.post('invitation', 'UserController.sendInvitation')
+  Route.post('assign-role', 'UserController.assignRole')
+  Route.post('forgot-password', 'UserController.forgotPassword')
+  Route.post('reset-password', 'UserController.resetPassword')
+}).prefix('api/user')
+
+Route.resource('api/users', 'UserController').except('create', 'store', 'edit').middleware('auth')
+
+Route.resource('api/agents', 'AgentController').except('create', 'edit').middleware('auth')
+
+Route.group('customer', () => {
+  Route.post('/', 'CustomerController.store')
+}).prefix('api/customer')// .middleware('auth')
+
+Route.group('appointment', () => {
+  Route.get(':id', 'AppointmentController.show')
+  Route.get('agent/:id', 'AppointmentController.byAgent')
+  Route.post('/', 'AppointmentController.store')
+}).prefix('api/appointment')
 // Route.post('/api/user', 'UserController.create')
 // Route.get('/api/users', 'UserController.all')
 Route.any('*', 'NuxtController.render')

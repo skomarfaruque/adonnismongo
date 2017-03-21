@@ -1,4 +1,4 @@
-'use strict'
+'use strict'
 
 const mongoose = use('Mongoose')
 
@@ -13,12 +13,11 @@ const scheduleSchema = mongoose.Schema({
   },
   start_time: Date,
   end_time: Date,
-  description: String,
+  description: String,
   created: {
     type: Date,
     default: Date.now
-  }  
+  }
 })
 const Appointment = mongoose.model('Appointment', scheduleSchema)
 module.exports = Appointment
-

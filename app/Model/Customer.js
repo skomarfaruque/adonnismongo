@@ -18,4 +18,3 @@ const customerSchema = mongoose.Schema({
 const Customer = mongoose.model('Customer', customerSchema)
 
 module.exports = Customer
-
