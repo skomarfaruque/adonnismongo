@@ -6,6 +6,28 @@ const Customer = use('App/Model/Customer')
 
 class AppointmentController {
 
+  * show (req, res) {
+    const id = req.input('id')
+    const appointment = yield Appointment.findOne(id)
+    res.send(appointment)
+  }
+  /**
+   * Fetch appointment by agent
+   */
+  * byAgent (req, res) {
+    const agentId = req.input('agent')
+    const appointments = yield Appointment.find({ agent: agentId })
+    res.ok(appointments)
+  }
+  /**
+   * Fetch appointment by customer
+   */
+  * byCustomer (req, res) {
+    const customerId = req.input('customer')
+    const appointments = yield Appointment.find({ customer: customerId })
+    res.ok(appointments)
+  }
+
   /**
    * Save appointment for agent
    * @param {customer} customer email
