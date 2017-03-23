@@ -31,7 +31,8 @@
             <td>{{ item.email }}</td>
             <td class="action">
               <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Delete"> <i class="fa fa-trash"></i> </a>
-				      <a class="button is-primary" :href="`/agent/edit/item.id`" @click="edit(item, ind)" title="Edit"><i class="fa fa-pencil"></i> </a>
+				      <a class="button is-primary" :href="`/agent/edit/${item._id}`" @click="edit(item, ind)" title="Edit"><i class="fa fa-pencil"></i> </a>
+              <a class="button is-primary" :href="`/agent/calendar?id=${item._id}`" @click="edit(item, ind)" title="Edit"><i class="fa fa-calendar"></i> </a>
             </td>
           </tr>
         </tbody>
