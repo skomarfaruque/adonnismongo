@@ -36,7 +36,7 @@ class AppointmentController {
     const agentId = req.input('agent')
     const start = req.input('start_time')
     const description = req.input('description')
-    const agent = yield User.findOne({ email: agentId }).exec()
+    const agent = yield User.findOne({ 'agent.id': agentId }).exec()
     const customer = yield Customer.findOne({ email: customerId }).exec()
     const appointment = yield Appointment.create({ customer, agent, start_time: start, description }).exec()
     res.send(appointment)

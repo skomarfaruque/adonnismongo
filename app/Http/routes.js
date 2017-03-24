@@ -31,11 +31,11 @@ Route.resource('api/users', 'UserController').except('create', 'store', 'edit').
 Route.resource('api/agents', 'AgentController').except('create', 'edit').middleware('auth')
 
 Route.group('customer', () => {
-  Route.post('/', 'CustomerController.store')
-}).prefix('api/customer')// .middleware('auth')
+  Route.resource('/', 'CustomerController').except('create', 'edit')
+}).prefix('api/customer').middleware('auth')
 
 Route.group('appointment', () => {
-  Route.get(':id', 'AppointmentController.show')
+  Route.get('/:id', 'AppointmentController.show')
   Route.get('agent/:id', 'AppointmentController.byAgent')
   Route.post('/', 'AppointmentController.store')
 }).prefix('api/appointment')

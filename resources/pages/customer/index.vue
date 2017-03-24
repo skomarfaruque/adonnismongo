@@ -31,7 +31,7 @@
             <td>{{ item.email }}</td>
             <td class="action">
               <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Delete"> <i class="fa fa-trash"></i> </a>
-				      <a class="button is-primary" :href="`/agent/edit/item.id`" @click="edit(item, ind)" title="Edit"><i class="fa fa-pencil"></i> </a>
+				      <nuxt-link class="button is-primary" :to="`/customer/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
             </td>
           </tr>
         </tbody>
@@ -56,7 +56,7 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `Agent Page`
+      title: `Customer Page`
     }
   },
   fetch ({ store }) {
@@ -65,17 +65,15 @@ export default {
   async data ({ store }) {
     axios.setBearer(store.state.authUser)
 
-    let { data } = await axios.get('users')
+    let { data } = await axios.get('customer')
     return {
       list: data
     }
   },
   methods: {
-    remove (item, ind) {
-
-    },
-    edit (item, ind) {
-
+    async remove (item, ind) {
+      await axios.delete(`customer/${item._id}`)
+      this.list.splice(ind, 1)
     }
   }
 }

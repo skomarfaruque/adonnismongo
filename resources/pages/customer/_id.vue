@@ -32,17 +32,19 @@ export default {
   fetch ({ store }) {
     store.commit('SET_HEAD', ['New Customer', 'Add a new customer.'])
   },
-  data ({ store }) {
+  async data ({ store, params }) {
     axios.setBearer(store.state.authUser)
+    const { data } = await axios.get(`customer/${params.id}`)
     return {
-      name: '',
-      email: '',
-      address: ''
+      id: data._id,
+      name: data.name,
+      email: data.email,
+      address: data.address ? data.address : ''
     }
   },
   methods: {
     async save () {
-      const customer = await axios.post('customer', this.$data)
+      const customer = await axios.put(`customer/${this.id}`, this.$data)
       this.$router.push('/customer')
     }
   }

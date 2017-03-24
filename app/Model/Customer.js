@@ -5,6 +5,7 @@ const mongoose = use('Mongoose')
 const customerSchema = mongoose.Schema({
   name: String,
   email: String,
+  address: String,
   synced: {
     type: Boolean,
     default: false

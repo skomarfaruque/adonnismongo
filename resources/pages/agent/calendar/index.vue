@@ -38,6 +38,7 @@
   }
 </style>
 <script>
+import axios from '~/plugins/axios'
 export default {
   middleware: '',
   head () {
@@ -48,7 +49,8 @@ export default {
   fetch ({ store }) {
     store.commit('SET_HEAD', ['Agent Calendar', 'View agents appointments.'])
   },
-  data ({ query }) {
+  data ({ store, query }) {
+    axios.setBearer(store.state.authUser)
     return {
       id: query.id
     }
@@ -70,8 +72,16 @@ export default {
     scheduler.templates.month_events_link = function(date, count){
         return "<a style='padding-right:5px;'>+ "+(count - 4)+" events </a>";
     }
+    scheduler.attachEvent("onEventSave", this.save)
 
     scheduler.parse(events, "json")
+  },
+  methods: {
+    async save(id, ev) {
+      const obj = { description: ev.text, customer: ev.customer, start: ev.start_date }
+      let event = await axios.post('appointment', obj)
+      ev.id = event.id
+    }
   }
 }
 </script>
