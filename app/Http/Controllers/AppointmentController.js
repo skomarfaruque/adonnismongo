@@ -13,16 +13,16 @@ class AppointmentController {
    * Fetch appointment by agent
    */
   * byAgent (req, res) {
-    const agentId = req.input('id')
-    const appointments = yield Appointment.find({ 'agent.id': agentId }).exec()
+    const agentId = req.param('id')
+    const appointments = yield Appointment.find({ agent: agentId }).populate('customer').exec()
     res.send(appointments)
   }
   /**
    * Fetch appointment by customer
    */
   * byCustomer (req, res) {
-    const customerId = req.input('id')
-    const appointments = yield Appointment.find({ 'customer.id': customerId }).exec()
+    const customerId = req.param('id')
+    const appointments = yield Appointment.find({ customer: customerId }).exec()
     res.send(appointments)
   }
 
@@ -34,12 +34,21 @@ class AppointmentController {
   * store (req, res) {
     const customerId = req.input('customer')
     const agentId = req.input('agent')
-    const start = req.input('start_time')
+    const start = req.input('start')
     const description = req.input('description')
-    const agent = yield User.findOne({ 'agent.id': agentId }).exec()
+    const agent = yield User.findOne({ _id: agentId }).exec()
     const customer = yield Customer.findOne({ email: customerId }).exec()
-    const appointment = yield Appointment.create({ customer, agent, start_time: start, description }).exec()
+    const appointment = yield Appointment.create({ customer, agent, start_time: start, description })
     res.send(appointment)
+  }
+
+  /**
+   * Delete a appointment
+   */
+  * destroy (req, res) {
+    const id = req.param('id')
+    yield Appointment.deleteOne({ _id: id })
+    res.ok()
   }
 }
 

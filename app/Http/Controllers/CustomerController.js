@@ -25,9 +25,9 @@ class CustomerController {
   }
 
   * update (req, res) {
-    const id = req.input('id')
+    const id = req.param('id')
     const obj = req.only('name', 'email', 'address')
-    const customer = yield Customer.update({ id: id }, { name: obj.name, email: obj.email, address: obj.address }).exec()
+    const customer = yield Customer.update({ _id: id }, { name: obj.name, email: obj.email, address: obj.address }).exec()
     res.send(customer)
   }
 

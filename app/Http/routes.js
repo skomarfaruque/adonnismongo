@@ -38,6 +38,7 @@ Route.group('appointment', () => {
   Route.get('/:id', 'AppointmentController.show')
   Route.get('agent/:id', 'AppointmentController.byAgent')
   Route.post('/', 'AppointmentController.store')
+  Route.delete(':id', 'AppointmentController.destroy')
 }).prefix('api/appointment')
 // Route.post('/api/user', 'UserController.create')
 // Route.get('/api/users', 'UserController.all')

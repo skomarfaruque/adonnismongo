@@ -49,10 +49,12 @@ export default {
   fetch ({ store }) {
     store.commit('SET_HEAD', ['Agent Calendar', 'View agents appointments.'])
   },
-  data ({ store, query }) {
+  async data ({ store, query }) {
     axios.setBearer(store.state.authUser)
+    let { data } = await axios.get(`appointment/agent/${query.id}`)
     return {
-      id: query.id
+      id: query.id,
+      events: data
     }
   },
   mounted () {
@@ -63,24 +65,32 @@ export default {
       {name:"Customer", height:25, map_to:"customer", type:"textarea"},
       {name:"time", height:72, type:"time", map_to:"auto"}
     ]
-    var events = [
-      {id:1, text:"Meeting",   start_date:"04/11/2017 14:00",end_date:"04/11/2017 17:00"},
-      {id:2, text:"Conference",start_date:"04/15/2017 12:00",end_date:"04/15/2017 19:00"},
-      {id:3, text:"Interview", start_date:"04/24/2017 09:00",end_date:"04/24/2017 10:00"}
-    ]
     scheduler.config.max_month_events = 4
-    scheduler.templates.month_events_link = function(date, count){
+    scheduler.templates.month_events_link = function(date, count) {
         return "<a style='padding-right:5px;'>+ "+(count - 4)+" events </a>";
     }
-    scheduler.attachEvent("onEventSave", this.save)
-
+    scheduler.attachEvent('onEventSave', this.save)
+    scheduler.attachEvent('onEventDeleted', this.remove)
+    var events = []
+    this.events.forEach(m => {
+      events.push( {
+        id: m._id,
+        text: m.description,
+        start_date: new Date(m.start_time),
+        end_date: new Date(m.start_time),
+        customer: m.customer.email
+      }) 
+    })
     scheduler.parse(events, "json")
   },
   methods: {
     async save(id, ev) {
-      const obj = { description: ev.text, customer: ev.customer, start: ev.start_date }
+      const obj = { agent: this.id, description: ev.text, customer: ev.customer, start: ev.start_date }
       let event = await axios.post('appointment', obj)
       ev.id = event.id
+    },
+    async remove(id) {
+      await axios.delete(`appointment/${id}`)
     }
   }
 }
