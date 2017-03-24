@@ -10,10 +10,6 @@
         <p class="control">
           <input class="input" v-model="email" type="text" placeholder="Customer Email">
         </p>
-        <label class="label">Address</label>
-        <p class="control">
-          <textarea class="textarea" v-model="address" name="" id="" cols="30" rows="10"></textarea>
-        </p>
         <a href="javascript:" class="button is-primary" @click="save">Save</a>
       </div>
     </div>
@@ -30,11 +26,11 @@ export default {
     }
   },
   fetch ({ store }) {
-    store.commit('SET_HEAD', ['Customer Edit', 'Edit customer information.'])
+    store.commit('SET_HEAD', ['Agent Edit', 'Edit agent information.'])
   },
   async data ({ store, params }) {
     axios.setBearer(store.state.authUser)
-    const { data } = await axios.get(`customer/${params.id}`)
+    const { data } = await axios.get(`users/${params.id}`)
     return {
       id: data._id,
       name: data.name,
@@ -44,7 +40,7 @@ export default {
   },
   methods: {
     async save () {
-      const customer = await axios.put(`customer/${this.id}`, this.$data)
+      const agent = await axios.put(`users/${this.id}`, this.$data)
       this.$router.push('/customer')
     }
   }

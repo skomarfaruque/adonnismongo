@@ -6,7 +6,7 @@ const Customer = use('App/Model/Customer')
 class AppointmentController {
   * show (req, res) {
     const id = req.input('id')
-    const appointment = yield Appointment.findOne(id).exec()
+    const appointment = yield Appointment.findOne(id).populate('agent', 'name email').populate('customer', 'name email').exec()
     res.send(appointment)
   }
   /**
@@ -14,7 +14,7 @@ class AppointmentController {
    */
   * byAgent (req, res) {
     const agentId = req.param('id')
-    const appointments = yield Appointment.find({ agent: agentId }).populate('customer').exec()
+    const appointments = yield Appointment.find({ agent: agentId }).populate('agent', 'name email').populate('customer', 'name email').exec()
     res.send(appointments)
   }
   /**
@@ -22,7 +22,7 @@ class AppointmentController {
    */
   * byCustomer (req, res) {
     const customerId = req.param('id')
-    const appointments = yield Appointment.find({ customer: customerId }).exec()
+    const appointments = yield Appointment.find({ customer: customerId }).populate('agent', 'name email').populate('customer', 'name email').exec()
     res.send(appointments)
   }
 
@@ -36,7 +36,7 @@ class AppointmentController {
     const agentId = req.input('agent')
     const start = req.input('start')
     const description = req.input('description')
-    const agent = yield User.findOne({ _id: agentId }).exec()
+    const agent = yield User.findOne({ email: agentId }).exec()
     const customer = yield Customer.findOne({ email: customerId }).exec()
     const appointment = yield Appointment.create({ customer, agent, start_time: start, description })
     res.send(appointment)

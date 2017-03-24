@@ -47,16 +47,16 @@ export default {
     }
   },
   fetch ({ store }) {
-    store.commit('SET_HEAD', ['Agent Calendar', 'View agents appointments.'])
+    store.commit('SET_HEAD', ['Customer Calendar', 'View customer appointments.'])
   },
   async data ({ store, query }) {
     axios.setBearer(store.state.authUser)
-    let event = await axios.get(`appointment/agent/${query.id}`)
-    let agent = await axios.get(`users/${query.id}`)
+    let event = await axios.get(`appointment/customer/${query.id}`)
+    let customer = await axios.get(`customer/${query.id}`)
     return {
       id: query.id,
       events: event.data,
-      email: agent.data.email
+      email: customer.data.email
     }
   },
   mounted () {
@@ -64,7 +64,7 @@ export default {
 		scheduler.init('scheduler_here',new Date(),"month")
     scheduler.config.lightbox.sections=[
       {name:"description", height:200, map_to:"text", type:"textarea" , focus:true},
-      {name:"Customer", height:25, map_to:"customer", type:"textarea"},
+      {name:"Agent", height:25, map_to:"agent", type:"textarea"},
       {name:"time", height:72, type:"time", map_to:"auto"}
     ]
     scheduler.config.max_month_events = 4
@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     async save(id, ev) {
-      const obj = { agent: this.email, description: ev.text, customer: ev.customer, start: ev.start_date }
+      const obj = { agent: ev.agent, description: ev.text, customer: this.email, start: ev.start_date }
       let { data } = await axios.post('appointment', obj)
       ev.id = data.id
     },
