@@ -19,7 +19,7 @@
       <div class="tile is-horizontal">
         <div class="tile is-parent is-6">
           <nuxt-link class="tile is-child notification is-primary" to="/customer">
-            <p class="title">Existing Customer</p>
+            <p class="title">Customer</p>
             <p class="subtitle">View list of customers.</p>
           </nuxt-link>
         </div>

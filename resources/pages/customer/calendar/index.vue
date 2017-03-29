@@ -71,8 +71,8 @@ export default {
     scheduler.templates.month_events_link = function(date, count) {
         return "<a style='padding-right:5px;'>+ "+(count - 4)+" events </a>";
     }
-    scheduler.attachEvent('onEventSave', this.save)
-    scheduler.attachEvent('onEventDeleted', this.remove)
+    // scheduler.attachEvent('onEventSave', this.save)
+    // scheduler.attachEvent('onEventDeleted', this.remove)
     var events = []
     this.events.forEach(m => {
       events.push( {

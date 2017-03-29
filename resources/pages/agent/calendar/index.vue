@@ -10,37 +10,19 @@
       </div>
     </div>
     <div class="columns">
-      <div id="scheduler_here" class="column is-full dhx_cal_container">
-        <div class="dhx_cal_navline">
-          <div class="dhx_cal_prev_button">&nbsp;</div>
-          <div class="dhx_cal_next_button">&nbsp;</div>
-          <div class="dhx_cal_today_button"></div>
-          <div class="dhx_cal_date"></div>
-          <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
-          <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
-          <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
-        </div>
-        <div class="dhx_cal_header">
-        </div>
-        <div class="dhx_cal_data">
-        </div>
-      </div>
+      <scheduler />
     </div>
   </section>
 </template>
-<style scoped>
 
-  #scheduler_here {
-    height:600px;
-    border-style: solid;
-    border-color: #CECECE;
-    border-width: 1px 1px 0 1px;
-  }
-</style>
 <script>
 import axios from '~/plugins/axios'
+import Scheduler from '~components/Scheduler.vue'
 export default {
   middleware: '',
+  components: {
+    Scheduler
+  },
   head () {
     return {
       title: `Calendar`      
@@ -60,17 +42,12 @@ export default {
     }
   },
   mounted () {
-    // scheduler.config.xml_date="%Y-%m-%d %H:%i"
-		scheduler.init('scheduler_here',new Date(),"month")
     scheduler.config.lightbox.sections=[
       {name:"description", height:200, map_to:"text", type:"textarea" , focus:true},
       {name:"Customer", height:25, map_to:"customer", type:"textarea"},
       {name:"time", height:72, type:"time", map_to:"auto"}
     ]
-    scheduler.config.max_month_events = 4
-    scheduler.templates.month_events_link = function(date, count) {
-        return "<a style='padding-right:5px;'>+ "+(count - 4)+" events </a>";
-    }
+    
     scheduler.attachEvent('onEventSave', this.save)
     scheduler.attachEvent('onEventDeleted', this.remove)
     var events = []
