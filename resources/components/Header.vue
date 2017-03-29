@@ -3,13 +3,9 @@
     <nav class="nav has-shadow">
       <div class="container">
         <div class="nav-left">
-          <a class="nav-item">
-            <figure class="icon" style="margin-right: 8px;">
-              <i class="fa fa-bars" aria-hidden="true"></i>
-            </figure>
-            Back Portal
-          </a>
-          <nuxt-link class="nav-item is-tab is-hidden-mobile is-active" to="/dashboard">Home</nuxt-link>
+          <nuxt-link class="nav-item" to="/dashboard">
+            <img src="../assets/img/logo.png" alt="Bulma logo">
+          </nuxt-link>
         </div>
         <span class="nav-toggle">
           <span></span>

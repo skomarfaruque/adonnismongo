@@ -3,9 +3,6 @@
   <div>
     <my-header/>
     <div class="container">
-      
-      <div class="columns">
-      </div>
       <div class="columns">
         <div class="column is-full">
           <Breadcrumb />
@@ -26,14 +23,12 @@
 <script>
 import MyHeader from '~components/Header.vue'
 import MyFooter from '~components/Footer.vue'
-import Wanthelp from '~components/Wanthelp.vue'
 import Breadcrumb from '~components/Breadcrumb.vue'
 
 export default {
   components: {
     MyHeader,
     MyFooter,
-    Wanthelp,
     Breadcrumb
   }
 }
