@@ -2,17 +2,33 @@
   <section>
     <div class="columns">
       <div class="column is-6">
-        <label class="label">Name</label>
-        <p class="control">
-          <input class="input" v-model="name" type="text" placeholder="Customer Name">
-        </p>
         <label class="label">Email</label>
         <p class="control">
           <input class="input" v-model="email" type="text" placeholder="Customer Email">
         </p>
-        <label class="label">Address</label>
+        <label class="label">Name</label>
         <p class="control">
-          <textarea class="textarea" v-model="address" name="" id="" cols="30" rows="10"></textarea>
+          <input class="input" v-model="name" type="text" placeholder="Customer Name">
+        </p>
+        <label class="label">Address 1</label>
+        <p class="control">
+          <textarea class="textarea" v-model="address1" name="" id="" cols="30" rows="10"></textarea>
+        </p>
+        <label class="label">Address 2</label>
+        <p class="control">
+          <textarea class="textarea" v-model="address2" name="" id="" cols="30" rows="10"></textarea>
+        </p>
+        <label class="label">City</label>
+        <p class="control">
+          <input class="input" v-model="city" type="text" placeholder="City">
+        </p>
+        <label class="label">State</label>
+        <p class="control">
+          <input class="input" v-model="state" type="text" placeholder="State">
+        </p>
+        <label class="label">Zip Code</label>
+        <p class="control">
+          <input class="input" v-model="zipCode" type="text" placeholder="Zip Code">
         </p>
         <a href="javascript:" class="button is-primary" @click="save">Save</a>
       </div>
@@ -37,7 +53,11 @@ export default {
     return {
       name: '',
       email: '',
-      address: ''
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      zipCode: ''
     }
   },
   methods: {

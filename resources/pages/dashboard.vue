@@ -27,10 +27,6 @@
             <p class="title">Invoice</p>
             <p class="subtitle">Create and print invoices.</p>
           </nuxt-link>
-          <nuxt-link class="tile is-child notification is-info" to="/store" v-if="isStore">
-            <p class="title">Store</p>
-            <p class="subtitle">Buy something for your service needs.</p>
-          </nuxt-link>
         </div>
         
       </div>
@@ -55,7 +51,6 @@ export default {
       isAgent: per.includes('agent-view'),
       isAdmin: per.includes('admin-view'),
       isCustomer: per.includes('customer-view'),
-      isStore: per.includes('store-view'),
       isSupply: per.includes('supply-view'),
       isInvoice: per.includes('invoice-view')
     }

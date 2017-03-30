@@ -7,12 +7,7 @@ const ax = axios.create({
 })
 
 ax.setBearer = function (token) {
-  this.interceptors.request.use(function (config) {
-    config.headers.Authorization = `Bearer ${token}`
-    return config
-  }, function (err) {
-    return Promise.reject(err)
-  })
+  this.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }
 
 export default ax
