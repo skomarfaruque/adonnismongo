@@ -32,8 +32,8 @@
             </div>
           </div>
           <footer class="card-footer">
-            <a href="javascript:" class="button is-primary card-footer-item" @click="login">Sign in</a>
-            <nuxt-link class="button is-primary card-footer-item" to="/user/forgotpassword">Forgot Password</nuxt-link>
+            <a href="javascript:" class="button is-info card-footer-item" @click="login">Sign in</a>
+            <nuxt-link class="button is-info card-footer-item" to="/user/forgotpassword">Forgot Password</nuxt-link>
           </footer>
         </div>
       </div>

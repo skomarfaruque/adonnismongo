@@ -3,31 +3,31 @@
     <div class="tile is-vertical is-12">
       <div class="tile is-vertical">
         <div class="tile is-parent is-vertical">
-          <nuxt-link class="tile is-child notification is-primary" to="/calendar" v-if="isCalendar">
+          <nuxt-link class="tile is-child notification is-info" to="/calendar" v-if="isCalendar">
             <p class="title">Calendar</p>
             <p class="subtitle">View and create appointments.</p>
           </nuxt-link>
-          <nuxt-link class="tile is-child notification is-primary" to="/agent" v-if="isAgent">
+          <nuxt-link class="tile is-child notification is-info" to="/agent" v-if="isAgent">
             <p class="title">Agent</p>
             <p class="subtitle">View list of the agents</p>
           </nuxt-link>
-          <nuxt-link class="tile is-child notification is-primary" to="/customer" v-if="isCustomer">
+          <nuxt-link class="tile is-child notification is-info" to="/customer" v-if="isCustomer">
             <p class="title">Customer</p>
             <p class="subtitle">View list of customers.</p>
           </nuxt-link>
-          <nuxt-link class="tile is-child notification is-primary" to="/admin" v-if="isAdmin">
+          <nuxt-link class="tile is-child notification is-info" to="/admin" v-if="isAdmin">
             <p class="title">Admin</p>
             <p class="subtitle">Manage administrative tasks.</p>
           </nuxt-link>
-          <nuxt-link class="tile is-child notification is-primary" to="/supplies" v-if="isSupply">
+          <nuxt-link class="tile is-child notification is-info" to="/supplies" v-if="isSupply">
             <p class="title">Supplies</p>
             <p class="subtitle">View all your supply items.</p>
           </nuxt-link>
-          <nuxt-link class="tile is-child notification is-primary" to="/invoice" v-if="isInvoice">
+          <nuxt-link class="tile is-child notification is-info" to="/invoice" v-if="isInvoice">
             <p class="title">Invoice</p>
             <p class="subtitle">Create and print invoices.</p>
           </nuxt-link>
-          <nuxt-link class="tile is-child notification is-primary" to="/store" v-if="isStore">
+          <nuxt-link class="tile is-child notification is-info" to="/store" v-if="isStore">
             <p class="title">Store</p>
             <p class="subtitle">Buy something for your service needs.</p>
           </nuxt-link>
