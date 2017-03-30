@@ -32,6 +32,10 @@
       }
     },
     mounted () {
+      scheduler.config.hour_date = "%h:%i %A"
+      scheduler.config.time_step = 15
+      scheduler.config.event_duration = 120
+      scheduler.config.auto_end_date = true
       scheduler.init('scheduler_here',new Date(),"month")
       scheduler.config.max_month_events = 4
       scheduler.templates.month_events_link = function(date, count) {

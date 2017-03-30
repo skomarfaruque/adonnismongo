@@ -13,7 +13,10 @@ class AppointmentController {
    * Fetch appointment by agent
    */
   * byAgent (req, res) {
-    const agentId = req.param('id')
+    let agentId = req.param('id')
+    if (agentId === 'me') {
+      agentId = req.currentUser._id
+    }
     const appointments = yield Appointment.find({ agent: agentId }).populate('agent', 'name email').populate('customer', 'name email').exec()
     res.send(appointments)
   }

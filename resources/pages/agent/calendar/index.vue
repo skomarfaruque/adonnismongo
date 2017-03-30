@@ -28,17 +28,16 @@ export default {
       title: `Calendar`      
     }
   },
-  fetch ({ store }) {
-    store.commit('SET_HEAD', ['Agent Calendar', 'View agents appointments.'])
-  },
   async data ({ store, query }) {
     axios.setBearer(store.state.authUser)
     let event = await axios.get(`appointment/agent/${query.id}`)
     let agent = await axios.get(`users/${query.id}`)
+    store.commit('SET_HEAD', [`Agent Calendar`, `View appointments of ${agent.data.name}.`])
     return {
       id: query.id,
       events: event.data,
-      email: agent.data.email
+      email: agent.data.email,
+      name: agent.data.name
     }
   },
   mounted () {

@@ -3,6 +3,7 @@
 const User = use('App/Model/User')
 const Role = use('App/Model/Role')
 const AgentCustomer = use('App/Model/AgentCustomer')
+use('App/Model/Customer')
 
 class AgentController {
 
@@ -32,10 +33,23 @@ class AgentController {
   }
 
   * assignCustomer (req, res) {
-    const customer = req.input('customer')
-    const agent = req.currentUser._id
-    yield AgentCustomer.create({ agent: agent, customer: customer })
-    res.ok()
+    const customerId = req.param('cid')
+    let agentId = req.param('aid')
+    if (agentId === 'me') {
+      agentId = req.currentUser._id
+    }
+    const agentCustomer = yield AgentCustomer.create({ agent: agentId, customer: customerId })
+    res.ok(agentCustomer)
+  }
+
+  * customers (req, res) {
+    let agentId = req.param('id')
+    if (agentId === 'me') {
+      agentId = req.currentUser._id
+    }
+    const agentcustomers = yield AgentCustomer.find({ agent: agentId }).populate('customer').exec()
+
+    res.ok(agentcustomers)
   }
 }
 

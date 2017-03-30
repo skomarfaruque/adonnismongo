@@ -12,8 +12,14 @@ class UserController {
   }
 
   * show (req, res) {
-    let user = req.currentUser
-    res.ok(user)
+    const userId = req.param('id')
+    if (userId === 'me') {
+      const user = req.currentUser
+      return res.ok(user)
+    } else {
+      const user = yield User.findOne(userId).exec()
+      return res.ok(user)
+    }
   }
 
   * store (req, res) {

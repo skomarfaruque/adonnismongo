@@ -21,13 +21,13 @@ class DatabaseSeeder {
     yield role.remove({})
     const roles = yield role.create([{
       name: 'Admin',
-      permissions: ['user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
+      permissions: ['calendar-view', 'agent-view', 'admin-view', 'customer-view', 'supply-view', 'invoice-view', 'store-view', 'user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
     }, {
       name: 'Staff',
-      permissions: ['user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
+      permissions: ['calendar-view', 'admin-view', 'customer-view', 'user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
     }, {
       name: 'Agent',
-      permissions: ['book-create', 'book-update', 'book-delete']
+      permissions: ['calendar-view', 'admin-view', 'customer-view', 'supply-view', 'invoice-view', 'book-create', 'book-update', 'book-delete']
     }])
     const user = use('App/Model/User')
     yield user.remove({})
@@ -36,6 +36,18 @@ class DatabaseSeeder {
       email: 'admin@email.com',
       password: '123456',
       role: roles[0]
+    })
+    yield user.create({
+      name: 'Staff',
+      email: 'staff@email.com',
+      password: '123456',
+      role: roles[1]
+    })
+    yield user.create({
+      name: 'Agent',
+      email: 'agent@email.com',
+      password: '123456',
+      role: roles[2]
     })
     return true
   }

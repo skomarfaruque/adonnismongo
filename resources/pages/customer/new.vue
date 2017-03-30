@@ -26,7 +26,7 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `New Customer Page (${this.name}-side)`
+      title: `New Customer Page`
     }
   },
   fetch ({ store }) {
@@ -43,6 +43,7 @@ export default {
   methods: {
     async save () {
       const customer = await axios.post('customer', this.$data)
+      const agentCustomer = await axios.get(`agent/me/assign-customer/${customer.data._id}`)
       this.$router.push('/customer')
     }
   }

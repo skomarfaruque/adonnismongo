@@ -1,6 +1,8 @@
 'use strict'
 
 const Customer = use('App/Model/Customer')
+const AgentCustomer = use('App/Model/AgentCustomer')
+const Appointment = use('App/Model/Appointment')
 
 class CustomerController {
 
@@ -33,6 +35,8 @@ class CustomerController {
   * destroy (req, res) {
     const id = req.param('id')
     yield Customer.deleteOne({ _id: id })
+    yield AgentCustomer.remove({ customer: id })
+    yield Appointment.remove({ customer: id })
     res.ok()
   }
 
