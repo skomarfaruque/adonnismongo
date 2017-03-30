@@ -37,7 +37,13 @@ class AppointmentController {
     const start = req.input('start')
     const description = req.input('description')
     const agent = yield User.findOne({ email: agentId }).exec()
+    if (!agent) {
+      return res.send('Agent not Found')
+    }
     const customer = yield Customer.findOne({ email: customerId }).exec()
+    if (!customer) {
+      return res.send('Customer not Found')
+    }
     const appointment = yield Appointment.create({ customer, agent, start_time: start, description })
     res.send(appointment)
   }
@@ -47,8 +53,12 @@ class AppointmentController {
    */
   * destroy (req, res) {
     const id = req.param('id')
-    yield Appointment.deleteOne({ _id: id })
-    res.ok()
+    try {
+      yield Appointment.deleteOne({ _id: id })
+      res.ok()
+    } catch (e) {
+      res.send(e)
+    }
   }
 }
 

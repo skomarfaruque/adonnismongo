@@ -67,7 +67,6 @@ class UserController {
     const token = req.input('token')
     const password = req.input('password')
     const user = yield User.findOne({ reset_token: token })
-    console.log(user)
     if (!user) {
       res.send({ success: false, message: 'Email account not found' })
     }

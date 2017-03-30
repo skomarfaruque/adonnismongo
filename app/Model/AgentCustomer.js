@@ -7,10 +7,10 @@ const agentCustomer = mongoose.Schema({
     type: 'ObjectId',
     ref: 'Agent'
   },
-  customers: [{
+  customer: {
     type: 'ObjectId',
     ref: 'Customer'
-  }]
+  }
 })
 
 const AgentCustomer = mongoose.model('AgentCustomer', agentCustomer)

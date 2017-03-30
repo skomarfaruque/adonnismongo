@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="columns">
-      <scheduler />
+      <scheduler v-on:save="save" v-on:remove="remove"/>
     </div>
   </section>
 </template>
@@ -46,10 +46,8 @@ export default {
       {name:"description", height:200, map_to:"text", type:"textarea" , focus:true},
       {name:"Customer", height:25, map_to:"customer", type:"textarea"},
       {name:"time", height:72, type:"time", map_to:"auto"}
-    ]
+    ]  
     
-    scheduler.attachEvent('onEventSave', this.save)
-    scheduler.attachEvent('onEventDeleted', this.remove)
     var events = []
     this.events.forEach(m => {
       events.push( {

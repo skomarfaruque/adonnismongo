@@ -29,6 +29,7 @@ Route.group('user', () => {
 Route.resource('api/users', 'UserController').except('create', 'store', 'edit').middleware('auth')
 
 Route.resource('api/agents', 'AgentController').except('create', 'edit').middleware('auth')
+Route.get('api/agent/assign-customer/:id', 'AgentController.assignCustomer').middleware('auth')
 
 Route.group('customer', () => {
   Route.resource('/', 'CustomerController').except('create', 'edit')

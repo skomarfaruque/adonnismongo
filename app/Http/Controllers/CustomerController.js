@@ -11,7 +11,6 @@ class CustomerController {
 
   * show (req, res) {
     const id = req.param('id')
-    console.log(id)
     const customer = yield Customer.findOne({ _id: id }).exec()
     res.send(customer)
   }

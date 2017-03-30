@@ -2,6 +2,7 @@
 
 const User = use('App/Model/User')
 const Role = use('App/Model/Role')
+const AgentCustomer = use('App/Model/AgentCustomer')
 
 class AgentController {
 
@@ -28,6 +29,13 @@ class AgentController {
 
   * destroy (req, res) {
     res.send('destroy')
+  }
+
+  * assignCustomer (req, res) {
+    const customer = req.input('customer')
+    const agent = req.currentUser._id
+    yield AgentCustomer.create({ agent: agent, customer: customer })
+    res.ok()
   }
 }
 

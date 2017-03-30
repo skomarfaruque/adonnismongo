@@ -11,6 +11,7 @@
     </div>
     <div class="dhx_cal_header"></div>
     <div class="dhx_cal_data"></div>
+    
   </div>
 </template>
 
@@ -26,14 +27,31 @@
 
 <script>
   export default {
+    data () {
+      return {
+      }
+    },
     mounted () {
       scheduler.init('scheduler_here',new Date(),"month")
       scheduler.config.max_month_events = 4
       scheduler.templates.month_events_link = function(date, count) {
         return "<a style='padding-right:5px;'>+ "+(count - 4)+" events </a>";
       }
-      // scheduler.detachEvent('onEventSave')
-      // scheduler.detachEvent('onEventDeleted')
+      scheduler.attachEvent('onEventSave', this.save)
+      scheduler.attachEvent('onEventDeleted', this.remove)
+    },
+    destroyed () {
+      scheduler.clearAll()
+    },
+    methods: {
+      save (id, ev) {
+        this.$emit('save', id, ev)
+        return true
+      },
+      remove (id) {
+        this.$emit('remove', id)
+        return true
+      }
     }
   }
 </script>
