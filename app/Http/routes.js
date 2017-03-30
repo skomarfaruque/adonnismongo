@@ -35,8 +35,8 @@ Route.group('agent', () => {
 }).prefix('api')
 
 Route.group('customer', () => {
-  Route.resource('/', 'CustomerController').except('create', 'edit')
-}).prefix('api/customer').middleware('auth')
+  Route.resource('customer', 'CustomerController').except('create', 'edit')
+}).prefix('api').middleware('auth')
 
 Route.group('appointment', () => {
   Route.get('/:id', 'AppointmentController.show')
