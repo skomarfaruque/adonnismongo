@@ -72,8 +72,9 @@
       }
     },
     methods: {
-      remove (item, ind) {
-
+      async remove (item, ind) {
+        await axios.delete(`agents/${item._id}`)
+        this.list.splice(ind, 1)
       },
       edit (item, ind) {
 

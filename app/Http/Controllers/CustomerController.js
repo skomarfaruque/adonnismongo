@@ -7,7 +7,7 @@ const Appointment = use('App/Model/Appointment')
 class CustomerController {
 
   * index (req, res) {
-    const customers = yield Customer.find()
+    const customers = yield Customer.find().exec()
     res.send(customers)
   }
 
@@ -20,14 +20,14 @@ class CustomerController {
    * Create Customer
    */
   * store (req, res) {
-    const obj = req.only('name', 'email')
+    const obj = req.only('name', 'email', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state')
     const customer = yield Customer.create(obj)
     res.send(customer)
   }
 
   * update (req, res) {
     const id = req.param('id')
-    const obj = req.only('name', 'email', 'address')
+    const obj = req.only('name', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state')
     const customer = yield Customer.update({ _id: id }, { name: obj.name, email: obj.email, address: obj.address }).exec()
     res.send(customer)
   }

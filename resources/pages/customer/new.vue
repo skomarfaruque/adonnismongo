@@ -10,13 +10,17 @@
         <p class="control">
           <input class="input" v-model="name" type="text" placeholder="Customer Name">
         </p>
+        <label class="label">Phone</label>
+        <p class="control">
+          <input class="input" v-model="phone" type="text" placeholder="Customer phone">
+        </p>
         <label class="label">Address 1</label>
         <p class="control">
-          <textarea class="textarea" v-model="address1" name="" id="" cols="30" rows="10"></textarea>
+          <input class="input" v-model="address1" name="" id=""/>
         </p>
         <label class="label">Address 2</label>
         <p class="control">
-          <textarea class="textarea" v-model="address2" name="" id="" cols="30" rows="10"></textarea>
+          <input class="input" v-model="address2" name="" />
         </p>
         <label class="label">City</label>
         <p class="control">
@@ -53,6 +57,7 @@ export default {
     return {
       name: '',
       email: '',
+      phone: '',
       address1: '',
       address2: '',
       city: '',
@@ -63,7 +68,9 @@ export default {
   methods: {
     async save () {
       const customer = await axios.post('customer', this.$data)
-      const agentCustomer = await axios.get(`agent/me/assign-customer/${customer.data._id}`)
+      if (this.$store.state.role === 'Agent') {
+        const agentCustomer = await axios.get(`agent/me/assign-customer/${customer.data._id}`)
+      }
       this.$router.push('/customer')
     }
   }

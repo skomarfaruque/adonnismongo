@@ -6,13 +6,29 @@
         <p class="control">
           <input class="input" v-model="name" type="text" placeholder="Customer Name">
         </p>
-        <label class="label">Email</label>
+        <label class="label">Phone</label>
         <p class="control">
-          <input class="input" v-model="email" type="text" placeholder="Customer Email">
+          <input class="input" v-model="phone" type="text" placeholder="Customer phone">
         </p>
-        <label class="label">Address</label>
+        <label class="label">Address 1</label>
         <p class="control">
-          <textarea class="textarea" v-model="address" name="" id="" cols="30" rows="10"></textarea>
+          <input class="input" v-model="address1" name="" id=""/>
+        </p>
+        <label class="label">Address 2</label>
+        <p class="control">
+          <input class="input" v-model="address2" name="" />
+        </p>
+        <label class="label">City</label>
+        <p class="control">
+          <input class="input" v-model="city" type="text" placeholder="City">
+        </p>
+        <label class="label">State</label>
+        <p class="control">
+          <input class="input" v-model="state" type="text" placeholder="State">
+        </p>
+        <label class="label">Zip Code</label>
+        <p class="control">
+          <input class="input" v-model="zipCode" type="text" placeholder="Zip Code">
         </p>
         <a href="javascript:" class="button is-primary" @click="save">Save</a>
       </div>
@@ -39,7 +55,12 @@ export default {
       id: data._id,
       name: data.name,
       email: data.email,
-      address: data.address ? data.address : ''
+      phone: data.phone,
+      city: data.city,
+      zipCode: data.zipCode,
+      state: data.state,
+      address1: data.address1,
+      address2: data.address2
     }
   },
   methods: {

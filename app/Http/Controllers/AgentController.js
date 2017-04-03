@@ -29,6 +29,9 @@ class AgentController {
   }
 
   * destroy (req, res) {
+    const agentId = req.param('id')
+    yield User.deleteOne({ _id: agentId })
+    yield AgentCustomer.remove({ agent: agentId })
     res.send('destroy')
   }
 
@@ -48,8 +51,19 @@ class AgentController {
       agentId = req.currentUser._id
     }
     const agentcustomers = yield AgentCustomer.find({ agent: agentId }).populate('customer').exec()
-
-    res.ok(agentcustomers)
+    let customers = []
+    agentcustomers.forEach((m) => {
+      customers.push({
+        _id: m.customer._id,
+        name: m.customer.name,
+        email: m.customer.email,
+        phone: m.customer.phone,
+        zipCode: m.customer.zipCode,
+        state: m.customer.state,
+        city: m.customer.city
+      })
+    })
+    res.ok(customers)
   }
 }
 

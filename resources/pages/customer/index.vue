@@ -21,14 +21,22 @@
               Email
             </th>
             <th>
+              Zip Code
+            </th>
+            <th>
+              City
+            </th>
+            <th>
               Action
             </th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, ind) in list">
-            <td>{{ item.customer.name }}</td>
-            <td>{{ item.customer.email }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.zipCode }}</td>
+            <td>{{ item.city }}</td>
             <td class="action">
               <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Delete"> <i class="fa fa-trash"></i> </a>
 						  <nuxt-link class="button is-primary" :to="`/customer/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
@@ -60,13 +68,11 @@ export default {
       title: `Customer Page`
     }
   },
-  fetch ({ store }) {
-    store.commit('SET_HEAD', ['Your Customer', 'View list of the customers.'])
-  },
   async data ({ store }) {
+    store.commit('SET_HEAD', ['Your Customer', 'View list of the customers.'])
     axios.setBearer(store.state.authUser)
+    let { data } = store.state.role === 'Agent' ? await axios.get('agent/me/customer') : await axios.get('customer')
 
-    let { data } = await axios.get('agent/me/customer')
     return {
       list: data
     }

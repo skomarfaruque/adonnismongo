@@ -5,6 +5,7 @@ import cookie from '~/plugins/cookie'
 
 export const state = {
   authUser: null,
+  role: '',
   permissions: [],
   heading: {
     title: '',
@@ -15,6 +16,7 @@ export const state = {
 export const mutations = {
   SET_USER: function (state, user) {
     state.authUser = user.token
+    state.role = user.role
     state.permissions = user.permissions
   },
   SET_HEAD: function (state, heading) {
@@ -27,10 +29,10 @@ export const actions = {
   nuxtServerInit ({ commit }, { req }) {
     if (req) {
       try {
-        const token = cookie.get('backend-app', req.headers.cookie)
-        const permissions = cookie.get('backend-app-per', req.headers.cookie)
-        if (token && token.length > 0) {
-          commit('SET_USER', { token, permissions })
+        const userStr = cookie.get('backend-app', req.headers.cookie)
+        const user = JSON.parse(userStr)
+        if (user.token && user.token.length > 0) {
+          commit('SET_USER', user)
         }
       } catch (e) {
         return false
@@ -44,8 +46,8 @@ export const actions = {
     })
     .then((res) => {
       commit('SET_USER', res.data)
-      cookie.set('backend-app', res.data.token, 1)
-      cookie.set('backend-app-per', res.data.permissions, 1)
+      const userStr = JSON.stringify(res.data)
+      cookie.set('backend-app', userStr, 1)
     })
     .catch((error) => {
       if (error.response.status === 401) {
@@ -56,8 +58,7 @@ export const actions = {
 
   logout ({ commit }) {
     commit('SET_USER', { token: null, permissions: [] })
-    cookie.set('backend-app', '')
-    cookie.set('backend-app-per', '')
+    cookie.set('backend-app', '{}')
   },
   forgotpassword ({ commit }, { email }) {
     return axios.post('user/forgotpassword', {

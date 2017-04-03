@@ -13,6 +13,15 @@
         <a href="javascript:" class="button is-primary" @click="sendInvitation">Send Invitation</a>
       </div>
     </div>
+
+    <div class="card" v-show="confirmation.length > 0">
+      <div class="title">
+        This link will be sent to email for confirmation: (For testing purpose)
+      </div>
+      <div class="subtitle">
+        <a :href="confirmation" target="_blank">Confirmation Link</a>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -32,13 +41,14 @@
       axios.setBearer(store.state.authUser)
       return {
         name: '',
-        email: ''
+        email: '',
+        confirmation: ''
       }
     },
     methods: {
       async sendInvitation () {
-        console.log(this.$data)
         let { data } = await axios.post('user/invitation', this.$data)
+        this.confirmation = data
       }
     }
   }

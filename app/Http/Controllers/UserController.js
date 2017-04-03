@@ -46,8 +46,8 @@ class UserController {
     const token = yield req.auth.attempt(email, password)
 
     if (token) {
-      let user = yield User.findOne({ email }).populate('role', 'permissions').exec()
-      return res.send({ token, permissions: user.role.permissions })
+      let user = yield User.findOne({ email }).populate('role', 'name permissions').exec()
+      return res.send({ token, role: user.role.name, permissions: user.role.permissions })
     }
 
     res.unauthorized('Invalid credentails')
