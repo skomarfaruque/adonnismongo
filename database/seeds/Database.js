@@ -21,10 +21,10 @@ class DatabaseSeeder {
     yield role.remove({})
     const roles = yield role.create([{
       name: 'Admin',
-      permissions: ['calendar-view', 'agent-view', 'admin-view', 'customer-view', 'supply-view', 'invoice-view', 'store-view', 'user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
+      permissions: ['agent-view', 'admin-view', 'customer-view', 'supply-view', 'invoice-view', 'user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
     }, {
       name: 'Staff',
-      permissions: ['calendar-view', 'admin-view', 'customer-view', 'user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
+      permissions: ['admin-view', 'customer-view', 'user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
     }, {
       name: 'Agent',
       permissions: ['calendar-view', 'admin-view', 'customer-view', 'supply-view', 'invoice-view', 'book-create', 'book-update', 'book-delete']
