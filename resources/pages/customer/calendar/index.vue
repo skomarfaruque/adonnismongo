@@ -34,7 +34,7 @@ export default {
   async data ({ store, query }) {
     axios.setBearer(store.state.authUser)
     let event = await axios.get(`appointment/customer/${query.id}`)
-    let customer = await axios.get(`customer/${query.id}`)
+    let customer = await axios.get(`customers/${query.id}`)
     store.commit('SET_HEAD', ['Customer Calendar', `View appointments of ${customer.data.name}.`])
     return {
       id: query.id,

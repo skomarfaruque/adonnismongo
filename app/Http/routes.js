@@ -32,13 +32,13 @@ Route.group('agent', () => {
   Route.resource('agents', 'AgentController').except('create', 'edit')
   Route.get('agent/:aid/assign-customer/:cid', 'AgentController.assignCustomer')
   Route.get('agent/:id/customer', 'AgentController.customers')
-  Route.get('agent/search/:key', 'AgentController.search')
+  Route.get('agent/search', 'AgentController.search')
 }).prefix('api').middleware('auth')
 
 Route.group('customer', () => {
-  Route.resource('customer', 'CustomerController').except('create', 'edit')
+  Route.resource('customers', 'CustomerController').except('create', 'edit')
+  Route.get('customer/search', 'CustomerController.search')
 }).prefix('api').middleware('auth')
-
 Route.group('appointment', () => {
   Route.get('/:id', 'AppointmentController.show')
   Route.get('agent/:id', 'AppointmentController.byAgent')

@@ -69,39 +69,7 @@
   </section>
 </template>
 <style>
-  td.action {
-    text-align: center;
-  }
-  td.action a {
-    margin: 0 5px 0 5px;
-  }
-  .level .field input {
-    width: 300px;
-  }
-  .field.has-addons {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: start;
-    -ms-flex-pack: start;
-    justify-content: flex-start;
-  }
-  .control {
-    font-size: 1rem;
-    position: relative;
-    text-align: left;
-  }
-  .field.has-addons .control:first-child .button, .field.has-addons .control:first-child .input, .field.has-addons .control:first-child .select select {
-    border-bottom-left-radius: 3px;
-    border-top-left-radius: 3px;
-  }
-  .field.has-addons .control:last-child .button, .field.has-addons .control:last-child .input, .field.has-addons .control:last-child .select select {
-    border-bottom-right-radius: 3px;
-    border-top-right-radius: 3px;
-  }
-  .field.has-addons .control .button, .field.has-addons .control .input, .field.has-addons .control .select select {
-    border-radius: 0;
-  }
+  
 </style>
 <script>
   import axios from '~/plugins/axios'
@@ -133,11 +101,8 @@
         await axios.delete(`agents/${item._id}`)
         this.list.splice(ind, 1)
       },
-      edit (item, ind) {
-
-      },
       async searchAgent () {
-        let { data } = await axios.get(`agent/search/${this.search}`)
+        let { data } = await axios.get(`agent/search?key=${this.search}`)
         this.list = data
       }
     }

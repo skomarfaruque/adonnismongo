@@ -43,6 +43,28 @@ class CustomerController {
   * import (req, res) {
     res.ok()
   }
+
+  /**
+   * Search Customer by Name, Zip Code, City
+   */
+  * search (req, res) {
+    let search = req.input('key')
+    search = search || ''
+    const id = req.currentUser._id
+    const agents = yield AgentCustomer.find({ agent: id }, 'customer').exec()
+    const cids = agents.map((c) => {
+      return c.customer
+    })
+    const customers = yield Customer
+      .find()
+      .and([
+        { _id: { $in: cids } },
+        { $or: [{ name: new RegExp(search, 'i') }, { email: new RegExp(search, 'i') }, { zipCode: search }, { city: new RegExp(search, 'i') }] }
+      ])
+      .exec()
+
+    res.ok(customers)
+  }
 }
 
 module.exports = CustomerController

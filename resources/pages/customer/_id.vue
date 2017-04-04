@@ -50,7 +50,7 @@ export default {
   },
   async data ({ store, params }) {
     axios.setBearer(store.state.authUser)
-    const { data } = await axios.get(`customer/${params.id}`)
+    const { data } = await axios.get(`customers/${params.id}`)
     return {
       id: data._id,
       name: data.name,
@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     async save () {
-      const customer = await axios.put(`customer/${this.id}`, this.$data)
+      const customer = await axios.put(`customers/${this.id}`, this.$data)
       this.$router.push('/customer')
     }
   }

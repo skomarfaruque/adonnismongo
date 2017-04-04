@@ -1,15 +1,26 @@
 <template>
   <section>
-    <div class="levels">
+    <nav class="level">
       <div class="level-left">   
-
+        <div class="level-item">
+          <div class="field has-addons">
+            <p class="control">
+              <input class="input" type="search" placeholder="Search by Name, Email, Zip Code, City" v-model="search" @keyup.enter="searchCustomer">
+            </p>
+            <p class="control">
+              <button class="button" @click="searchCustomer">
+                <i class="fa fa-search"></i>
+              </button>
+            </p>
+          </div>
+        </div>
       </div>
       <div class="level-right">   
         <div class="level-item">
           <nuxt-link href="javascript:" class="button is-primary" title="Add New" to="/customer/new"> <i class="fa fa-plus"></i> </nuxt-link>
         </div>
       </div>
-    </div>
+    </nav>
     <div class="columns">
       <table class="table is-striped">
         <thead>
@@ -79,10 +90,11 @@ export default {
   async data ({ store }) {
     store.commit('SET_HEAD', ['Your Customer', 'View list of the customers.'])
     axios.setBearer(store.state.authUser)
-    let { data } = store.state.role === 'Agent' ? await axios.get('agent/me/customer') : await axios.get('customer')
+    let { data } = store.state.role === 'Agent' ? await axios.get('agent/me/customer') : await axios.get('customers')
 
     return {
       list: data,
+      search: '',
       confirmation: false
     }
   },
@@ -93,6 +105,10 @@ export default {
     async remove (item, ind) {
       await axios.delete(`customer/${item._id}`)
       this.list.splice(ind, 1)
+    },
+    async searchCustomer () {
+      let { data } = await axios.get(`customer/search?key=${this.search}`)
+      this.list = data
     }
   }
 }

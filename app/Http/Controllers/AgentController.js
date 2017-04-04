@@ -52,9 +52,8 @@ class AgentController {
       agentId = req.currentUser._id
     }
     const agentcustomers = yield AgentCustomer.find({ agent: agentId }).populate('customer').exec()
-    let customers = []
-    agentcustomers.forEach((m) => {
-      customers.push({
+    const customers = agentcustomers.map((m) => {
+      return {
         _id: m.customer._id,
         name: m.customer.name,
         email: m.customer.email,
@@ -62,7 +61,7 @@ class AgentController {
         zipCode: m.customer.zipCode,
         state: m.customer.state,
         city: m.customer.city
-      })
+      }
     })
     res.ok(customers)
   }
@@ -71,7 +70,8 @@ class AgentController {
    * Search Agent by Name, Zip Code, City
    */
   * search (req, res) {
-    const search = req.param('key')
+    let search = req.input('key')
+    search = search || ''
     const agentId = yield Role.findOne({ name: 'Agent' }).exec()
     const agents = yield User
       .find()
