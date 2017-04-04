@@ -75,7 +75,7 @@
       }
       return {
         user: data,
-        isAgent: store.state.permissions.includes('agent-view')
+        isAgent: store.state.role === 'Agent'
       }
     },
     methods: {

@@ -4,13 +4,52 @@
       <div class="column is-6">
         <label class="label">Name</label>
         <p class="control">
-          <input class="input" v-model="name" type="text" placeholder="Customer Name">
+          <input class="input" type="text" v-model="user.name" placeholder="Name">
         </p>
         <label class="label">Email</label>
         <p class="control">
-          <input class="input" v-model="email" type="text" placeholder="Customer Email">
+          <input class="input" type="email" v-model="user.email" placeholder="Email">
         </p>
-        <a href="javascript:" class="button is-primary" @click="save">Save</a>
+        <label class="label">Address</label>
+        <p class="control">
+          <input class="input" type="text" v-model="user.address" placeholder="Address Line">
+        </p>
+        <label class="label">City</label>
+        <p class="control">
+          <input class="input" v-model="user.city" type="text" placeholder="City">
+        </p>
+        <label class="label">State</label>
+        <p class="control">
+          <input class="input" v-model="user.state" type="text" placeholder="State">
+        </p>
+        <label class="label">Zip Code</label>
+        <p class="control">
+          <ul>
+            <li v-for="(zip, ind) in user.zipCode">
+              <div class="columns">
+                <div class="column is-1">
+                  <a href="javascript:" class="button is-danger" @click="removeZip(ind)"><i class="fa fa-minus"></i></a>
+                </div> 
+                <div class="column is-5"><input class="input" v-model="user.zipCode[ind]" type="text" placeholder="Zip Code"></div>
+              </div>
+            </li>
+          </ul>
+          
+          <div class="columns">
+            <div class="column is-1"><a href="javascript:"
+                class="button is-info"
+                @click="addZip"><i class="fa fa-plus"></i></a></div>
+          </div>
+
+        </p>
+        <section>
+          <label class="label">Block Time</label>
+          <p class="control">
+            <input class="input" v-model="user.block_time" type="text" placeholder="Block Time">
+          </p>
+        </section>
+        <hr/>
+        <a href="javascript:" class="button is-info" @click="saveInfo">Save Information</a>
       </div>
     </div>
   </section>
@@ -30,19 +69,25 @@ export default {
   },
   async data ({ store, params }) {
     axios.setBearer(store.state.authUser)
-    const { data } = await axios.get(`users/${params.id}`)
-    return {
-      id: data._id,
-      name: data.name,
-      email: data.email,
-      address: data.address ? data.address : ''
-    }
+      let { data } = await axios.get(`users/${params.id}`)
+      if (!data.zipCode) {
+          data.zipCode = []
+      }
+      return {
+        user: data
+      }
   },
   methods: {
-    async save () {
-      const agent = await axios.put(`users/${this.id}`, this.$data)
-      this.$router.push('/customer')
-    }
+     addZip () {
+        this.user.zipCode.push('')
+      },
+      removeZip (ind) {
+        this.user.zipCode.splice(ind, 1)
+      },
+      async saveInfo () {
+        await axios.put(`users/${this.user._id}`, this.user)
+        this.$router.push('/agent')
+      }
   }
 }
 </script>

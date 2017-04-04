@@ -38,9 +38,17 @@
             <td>{{ item.zipCode }}</td>
             <td>{{ item.city }}</td>
             <td class="action">
-              <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Delete"> <i class="fa fa-trash"></i> </a>
-						  <nuxt-link class="button is-primary" :to="`/customer/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
-              <nuxt-link class="button is-primary" :to="`/customer/calendar?id=${item._id}`" title="Edit"><i class="fa fa-calendar"></i> </nuxt-link>
+              <section v-show="confirmation === false">
+                <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
+                <nuxt-link class="button is-primary" :to="`/customer/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
+                <nuxt-link class="button is-primary" :to="`/customer/calendar?id=${item._id}`" title="Edit"><i class="fa fa-calendar"></i> </nuxt-link>
+              </section>
+              <section v-show="confirmation">
+                <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>
+                 <a href="javascript:" class="button is-primary" @click="confirmation = false" title="Cancel"> <i class="fa fa-times"></i> </a>
+              </section>
+
+
             </td>
           </tr>
         </tbody>
@@ -74,8 +82,12 @@ export default {
     let { data } = store.state.role === 'Agent' ? await axios.get('agent/me/customer') : await axios.get('customer')
 
     return {
-      list: data
+      list: data,
+      confirmation: false
     }
+  },
+  destroyed () {
+    this.confirmation = false
   },
   methods: {
     async remove (item, ind) {

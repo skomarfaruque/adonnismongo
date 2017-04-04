@@ -16,7 +16,7 @@ class UserController {
     if (userId === 'me') {
       userId = req.currentUser._id
     }
-    const user = yield User.findOne(userId).exec()
+    const user = yield User.findOne({ _id: userId }).exec()
     return res.ok(user)
   }
 

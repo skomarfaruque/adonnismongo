@@ -29,10 +29,11 @@ Route.group('user', () => {
 Route.resource('api/users', 'UserController').except('create', 'store', 'edit').middleware('auth')
 
 Route.group('agent', () => {
-  Route.resource('agents', 'AgentController').except('create', 'edit').middleware('auth')
-  Route.get('agent/:aid/assign-customer/:cid', 'AgentController.assignCustomer').middleware('auth')
-  Route.get('agent/:id/customer', 'AgentController.customers').middleware('auth')
-}).prefix('api')
+  Route.resource('agents', 'AgentController').except('create', 'edit')
+  Route.get('agent/:aid/assign-customer/:cid', 'AgentController.assignCustomer')
+  Route.get('agent/:id/customer', 'AgentController.customers')
+  Route.get('agent/search/:key', 'AgentController.search')
+}).prefix('api').middleware('auth')
 
 Route.group('customer', () => {
   Route.resource('customer', 'CustomerController').except('create', 'edit')

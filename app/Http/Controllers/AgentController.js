@@ -8,7 +8,8 @@ use('App/Model/Customer')
 class AgentController {
 
   * index (req, res) {
-    let users = yield User.find({ 'role.name': 'Agent' })
+    const agentId = yield Role.findOne({ name: 'Agent' }).exec()
+    const users = yield User.find({ role: agentId }).exec()
     res.send(users)
   }
 
@@ -64,6 +65,24 @@ class AgentController {
       })
     })
     res.ok(customers)
+  }
+
+  /**
+   * Search Agent by Name, Zip Code, City
+   */
+  * search (req, res) {
+    const search = req.param('key')
+    const agentId = yield Role.findOne({ name: 'Agent' }).exec()
+    const agents = yield User
+      .find()
+      .and([
+        { role: agentId },
+        { $or: [{ name: new RegExp(search, 'i') }, { email: new RegExp(search, 'i') }, { zipCode: search }, { city: new RegExp(search, 'i') }] }
+      ])
+      .populate('role')
+      .exec()
+
+    res.ok(agents)
   }
 }
 
