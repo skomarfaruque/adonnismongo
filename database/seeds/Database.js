@@ -24,10 +24,10 @@ class DatabaseSeeder {
       permissions: ['agent-view', 'admin-view', 'customer-view', 'supply-view', 'invoice-view', 'user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
     }, {
       name: 'Staff',
-      permissions: ['admin-view', 'customer-view', 'user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
+      permissions: ['agent-view', 'customer-view', 'user-create', 'user-update', 'user-delete', 'book-create', 'book-update', 'book-delete']
     }, {
       name: 'Agent',
-      permissions: ['calendar-view', 'admin-view', 'customer-view', 'supply-view', 'invoice-view', 'book-create', 'book-update', 'book-delete']
+      permissions: ['calendar-view', 'customer-view', 'supply-view', 'invoice-view', 'book-create', 'book-update', 'book-delete']
     }])
     const user = use('App/Model/User')
     yield user.remove({})
