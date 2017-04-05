@@ -2,6 +2,10 @@
   <section>
     <div class="columns">
       <div class="column is-6">
+        <label class="label">Email</label>
+        <p class="control">
+          <input class="input" v-model="email" type="text" placeholder="Customer Email">
+        </p>
         <label class="label">Name</label>
         <p class="control">
           <input class="input" v-model="name" type="text" placeholder="Customer Name">
