@@ -47,7 +47,7 @@
             <td>{{ item.name }}</td>
             <td>{{ item.email }}</td>
             <td>{{ item.city }}</td>
-            <td>{{ item.zipCode.join(',') }}</td>
+            <td>{{ item.zipCode.join(', ') }}</td>
             <td class="action">
               <section v-show="confirmation === false">
                 <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
@@ -83,23 +83,33 @@
     fetch ({ store }) {
       store.commit('SET_HEAD', ['Agent', 'View list of the agents.'])
     },
-    async data ({ store }) {
-      axios.setBearer(store.state.authUser)
-
-      let { data } = await axios.get('agents')
+    data ({ store }) {      
       return {
-        list: data,
+        list: [],
         search: '',
         confirmation: false
       }
     },
+    async beforeCreate () {
+      axios.setBearer(this.$store.state.authUser)
+      let { data } = await axios.get('agents')
+      this.list = data
+    },
     destroyed () {
       this.confirmation = false
+    },
+    watch: {
+      search (value) {
+        if (value.length === 0) {
+          this.searchAgent()
+        }
+      }
     },
     methods: {
       async remove (item, ind) {
         await axios.delete(`agents/${item._id}`)
         this.list.splice(ind, 1)
+        this.confirmation = false
       },
       async searchAgent () {
         let { data } = await axios.get(`agent/search?key=${this.search}`)

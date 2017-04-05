@@ -52,6 +52,10 @@
   .card-footer {
     padding: 10px;
   }
+  .card-footer-item {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
 </style>
 <script>    
   export default {

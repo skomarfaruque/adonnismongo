@@ -87,24 +87,34 @@ export default {
       title: `Customer Page`
     }
   },
-  async data ({ store }) {
+  data ({ store }) {
     store.commit('SET_HEAD', ['Your Customer', 'View list of the customers.'])
-    axios.setBearer(store.state.authUser)
-    let { data } = store.state.role === 'Agent' ? await axios.get('agent/me/customer') : await axios.get('customers')
-
     return {
-      list: data,
+      list: [],
       search: '',
       confirmation: false
     }
   },
+  async beforeCreate () {
+    axios.setBearer(this.$store.state.authUser)
+    let { data } = this.$store.state.role === 'Agent' ? await axios.get('agent/me/customer') : await axios.get('customers')
+    this.list = data
+  },
   destroyed () {
     this.confirmation = false
+  },
+  watch: {
+    search (value) {
+      if (value.length === 0) {
+        this.searchCustomer()
+      }
+    }
   },
   methods: {
     async remove (item, ind) {
       await axios.delete(`customer/${item._id}`)
       this.list.splice(ind, 1)
+      this.confirmation = false
     },
     async searchCustomer () {
       let { data } = await axios.get(`customer/search?key=${this.search}`)

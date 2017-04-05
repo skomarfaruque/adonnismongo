@@ -27,8 +27,8 @@ class CustomerController {
 
   * update (req, res) {
     const id = req.param('id')
-    const obj = req.only('name', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state')
-    const customer = yield Customer.update({ _id: id }, { name: obj.name, email: obj.email, address: obj.address }).exec()
+    const obj = req.only('name', 'email', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state')
+    const customer = yield Customer.update({ _id: id }, { name: obj.name, email: obj.email, phone: obj.phone,  address1: obj.address1, address2: obj.address2, city: obj.city, zipCode: obj.zipCode, state: obj.state }).exec()
     res.send(customer)
   }
 
@@ -50,16 +50,23 @@ class CustomerController {
   * search (req, res) {
     let search = req.input('key')
     search = search || ''
-    const id = req.currentUser._id
-    const agents = yield AgentCustomer.find({ agent: id }, 'customer').exec()
-    const cids = agents.map((c) => {
-      return c.customer
-    })
+    const role = req.currentUser.role.name
+    let existingCustomer = {}
+    if (role === 'Agent') {
+      const id = req.currentUser._id
+      const agents = yield AgentCustomer.find({ agent: id }, 'customer').exec()
+      const cids = agents.map((c) => {
+        return c.customer
+      })
+      existingCustomer = { _id: { $in: cids } }
+    }
+    
+    let regex = new RegExp(search, 'i')
     const customers = yield Customer
       .find()
       .and([
-        { _id: { $in: cids } },
-        { $or: [{ name: new RegExp(search, 'i') }, { email: new RegExp(search, 'i') }, { zipCode: search }, { city: new RegExp(search, 'i') }] }
+        existingCustomer,
+        { $or: [{ name: regex }, { email: regex }, { zipCode: search }, { city: regex }] }
       ])
       .exec()
 

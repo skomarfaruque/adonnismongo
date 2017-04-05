@@ -31,6 +31,7 @@
     "mongoose": "^4.9.0",
     "nuxt": "latest",
     "standard": "^8.6.0",
+    "vue-text-mask": "^5.1.0",
     "youch": "^2.0.4"
   },
   "standard": {

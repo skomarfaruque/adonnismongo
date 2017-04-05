@@ -8,7 +8,19 @@
         </p>
         <label class="label">Email</label>
         <p class="control">
-          <input class="input" type="email" v-model="user.email" placeholder="Email">
+          <input class="input" type="user.email" v-model="user.email" placeholder="Email">
+        </p>
+        <label class="label">Phone</label>
+        <p class="control">
+          <masked-input
+            type="text"
+            name="phone"
+            class="input"
+            v-model="user.phone"
+            :mask="['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]"
+            :guide="false"
+            placeholderChar="#">
+          </masked-input>
         </p>
         <label class="label">Address</label>
         <p class="control">
@@ -23,7 +35,7 @@
           <input class="input" v-model="user.state" type="text" placeholder="State">
         </p>
         <label class="label">Zip Code</label>
-        <p class="control">
+        <div class="control">
           <ul>
             <li v-for="(zip, ind) in user.zipCode">
               <div class="columns">
@@ -41,7 +53,7 @@
                 @click="addZip"><i class="fa fa-plus"></i></a></div>
           </div>
 
-        </p>
+        </div>
         <section v-if="isAgent">
           <label class="label">Block Time</label>
           <p class="control">
@@ -57,6 +69,7 @@
 
 <script>
   import axios from '~/plugins/axios'
+  import MaskedInput from 'vue-text-mask'
   export default {
     middleware: 'auth',
     head () {
@@ -67,8 +80,11 @@
     fetch ({ store }) {
       store.commit('SET_HEAD', ['Profile', 'Personal Information.'])
     },
+    components: {
+      MaskedInput
+    },
     async data ({ store, params }) {
-      axios.setBearer(store.state.authUser)
+      
       let { data } = await axios.get('users/me')
       if (!data.zipCode) {
           data.zipCode = []
@@ -77,6 +93,10 @@
         user: data,
         isAgent: store.state.role === 'Agent'
       }
+    },
+    created ({ store }) {
+      console.log(store)
+      axios.setBearer(this.$store.state.authUser)
     },
     methods: {
       addZip () {

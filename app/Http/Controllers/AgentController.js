@@ -73,11 +73,12 @@ class AgentController {
     let search = req.input('key')
     search = search || ''
     const agentId = yield Role.findOne({ name: 'Agent' }).exec()
+    const regex = new RegExp(search, 'i')
     const agents = yield User
       .find()
       .and([
         { role: agentId },
-        { $or: [{ name: new RegExp(search, 'i') }, { email: new RegExp(search, 'i') }, { zipCode: search }, { city: new RegExp(search, 'i') }] }
+        { $or: [{ name: regex }, { email: regex }, { zipCode: search }, { city: regex }] }
       ])
       .populate('role')
       .exec()

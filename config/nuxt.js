@@ -68,7 +68,7 @@ module.exports = {
    * Vendors
    */
   build: {
-    vendor: ['axios']
+    vendor: ['axios', 'vue-text-mask']
   },
   plugins: ['~/plugins/cookie', '~/plugins/axios']
 }

@@ -10,6 +10,18 @@
         <p class="control">
           <input class="input" type="email" v-model="user.email" placeholder="Email">
         </p>
+        <label class="label">Phone</label>
+        <p class="control">
+          <masked-input
+            type="text"
+            name="phone"
+            class="input"
+            v-model="user.phone"
+            :mask="['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]"
+            :guide="false"
+            placeholderChar="#">
+          </masked-input>
+        </p>
         <label class="label">Address</label>
         <p class="control">
           <input class="input" type="text" v-model="user.address" placeholder="Address Line">
@@ -23,7 +35,7 @@
           <input class="input" v-model="user.state" type="text" placeholder="State">
         </p>
         <label class="label">Zip Code</label>
-        <p class="control">
+        <div class="control">
           <ul>
             <li v-for="(zip, ind) in user.zipCode">
               <div class="columns">
@@ -41,7 +53,7 @@
                 @click="addZip"><i class="fa fa-plus"></i></a></div>
           </div>
 
-        </p>
+        </div>
         <section>
           <label class="label">Block Time</label>
           <p class="control">
@@ -57,6 +69,7 @@
 
 <script>
 import axios from '~/plugins/axios'
+import MaskedInput from 'vue-text-mask'
 export default {
   middleware: 'auth',
   head () {
@@ -67,15 +80,22 @@ export default {
   fetch ({ store }) {
     store.commit('SET_HEAD', ['Agent Edit', 'Edit agent information.'])
   },
+  components: {
+    MaskedInput
+  },
   async data ({ store, params }) {
-    axios.setBearer(store.state.authUser)
-      let { data } = await axios.get(`users/${params.id}`)
-      if (!data.zipCode) {
-          data.zipCode = []
-      }
-      return {
-        user: data
-      }
+    
+    let { data } = await axios.get(`users/${params.id}`)
+    
+    return {
+      user: data
+    }
+  },
+  created () {
+    axios.setBearer(this.$store.state.authUser)
+    if (!this.user.zipCode) {
+        this.user.zipCode = []
+    }
   },
   methods: {
      addZip () {

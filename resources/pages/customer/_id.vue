@@ -12,7 +12,15 @@
         </p>
         <label class="label">Phone</label>
         <p class="control">
-          <input class="input" v-model="phone" type="text" placeholder="Customer phone">
+          <masked-input
+            type="text"
+            name="phone"
+            class="input"
+            v-model="phone"
+            :mask="['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]"
+            :guide="false"
+            placeholderChar="#">
+          </masked-input>
         </p>
         <label class="label">Address 1</label>
         <p class="control">
@@ -42,6 +50,7 @@
 
 <script>
 import axios from '~/plugins/axios'
+import MaskedInput from 'vue-text-mask'
 export default {
   middleware: 'auth',
   head () {
@@ -52,9 +61,12 @@ export default {
   fetch ({ store }) {
     store.commit('SET_HEAD', ['Customer Edit', 'Edit customer information.'])
   },
+  components: {
+    MaskedInput
+  },
   async data ({ store, params }) {
-    axios.setBearer(store.state.authUser)
-    const { data } = await axios.get(`customers/${params.id}`)
+    
+    let { data } = await axios.get(`customers/${params.id}`)
     return {
       id: data._id,
       name: data.name,
@@ -66,6 +78,9 @@ export default {
       address1: data.address1,
       address2: data.address2
     }
+  },
+  created () {
+    axios.setBearer(this.$store.state.authUser)
   },
   methods: {
     async save () {
