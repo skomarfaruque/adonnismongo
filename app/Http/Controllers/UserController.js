@@ -64,7 +64,12 @@ class UserController {
     const user = yield User.create({ name: name, email: email, reset_token: resetToken, role: role })
 
     const resetUrl = `${Env.get('HOST')}:${Env.get('PORT')}/signup/confirmation?token=${user.reset_token}`
-
+    yield Mail.Raw('', {}, (message) => {
+      message.to(email, email)
+      message.from('no-reply@backportal.com')
+      message.subject('Email Confirmation for Back Portal App')
+      message.html(`Hello,<br> <p>Please visit following url to join the Back Portal:</p> <br> <a href="${resetUrl}" style="font-size:20px;">Retrieve Password</a>`)
+    })
     res.ok(resetUrl)
   }
   /**
