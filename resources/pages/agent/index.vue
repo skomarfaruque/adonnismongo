@@ -63,9 +63,6 @@
         </tbody>
       </table>
     </div>
-    <div class="columns">
-
-    </div>
   </section>
 </template>
 <style>

@@ -48,6 +48,7 @@ module.exports = {
   */
   css: [
     { src: 'bulma', lang: 'sass' },
+    { src: 'flatpickr/dist/flatpickr.min.css' },
     { src: '~assets/css/main.scss', lang: 'scss' }
   ],
   /*
@@ -68,7 +69,7 @@ module.exports = {
    * Vendors
    */
   build: {
-    vendor: ['axios', 'vue-text-mask']
+    vendor: ['axios', 'vue-text-mask', 'flatpickr']
   },
   plugins: ['~/plugins/cookie', '~/plugins/axios']
 }

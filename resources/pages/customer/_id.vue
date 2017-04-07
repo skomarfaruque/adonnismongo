@@ -65,7 +65,7 @@ export default {
     MaskedInput
   },
   async data ({ store, params }) {
-    
+    axios.setBearer(store.state.authUser)
     let { data } = await axios.get(`customers/${params.id}`)
     return {
       id: data._id,
@@ -79,12 +79,9 @@ export default {
       address2: data.address2
     }
   },
-  created () {
-    axios.setBearer(this.$store.state.authUser)
-  },
   methods: {
     async save () {
-      const customer = await axios.put(`customers/${this.id}`, this.$data)
+      await axios.put(`customers/${this.id}`, this.$data)
       this.$router.push('/customer')
     }
   }
