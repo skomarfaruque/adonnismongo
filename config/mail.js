@@ -25,7 +25,7 @@ module.exports = {
   */
   smtp: {
     pool: true,
-    port: 587,
+    port: 465,
     host: 'smtp.gmail.com',
     secure: true,
     auth: {

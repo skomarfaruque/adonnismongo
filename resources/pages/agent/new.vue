@@ -16,10 +16,7 @@
 
     <div class="card" v-show="confirmation.length > 0">
       <div class="title">
-        This link will be sent to email for confirmation: (For testing purpose)
-      </div>
-      <div class="subtitle">
-        <a :href="confirmation" target="_blank">Confirmation Link</a>
+        A confirmation link has been sent to email.
       </div>
     </div>
   </section>

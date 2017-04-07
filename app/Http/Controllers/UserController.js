@@ -63,12 +63,12 @@ class UserController {
     const role = yield Role.findOne({ name: 'Agent' })
     const user = yield User.create({ name: name, email: email, reset_token: resetToken, role: role })
 
-    const resetUrl = `${Env.get('HOST')}:${Env.get('PORT')}/signup/confirmation?token=${user.reset_token}`
-    yield Mail.Raw('', {}, (message) => {
+    const resetUrl = `http://${Env.get('HOST')}:${Env.get('PORT')}/signup/confirmation?token=${user.reset_token}`
+    yield Mail.raw('', message => {
       message.to(email, email)
       message.from('no-reply@backportal.com')
       message.subject('Email Confirmation for Back Portal App')
-      message.html(`Hello,<br> <p>Please visit following url to join the Back Portal:</p> <br> <a href="${resetUrl}" style="font-size:20px;">Retrieve Password</a>`)
+      message.html(`Hello,<br> <p>Please visit following url to join the Back Portal:</p> <br> <a href="${resetUrl}"  style="font-size:20px;">${resetUrl}</a>`)
     })
     res.ok(resetUrl)
   }
@@ -106,12 +106,12 @@ class UserController {
     date.setDate(date.getDate() + 7)
     user.reset_exp = date
     yield user.save()
-    const resetUrl = `${Env.get('HOST')}:${Env.get('PORT')}/reset?re=${user.reset_token}`
-    yield Mail.Raw('', {}, (message) => {
+    const resetUrl = `http://${Env.get('HOST')}:${Env.get('PORT')}/reset?re=${user.reset_token}`
+    yield Mail.raw('', message => {
       message.to(email, email)
       message.from('no-reply@backportal.com')
       message.subject('Password Retrieval for Back Portal App')
-      message.html(`Hello,<br> <p>Please visit following url to retrieve your forgotten password:</p> <br> <a href="${resetUrl}" style="font-size:20px;">Retrieve Password</a>`)
+      message.html(`Hello,<br> <p>Please visit following url to retrieve your forgotten password:</p> <br> <a href="${resetUrl}"  style="font-size:20px;">${resetUrl}</a>`)
     })
 
     return res.send({ success: true })
