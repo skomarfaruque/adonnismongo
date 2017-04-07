@@ -14,7 +14,36 @@
     </div>
   </section>
 </template>
+<style>
+  .gray {
+    background-color: gray
+  }
+  		/* enabling marked timespans for month view */
+  .dhx_scheduler_month .dhx_marked_timespan {
+    display: block;
+  }
+  /* style to display special dates, e.g. holidays */
+  .holiday {
+    background-color: #fadcd3;
+    text-align: center;
+    font-size: 24px;
+    opacity: 0.8;
+    color: #e2b8ac;
+  }
+  .green {
+    background-color: rgba(173, 255, 47, 0.05);
+    text-align: center;
+    font-size: 24px;
+    opacity: 0.8;
+    color: green;
+  }
 
+  .fat_lines_section {
+			background-image: url(/calendar/imgs/fat_lines.png);
+      opacity: 0.05;
+		}
+
+</style>
 <script>
 import axios from '~/plugins/axios'
 import Scheduler from '~components/Scheduler.vue'
@@ -38,10 +67,12 @@ export default {
       events: event.data,
       email: agent.data.email,
       name: agent.data.name,
-      block_time: JSON.parse(agent.data.block_time)
+      block_time: JSON.parse(agent.data.block_time),
+      allMarkedId: []
     }
   },
   mounted () {
+    axios.setBearer(this.$store.state.authUser)
     scheduler.config.lightbox.sections = [
       {name: 'description', height: 200, map_to: 'text', type: 'textarea', focus: true},
       {name: 'Customer', height: 25, map_to: 'customer', type: 'textarea'},
@@ -59,17 +90,44 @@ export default {
       })
     })
     const startTimes = this.block_time.work_start_time.split(':')
-    const startMinute = startTimes[0] * 60 + startTimes[1]
+    const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
     const endTimes = this.block_time.work_end_time.split(':')
-    const endMinute = endTimes[0] * 60 + endTimes[1]
-    let config = {
+    const endMinute = parseInt(endTimes[0]) * 60 + parseInt(endTimes[1])
+    let offDay = {
       days: this.block_time.days,
-      zones: [parseInt(startMinute), parseInt(endMinute)],
-      invert_zones: true
+      zones: 'fullday',
+      css: 'holiday',
+      html: 'Personal Off',
+      type: 'dhx_time_block'
     }
-    console.log(config)
-    scheduler.addMarkedTimespan(this.block_time)
+    let difference = [0, 1, 2, 3, 4, 5, 6].filter(x => this.block_time.days.indexOf(x) === -1)
+    // let workingHour = {
+    //   days: difference,
+    //   zones: [startMinute, endMinute],
+    //   css: 'green'
+    // }
+    let offHour = {
+      days: difference,
+      zones: [startMinute, endMinute],
+      invert_zones: true,
+      type: 'dhx_time_block',
+      css: 'fat_lines_section'
+    }
     scheduler.parse(events, 'json')
+    // scheduler.addMarkedTimespan(workingHour)
+    let id1 = scheduler.addMarkedTimespan(offHour)
+    this.allMarkedId.push(offDay)
+    let id2 = scheduler.addMarkedTimespan(offDay)
+    this.allMarkedId.push(offHour)
+    scheduler.updateView()
+  },
+  destroyed () {
+    this.events = []
+    this.allMarkedId.forEach((e) => {
+      scheduler.deleteMarkedTimespan(e)
+    })
+    this.block_time = {}
+    this.allMarkedId = []
   },
   methods: {
     async save (id, ev) {

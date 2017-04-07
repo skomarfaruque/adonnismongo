@@ -40,6 +40,9 @@ module.exports = {
     script: [
       {
         src: '/calendar/dhtmlxscheduler.js'
+      },
+      {
+        src: '/calendar/dhtmlxscheduler_limit.js'
       }
     ]
   },
