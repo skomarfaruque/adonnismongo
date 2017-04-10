@@ -80,19 +80,20 @@
     fetch ({ store }) {
       store.commit('SET_HEAD', ['Agent', 'View list of the agents.'])
     },
-    data ({ store }) {      
+    async data ({ store }) {
+      axios.setBearer(store.state.authUser)
+      let { data } = await axios.get('agents')  
       return {
-        list: [],
+        list: data,
         search: '',
         confirmation: false
       }
     },
-    async beforeCreate () {
+    created () {
       axios.setBearer(this.$store.state.authUser)
-      let { data } = await axios.get('agents')
-      this.list = data
     },
     destroyed () {
+      this.list = []
       this.confirmation = false
     },
     watch: {
