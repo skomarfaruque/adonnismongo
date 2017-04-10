@@ -95,7 +95,7 @@
       margin-right: 10px;
     }
   #custom_form .modal-content {
-    overflow: visible !impomrtant;
+    overflow: visible !important;
   }  
   ul.options-list {
     display: flex;
