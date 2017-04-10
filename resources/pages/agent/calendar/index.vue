@@ -94,6 +94,9 @@
     .block a {
       margin-right: 10px;
     }
+  #custom_form .modal-content {
+    overflow: visible !impomrtant;
+  }  
   ul.options-list {
     display: flex;
     flex-direction: column;
