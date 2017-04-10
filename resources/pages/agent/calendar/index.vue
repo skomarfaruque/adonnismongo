@@ -33,6 +33,10 @@
                 <div class="field has-addons">
                   <p class="control">
                     <input class="input" type="text" placeholder="Select Customer" v-model="customer" @input="searchCustomer($event.target.value)" @keyup.esc="isOpen = false" @blur="isOpen = false" @keydown.down="moveDown" @keydown.up="moveUp" @keydown.enter="selectOption">
+                    <span class="icon is-small" v-if="isAdded">
+                      <i class="fa fa-info" aria-hidden="true"></i>
+                    </span>
+                    <span class="help is-success" v-if="isAdded">Customer with this email has added to your profile!</span>
                   </p>
                   <p class="control">
                     <button class="button" @click="addCustomer">
@@ -101,7 +105,7 @@
   .holiday {
     background-color: #fadcd3;
     text-align: center;
-    font-size: 24px;
+    font-size: 14px;
     opacity: 0.8;
     color: #e2b8ac;
   }
@@ -171,11 +175,13 @@
       axios.setBearer(store.state.authUser)
       let event = await axios.get(`appointment/agent/${query.id}`)
       let agent = await axios.get(`users/${query.id}`)
+      let blockDays = await axios.get(`agent/${query.id}/block-dates`)
       store.commit('SET_HEAD', [`Agent Calendar`, `View appointments of ${agent.data.name}.`])
       let blockTime = agent.data.block_time ? JSON.parse(agent.data.block_time) : { days: [], work_start_time: '08:00', work_end_time: '16:00' }
       return {
         id: query.id,
         events: event.data,
+        blockDays: blockDays.data,
         title: 'Customer Appointment',
         email: agent.data.email,
         name: agent.data.name,
@@ -186,7 +192,7 @@
         isOpen: false,
         highlightedPosition: 0,
         isPersonalOff: false,
-        isRepeat: false
+        isAdded: false
       }
     },
     mounted () {
@@ -232,6 +238,17 @@
         html: 'Personal Off',
         type: 'dhx_time_block'
       }
+      this.blockDays.forEach((b) => {
+        let day = {
+          days: new Date(b.blockDate),
+          zones: 'fullday',
+          css: 'holiday',
+          html: 'Personal Off',
+          type: 'dhx_time_block'
+        }
+        scheduler.addMarkedTimespan(day)
+        self.allMarkedId.push(day)
+      })
       let difference = [0, 1, 2, 3, 4, 5, 6].filter(x => this.block_time.days.indexOf(x) === -1)
       // let workingHour = {
       //   days: difference,
@@ -264,9 +281,9 @@
     },
     methods: {
       async save () {
+        let id = scheduler.getState().lightbox_id
+        let ev = scheduler.getEvent(id)
         if (!this.isPersonalOff) {
-          let id = scheduler.getState().lightbox_id
-          let ev = scheduler.getEvent(id)
           const startTimes = this.block_time.work_start_time.split(':')
           const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
           ev.start_date.setHours(startTimes[0], startTimes[1])
@@ -278,7 +295,19 @@
           scheduler.endLightbox(true, document.getElementById('custom_form'))
         } else {
           this.isPersonalOff = false
+          this.isAdded = false
+          await axios.get(`agent/${this.id}/block-date/${ev.start_date.toISOString()}`)
+          let offDay = {
+            days: ev.start_date,
+            zones: 'fullday',
+            css: 'holiday',
+            html: 'Personal Off',
+            type: 'dhx_time_block'
+          }
+          scheduler.addMarkedTimespan(offDay)
+          this.allMarkedId.push(offDay)
           scheduler.endLightbox(false, document.getElementById('custom_form'))
+          scheduler.updateView()
         }
       },
       async remove () {
@@ -291,12 +320,14 @@
       },
       closeForm () {
         this.isPersonalOff = false
+        this.isAdded = false
         scheduler.endLightbox(false, document.getElementById('custom_form'))
       },
       async addCustomer () {
         if (this.customer) {
           const { data } = await axios.post('customers', { name: this.customer, email: this.customer })
           await axios.get(`agent/${this.id}/assign-customer/${data._id}`)
+          this.isAdded = true
         }
       },
       async searchCustomer (value) {

@@ -3,6 +3,7 @@
 const User = use('App/Model/User')
 const Role = use('App/Model/Role')
 const AgentCustomer = use('App/Model/AgentCustomer')
+const BlockDay = use('App/Model/BlockDay')
 use('App/Model/Customer')
 
 class AgentController {
@@ -34,6 +35,25 @@ class AgentController {
     yield User.deleteOne({ _id: agentId })
     yield AgentCustomer.remove({ agent: agentId })
     res.send('destroy')
+  }
+
+  * addBlockDay (req, res) {
+    const agentId = req.param('id')
+    const date = req.param('date')
+    yield BlockDay.deleteOne({ agent: agentId, blockDate: date })
+    const blockDay = yield BlockDay.create({ agent: agentId, blockDate: date })
+    res.ok(blockDay)
+  }
+  * getBlockDays (req, res) {
+    const agentId = req.param('id')
+    const blockDay = yield BlockDay.find({ agent: agentId }).exec()
+    res.ok(blockDay)
+  }
+  * removeBlockDay (req, res) {
+    const agentId = req.param('id')
+    const date = req.param('date')
+    yield BlockDay.deleteOne({ agent: agentId, blockDate: date })
+    res.ok('Block Day Deleted')
   }
 
   * assignCustomer (req, res) {
