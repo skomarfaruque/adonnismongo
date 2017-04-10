@@ -106,7 +106,7 @@ export default {
     if (!data.zipCode) {
       data.zipCode = []
     }
-    let blockTime = JSON.parse(data.block_time) || {}
+    let blockTime = JSON.parse(data.block_time || '{}')
     return {
       user: data,
       allDay: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
