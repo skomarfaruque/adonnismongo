@@ -79,7 +79,7 @@ export default {
   methods: {
     async save () {
       if (!this.user._id) {
-        const customer = await axios.post('customer', this.user)
+        const customer = await axios.post('customers', this.user)
         this.user._id = customer.data._id
       }
       if (this.$store.state.role === 'Agent') {

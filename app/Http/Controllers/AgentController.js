@@ -42,6 +42,7 @@ class AgentController {
     if (agentId === 'me') {
       agentId = req.currentUser._id
     }
+    yield AgentCustomer.deleteOne({ agent: agentId, customer: customerId })
     const agentCustomer = yield AgentCustomer.create({ agent: agentId, customer: customerId })
     res.ok(agentCustomer)
   }
