@@ -10,12 +10,25 @@
       </div>
     </div>
     <div class='columns'>
-      <scheduler />
+        <div id="scheduler_here" class="column is-full dhx_cal_container">
+          <div class="dhx_cal_navline">
+            <div class="dhx_cal_prev_button">&nbsp;</div>
+            <div class="dhx_cal_next_button">&nbsp;</div>
+            <div class="dhx_cal_today_button"></div>
+            <div class="dhx_cal_date"></div>
+            <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+            <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+            <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+          </div>
+          <div class="dhx_cal_header"></div>
+          <div class="dhx_cal_data"></div>
+          
+        </div>
     </div>
     <div id="custom_form" class="modal">
       <div class="modal-content">
         <div class="box">
-          <div v-if="!isPersonalOff">          
+          <div>          
             <h1 class="title">Create Appointment for {{name}}</h1>
             <div class="columns">
               <div class="column is-2">
@@ -31,13 +44,12 @@
               </div>
               <div class="column is-10">
                 <div class="field has-addons">
-                  <p class="control has-icon has-icon-right">
-                    <input v-validate="'required|email'" class="input" type="email" placeholder="Select Customer" name="customer" v-model="customer" @input="searchCustomer($event.target.value)" @keyup.esc="isOpen = false" @blur="isOpen = false" @keydown.down="moveDown" @keydown.up="moveUp" @keydown.enter="selectOption">
+                  <p class="control">
+                    <input class="input" type="text" placeholder="Select Customer" v-model="customer" @input="searchCustomer($event.target.value)" @keyup.esc="isOpen = false" @blur="isOpen = false" @keydown.down="moveDown" @keydown.up="moveUp" @keydown.enter="selectOption">
                     <span class="icon is-small" v-if="isAdded">
-                      <i class="fa fa-check" aria-hidden="true"></i>
+                      <i class="fa fa-info" aria-hidden="true"></i>
                     </span>
                     <span class="help is-success" v-if="isAdded">Customer with this email has added to your profile!</span>
-                    <span class="help is-danger" v-show="errors.has('customer')" >{{ errors.first('customer') }}</span>
                   </p>
                   <p class="control">
                     <button class="button" @click="addCustomer">
@@ -69,7 +81,7 @@
               <p class="control block">
                 <label class="checkbox">
                   <input type="checkbox" v-model="isPersonalOff">
-                  Mark this day as off day.
+                  Personal Off
                 </label>
                 <!--<label class="checkbox">
                   <input type="checkbox" v-model="isRepeat">
@@ -95,6 +107,12 @@
   </section>
 </template>
 <style>
+  #scheduler_here {
+      height:600px;
+      border-style: solid;
+      border-color: #CECECE;
+      border-width: 1px 1px 0 1px;
+    }
   .gray {
     background-color: gray
   }
@@ -161,31 +179,23 @@
 </style>
 <script>
   import axios from '~/plugins/axios'
-  import Scheduler from '~components/Scheduler.vue'
   export default {
-    middleware: '',
-    components: {
-      Scheduler
-    },
-    head () {
-      return {
-        title: `Calendar`
-      }
-    },
-    async data ({ store, query }) {
-      const id = query.id || 'me'
-      axios.setBearer(store.state.authUser)
-      let agent = await axios.get(`users/${id}`)
-      let event = await axios.get(`appointment/agent/${agent.data._id}`)
-      
-      let blockDays = await axios.get(`agent/${agent.data._id}/block-dates`)
-      store.commit('SET_HEAD', [`Agent Calendar`, `View appointments of ${agent.data.name}.`])
+    props: [
+      'id'
+    ],
+    async data () {
+      axios.setBearer(this.$store.state.authUser)
+      let agent = await axios.get(`users/${this.id}`)
+      this.$store.commit('SET_HEAD', [`Agent Calendar`, `View appointments of ${agent.data.name}.`])
+      let id = agent.data._id
+      let event = await axios.get(`appointment/agent/${id}`)
+      let blockDays = await axios.get(`agent/${id}/block-dates`)
       let blockTime = agent.data.block_time ? JSON.parse(agent.data.block_time) : { days: [], work_start_time: '08:00', work_end_time: '16:00' }
       return {
-        id: agent.data._id,
+        id: id,
         events: event.data,
         blockDays: blockDays.data,
-        title: 'Scanning Session',
+        title: 'Customer Appointment',
         email: agent.data.email,
         name: agent.data.name,
         block_time: blockTime,
@@ -203,8 +213,19 @@
       axios.setBearer(this.$store.state.authUser)
       if (process.BROWSER_BUILD) {
         const flatpicker = require('flatpickr')
-        let options = { allowInput: true, enableTime: true, noCalendar: true } // , dateFormat: 'h:i K'
+        let options = { enableTime: true, noCalendar: true }
         new flatpicker(document.getElementById('start-time'), options)
+      }
+      scheduler.config.hour_date = "%h:%i %A"
+      scheduler.config.time_step = 15
+      scheduler.config.event_duration = 120
+      scheduler.config.auto_end_date = true
+      scheduler.config.first_hour = 8;
+      scheduler.config.last_hour = 22;
+      scheduler.init('scheduler_here', new Date(), 'month')
+      scheduler.config.max_month_events = 4
+      scheduler.templates.month_events_link = function (date, count) {
+        return '<a style="padding-right:5px;">+ ' + (count - 4) + ' events </a>'
       }
       var custom_form = document.getElementById('custom_form')
       scheduler.showLightbox = function(id){
@@ -280,16 +301,14 @@
       })
       this.block_time = {}
       this.allMarkedId = []
-      this.title = 'Scanning Session'
+      this.title = 'Customer Appointment'
+      scheduler.clearAll()
     },
     methods: {
       async save () {
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
         if (!this.isPersonalOff) {
-          if (this.errors.any()) {
-            return
-          }
           const startTimes = this.block_time.work_start_time.split(':')
           const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
           ev.start_date.setHours(startTimes[0], startTimes[1])
@@ -330,7 +349,7 @@
         scheduler.endLightbox(false, document.getElementById('custom_form'))
       },
       async addCustomer () {
-        if (this.customer && !this.errors.has('customer')) {
+        if (this.customer) {
           const { data } = await axios.post('customers', { name: this.customer, email: this.customer })
           await axios.get(`agent/${this.id}/assign-customer/${data._id}`)
           this.isAdded = true
@@ -338,7 +357,6 @@
       },
       async searchCustomer (value) {
         this.highlightedPosition = 0
-        this.isAdded = false
         if (value) {
           let { data } = await axios.get(`customer/search?agent=${this.id}&key=${value}`)
           this.searchedCustomers = data || []

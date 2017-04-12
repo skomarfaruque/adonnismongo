@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     async remove (item, ind) {
-      await axios.delete(`customer/${item._id}`)
+      await axios.delete(`customers/${item._id}`)
       this.list.splice(ind, 1)
       this.confirmation = false
     },

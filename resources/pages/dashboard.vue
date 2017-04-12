@@ -3,7 +3,7 @@
     <div class="tile is-vertical is-12">
       <div class="tile is-vertical">
         <div class="tile is-parent is-vertical">
-          <nuxt-link class="tile is-child notification is-info" to="/calendar" v-if="isCalendar">
+          <nuxt-link class="tile is-child notification is-info" to="/agent/calendar" v-if="isCalendar">
             <p class="title">Calendar</p>
             <p class="subtitle">View and create appointments.</p>
           </nuxt-link>

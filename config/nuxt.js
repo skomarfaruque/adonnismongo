@@ -72,7 +72,7 @@ module.exports = {
    * Vendors
    */
   build: {
-    vendor: ['axios', 'vue-text-mask', 'flatpickr']
+    vendor: ['axios', 'vee-validate', 'vue-text-mask', 'flatpickr']
   },
-  plugins: ['~/plugins/cookie', '~/plugins/axios']
+  plugins: ['~/plugins/cookie', '~/plugins/axios', '~/plugins/veelidate']
 }

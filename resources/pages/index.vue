@@ -41,7 +41,7 @@
   </section>
 </template>
 
-<style scoped>
+<style>
   img.logo {
     margin-top: 40px;
   }
@@ -56,8 +56,9 @@
     margin-left: 5px;
     margin-right: 5px;
   }
+
 </style>
-<script>    
+<script>
   export default {
     layout: 'header-less',
     data () {
