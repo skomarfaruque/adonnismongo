@@ -32,7 +32,7 @@
       }
     },
     fetch ({ store }) {
-      store.commit('SET_HEAD', ['Admin - New Staff', 'Invite an staff to join.'])
+      store.commit('SET_HEAD', ['Admin - New Staff', 'Invite a staff to join.'])
     },
     data ({ store }) {
       axios.setBearer(store.state.authUser)
