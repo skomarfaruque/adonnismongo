@@ -133,31 +133,6 @@
   #custom_form .block label {
     margin-right: 10px;
   }
-  ul.options-list {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #dbdbdb;
-    border-radius: 0 0 3px 3px;
-    position: absolute;
-    width: 78%;
-    overflow: hidden;
-    z-index:999;
-  }
-
-  ul.options-list li {
-    width: 100%;
-    flex-wrap: wrap;
-    background: white;
-    margin: 0;
-    border-bottom: 1px solid #eee;
-    color: #363636;
-    padding: 7px;
-    cursor: pointer;
-  }
-
-  ul.options-list li.highlighted {
-    background: #f8f8f8
-  }
 </style>
 <script>
   import axios from '~/plugins/axios'
@@ -177,7 +152,7 @@
       axios.setBearer(store.state.authUser)
       let agent = await axios.get(`users/${id}`)
       let event = await axios.get(`appointment/agent/${agent.data._id}`)
-      
+
       let blockDays = await axios.get(`agent/${agent.data._id}/block-dates`)
       store.commit('SET_HEAD', [`Agent Calendar`, `View appointments of ${agent.data.name}.`])
       let blockTime = agent.data.block_time ? JSON.parse(agent.data.block_time) : { days: [], work_start_time: '08:00', work_end_time: '16:00' }

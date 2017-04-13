@@ -37,9 +37,15 @@ class CustomerController {
 
   * destroy (req, res) {
     const id = req.param('id')
-    yield Customer.deleteOne({ _id: id })
-    yield AgentCustomer.remove({ customer: id })
-    yield Appointment.remove({ customer: id })
+    const agentId = req.input('agent')
+    if (!agentId) {
+      yield Customer.deleteOne({ _id: id })
+      yield AgentCustomer.remove({ customer: id })
+      yield Appointment.remove({ customer: id })
+    } else {
+      yield AgentCustomer.remove({ agent: agentId, customer: id })
+      yield Appointment.remove({ agent: agentId, customer: id })
+    }
     res.ok()
   }
 
@@ -53,6 +59,7 @@ class CustomerController {
   * search (req, res) {
     let search = req.input('key')
     let agent = req.input('agent')
+    let excludeAgent = req.input('excl')
     search = search || ''
     const role = req.currentUser.role.name
     let existingCustomer = {}
@@ -62,7 +69,11 @@ class CustomerController {
       const cids = agents.map((c) => {
         return c.customer
       })
-      existingCustomer = { _id: { $in: cids } }
+      if (excludeAgent && excludeAgent === '1') {
+        existingCustomer = { _id: { $nin: cids } }
+      } else {
+        existingCustomer = { _id: { $in: cids } }
+      }
     }
 
     let regex = new RegExp(search, 'i')

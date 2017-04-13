@@ -53,6 +53,7 @@
                 <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
                 <nuxt-link class="button is-info" :to="`/agent/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
                 <nuxt-link class="button is-info" :to="`/agent/calendar?id=${item._id}`" title="Edit"><i class="fa fa-calendar"></i> </nuxt-link>
+                <nuxt-link class="button is-info" :to="`/agent/customers?id=${item._id}`" title="View Customers"><i class="fa fa-users"></i> </nuxt-link>
               </section>
               <section v-show="confirmation">
                 <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>

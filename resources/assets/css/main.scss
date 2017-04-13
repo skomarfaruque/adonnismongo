@@ -56,3 +56,26 @@ td.action {
 .control.has-icon .icon {
   top: 1.1rem;
 }
+ul.options-list {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #dbdbdb;
+    border-radius: 0 0 3px 3px;
+    position: absolute;
+    width: 78%;
+    overflow: hidden;
+    z-index:999;
+    li {
+      width: 100%;
+      flex-wrap: wrap;
+      background: white;
+      margin: 0;
+      border-bottom: 1px solid #eee;
+      color: #363636;
+      padding: 7px;
+      cursor: pointer;
+      .highlighted {
+        background: #f8f8f8
+      }
+    }
+  }
