@@ -94,7 +94,7 @@
             <div class="level-left is-6">
               <div class="block">
                 <a class="button is-info" name="save" value="Save" id="" @click="save"> Save </a>          
-                <a class="button is-primary" name="close" value="Close" id="" @click="closeForm">Close</a>
+                <a class="button is-info" name="close" value="Close" id="" @click="closeForm">Close</a>
               </div>
             </div>
             <div class="level-right is-6">

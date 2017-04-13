@@ -19,7 +19,7 @@
           </div>
         </div>
         <footer class="card-footer">
-          <a href="javascript:" class="button is-primary card-footer-item" @click="submit">Submit</a>
+          <a href="javascript:" class="button is-info card-footer-item" @click="submit">Submit</a>
         </footer>
       </div>
     </div>

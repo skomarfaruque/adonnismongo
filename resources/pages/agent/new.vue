@@ -10,7 +10,7 @@
         <p class="control">
           <input class="input" v-model="email" type="text" placeholder="Email">
         </p>
-        <a href="javascript:" class="button is-primary" @click="sendInvitation">Send Invitation</a>
+        <a href="javascript:" class="button is-info" @click="sendInvitation">Send Invitation</a>
       </div>
     </div>
 

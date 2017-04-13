@@ -42,7 +42,7 @@
         <p class="control">
           <input class="input" v-model="zipCode" type="text" placeholder="Zip Code">
         </p>
-        <a href="javascript:" class="button is-primary" @click="save">Save Information</a>
+        <a href="javascript:" class="button is-info" @click="save">Save Information</a>
       </div>
     </div>
   </section>

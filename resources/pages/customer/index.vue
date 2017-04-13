@@ -17,7 +17,7 @@
       </div>
       <div class="level-right">   
         <div class="level-item">
-          <nuxt-link href="javascript:" class="button is-primary" title="Add New" to="/customer/new"> <i class="fa fa-plus"></i> </nuxt-link>
+          <nuxt-link href="javascript:" class="button is-info" title="Add New" to="/customer/new"> <i class="fa fa-plus"></i> </nuxt-link>
         </div>
       </div>
     </nav>
@@ -51,12 +51,11 @@
             <td class="action">
               <section v-show="confirmation === false">
                 <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
-                <nuxt-link class="button is-primary" :to="`/customer/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
-                <nuxt-link class="button is-primary" :to="`/customer/calendar?id=${item._id}`" title="Edit"><i class="fa fa-calendar"></i> </nuxt-link>
+                <nuxt-link class="button is-info" :to="`/customer/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
               </section>
               <section v-show="confirmation">
                 <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>
-                 <a href="javascript:" class="button is-primary" @click="confirmation = false" title="Cancel"> <i class="fa fa-times"></i> </a>
+                 <a href="javascript:" class="button is-info" @click="confirmation = false" title="Cancel"> <i class="fa fa-times"></i> </a>
               </section>
 
 
