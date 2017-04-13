@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="columns">
-      <div class="column is-7">
+      <div class="column is-6">
         <label class="label">Name</label>
         <p class="control">
           <input class="input" type="text" v-model="user.name" placeholder="Name">
@@ -88,6 +88,7 @@
 <script>
   import axios from '~/plugins/axios'
   import MaskedInput from 'vue-text-mask'
+  import notify from '~/plugins/vnotification'
   export default {
     middleware: 'auth',
     head () {
@@ -135,6 +136,11 @@
         }
         this.user.block_time = JSON.stringify(blockTime)
         await axios.put(`users/${this.user._id}`, this.user)
+        notify({
+          title: 'Save',
+          message: 'Your profile is saved successfully.',
+          type: 'success'
+        })
       }
     }
   }
