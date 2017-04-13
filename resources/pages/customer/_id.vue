@@ -82,7 +82,7 @@ export default {
   methods: {
     async save () {
       await axios.put(`customers/${this.id}`, this.$data)
-      this.$router.push('/customer')
+      this.$router.go(-1)
     }
   }
 }
