@@ -1,19 +1,5 @@
 <template>
-  <section>
-    
+  <section class="has-text-centered">
+    <h1 class="title">Hello from admin</h1>
   </section>
 </template>
-
-<script>
-export default {
-  middleware: 'auth',
-  head () {
-    return {
-      title: `About Page (${this.name}-side)`
-    }
-  },
-  fetch ({ store }) {
-    store.commit('SET_HEAD', ['Admin', 'Manage administrative tasks.'])
-  }
-}
-</script>

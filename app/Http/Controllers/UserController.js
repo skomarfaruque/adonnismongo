@@ -58,9 +58,10 @@ class UserController {
   * sendInvitation (req, res) {
     const name = req.input('name')
     const email = req.input('email')
+    const userRole = req.input('role')
 
     const resetToken = yield Hash.make(email)
-    const role = yield Role.findOne({ name: 'Agent' })
+    const role = yield Role.findOne({ name: userRole })
     const user = yield User.create({ name: name, email: email, reset_token: resetToken, role: role })
 
     const resetUrl = `http://${Env.get('DOMAIN')}:${Env.get('PORT')}/signup/confirmation?token=${user.reset_token}`

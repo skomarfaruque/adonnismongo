@@ -38,6 +38,11 @@ Route.group('agent', () => {
   Route.get('agent/search', 'AgentController.search')
 }).prefix('api').middleware('auth')
 
+Route.group('staff', () => {
+  Route.resource('staffs', 'StaffController').except('create', 'edit')
+  Route.get('staff/search', 'StaffController.search')
+}).prefix('api').middleware('auth')
+
 Route.group('customer', () => {
   Route.resource('customers', 'CustomerController').except('create', 'edit')
   Route.get('customer/search', 'CustomerController.search')

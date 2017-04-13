@@ -14,11 +14,6 @@
   </div>
 </template>
 {{{{/raw}}}}
-<style scoped>
-  .need-help {
-    margin-top: 30px;
-  }
-</style>
 
 <script>
 import MyHeader from '~components/Header.vue'

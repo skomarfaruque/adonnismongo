@@ -4,7 +4,7 @@
       <div class="column is-6">
         <label class="label">Name</label>
         <p class="control">
-          <input class="input" v-model="name" type="text" placeholder="Agent Name">
+          <input class="input" v-model="name" type="text" placeholder="Staff Name">
         </p>
         <label class="label">Email</label>
         <p class="control">
@@ -28,18 +28,18 @@
     middleware: 'auth',
     head () {
       return {
-        title: `New Agent Page`
+        title: `New Staff Page`
       }
     },
     fetch ({ store }) {
-      store.commit('SET_HEAD', ['New Agent', 'Invite an agent to join.'])
+      store.commit('SET_HEAD', ['Admin - New Staff', 'Invite an staff to join.'])
     },
     data ({ store }) {
       axios.setBearer(store.state.authUser)
       return {
         name: '',
         email: '',
-        role: 'Agent',
+        role: 'Staff',
         confirmation: ''
       }
     },
