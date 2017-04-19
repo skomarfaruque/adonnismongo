@@ -44,7 +44,7 @@ export default {
     }
   },
 
-  data () {
+  asyncData () {
     return {
       $_parent_: null,
       show: true

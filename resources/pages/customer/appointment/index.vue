@@ -57,7 +57,7 @@ export default {
       title: `Appointments`
     }
   },
-  async data ({ store, query }) {
+  async asyncData ({ store, query }) {
     axios.setBearer(store.state.authUser)
     let event = await axios.get(`appointment/customer/${query.id}`)
     let customer = await axios.get(`customers/${query.id}`)

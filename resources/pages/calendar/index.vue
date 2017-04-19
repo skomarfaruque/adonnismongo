@@ -16,7 +16,7 @@
         title: `Calendar`
       }
     },
-    data () {
+    asyncData () {
       return {
         id: 'me',
         block_time: {}

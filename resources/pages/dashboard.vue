@@ -43,7 +43,7 @@ export default {
       title: `Dashboard Page`
     }
   },
-  data ({ store }) {
+  asyncData ({ store }) {
     store.commit('SET_HEAD', ['Dashboard', 'Navigate your application.'])
     const per = store.state.permissions
     return {

@@ -16,7 +16,7 @@
 <script>
 import axios from '~/plugins/axios'
 export default {
-  async data ({ store, req }) {
+  async asyncData ({ store, req }) {
     axios.setBearer(store.state.authUser)
     const { data } = await axios.get('api/users')
     return {

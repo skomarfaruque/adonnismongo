@@ -81,7 +81,7 @@
     fetch ({ store }) {
       store.commit('SET_HEAD', ['Agent', 'View list of the agents.'])
     },
-    async data ({ store }) {
+    async asyncData ({ store }) {
       axios.setBearer(store.state.authUser)
       let { data } = await axios.get('agents')  
       return {

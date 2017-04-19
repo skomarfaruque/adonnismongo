@@ -183,7 +183,7 @@
     props: [
       'id'
     ],
-    async data () {
+    async asyncData () {
       axios.setBearer(this.$store.state.authUser)
       let agent = await axios.get(`users/${this.id}`)
       this.$store.commit('SET_HEAD', [`Agent Calendar`, `View appointments of ${agent.data.name}.`])

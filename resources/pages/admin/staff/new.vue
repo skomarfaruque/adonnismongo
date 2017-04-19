@@ -34,7 +34,7 @@
     fetch ({ store }) {
       store.commit('SET_HEAD', ['Admin - New Staff', 'Invite a staff to join.'])
     },
-    data ({ store }) {
+    asyncData ({ store }) {
       axios.setBearer(store.state.authUser)
       return {
         name: '',

@@ -147,7 +147,7 @@
         title: `Calendar`
       }
     },
-    async data ({ store, query }) {
+    async asyncData ({ store, query }) {
       const id = query.id || 'me'
       axios.setBearer(store.state.authUser)
       let agent = await axios.get(`users/${id}`)

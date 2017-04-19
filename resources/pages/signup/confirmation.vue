@@ -54,7 +54,7 @@
   import axios from '~/plugins/axios'
   export default {
     layout: 'header-less',
-    data ({ query }) {
+    asyncData ({ query }) {
       return {
         token: query.token,
         password: '',

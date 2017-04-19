@@ -87,7 +87,7 @@ export default {
       title: `Customer Page`
     }
   },
-  async data ({ store }) {
+  async asyncData ({ store }) {
     store.commit('SET_HEAD', ['Your Customer', 'View list of the customers.'])
     axios.setBearer(store.state.authUser)
     let { data } = store.state.role === 'Agent' ? await axios.get('agent/me/customer') : await axios.get('customers')

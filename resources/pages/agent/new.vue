@@ -34,7 +34,7 @@
     fetch ({ store }) {
       store.commit('SET_HEAD', ['New Agent', 'Invite an agent to join.'])
     },
-    data ({ store }) {
+    asyncData ({ store }) {
       axios.setBearer(store.state.authUser)
       return {
         name: '',

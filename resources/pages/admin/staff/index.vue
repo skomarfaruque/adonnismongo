@@ -79,7 +79,7 @@
     fetch ({ store }) {
       store.commit('SET_HEAD', ['Admin - Staff', 'View list of the staffs.'])
     },
-    async data ({ store }) {
+    async asyncData ({ store }) {
       axios.setBearer(store.state.authUser)
       let { data } = await axios.get('staffs')
       return {

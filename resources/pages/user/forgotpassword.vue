@@ -38,7 +38,7 @@
 <script>    
   export default {
     layout: 'header-less',
-    data () {
+    asyncData () {
       return {
         formError: null,
         email: 'admin@email.com'

@@ -95,7 +95,7 @@
         title: `Customer Page`
       }
     },
-    async data ({ store, query }) {
+    async asyncData ({ store, query }) {
       store.commit('SET_HEAD', ['Agent Customers', 'View and add customers.'])
       axios.setBearer(store.state.authUser)
       let { data } = await axios.get(`agent/${query.id}/customer`)

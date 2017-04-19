@@ -102,7 +102,7 @@
     components: {
       MaskedInput
     },
-    async data ({ store, params }) {
+    async asyncData ({ store, params }) {
       axios.setBearer(store.state.authUser)
       let { data } = await axios.get('users/me')
       if (!data.zipCode) {

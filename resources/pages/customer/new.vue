@@ -68,7 +68,7 @@ export default {
   components: {
     MaskedInput
   },
-  data ({ store }) {
+  asyncData ({ store }) {
     return {
       user: {}
     }
