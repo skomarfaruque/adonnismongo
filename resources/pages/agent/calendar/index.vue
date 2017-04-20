@@ -135,7 +135,6 @@
   }
 </style>
 <script>
-  import axios from '~/plugins/axios'
   import Scheduler from '~components/Scheduler.vue'
   export default {
     middleware: '',
@@ -147,9 +146,8 @@
         title: `Calendar`
       }
     },
-    async asyncData ({ store, query }) {
+    async asyncData ({ store, axios, query }) {
       const id = query.id || 'me'
-      axios.setBearer(store.state.authUser)
       let agent = await axios.get(`users/${id}`)
       let event = await axios.get(`appointment/agent/${agent.data._id}`)
 
@@ -173,9 +171,13 @@
         isAdded: false
       }
     },
+    data () {
+      return {
+        axios: this.$root.$options.axios
+      }
+    },
     mounted () {
       let self = this
-      axios.setBearer(this.$store.state.authUser)
       if (process.BROWSER_BUILD) {
         const flatpicker = require('flatpickr')
         let options = { allowInput: true, enableTime: true, noCalendar: true } // , dateFormat: 'h:i K'
@@ -269,7 +271,7 @@
           const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
           ev.start_date.setHours(startTimes[0], startTimes[1])
           const obj = { agent: this.email, description: this.title, customer: this.customer, start: ev.start_date }
-          let { data } = await axios.post('appointment', obj)
+          let { data } = await this.axios.post('appointment', obj)
           ev.customer = data.customer.email
           ev.text = data.description
           ev._id = data._id
@@ -277,7 +279,7 @@
         } else {
           this.isPersonalOff = false
           this.isAdded = false
-          await axios.get(`agent/${this.id}/block-date/${ev.start_date.toISOString()}`)
+          await this.axios.get(`agent/${this.id}/block-date/${ev.start_date.toISOString()}`)
           let offDay = {
             days: ev.start_date,
             zones: 'fullday',
@@ -294,7 +296,7 @@
       async remove () {
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
-        let { date } = await axios.delete(`appointment/${ev._id}`)
+        let { date } = await this.axios.delete(`appointment/${ev._id}`)
 
         scheduler.endLightbox(false, document.getElementById('custom_form'))
         scheduler.deleteEvent(id)
@@ -306,8 +308,8 @@
       },
       async addCustomer () {
         if (this.customer && !this.errors.has('customer')) {
-          const { data } = await axios.post('customers', { name: this.customer, email: this.customer })
-          await axios.get(`agent/${this.id}/assign-customer/${data._id}`)
+          const { data } = await this.axios.post('customers', { name: this.customer, email: this.customer })
+          await this.axios.get(`agent/${this.id}/assign-customer/${data._id}`)
           this.isAdded = true
         }
       },
@@ -315,7 +317,7 @@
         this.highlightedPosition = 0
         this.isAdded = false
         if (value) {
-          let { data } = await axios.get(`customer/search?agent=${this.id}&key=${value}`)
+          let { data } = await this.axios.get(`customer/search?agent=${this.id}&key=${value}`)
           this.searchedCustomers = data || []
           this.isOpen = this.searchedCustomers.length > 0
         }

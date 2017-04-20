@@ -23,7 +23,6 @@
 </template>
 
 <script>
-  import axios from '~/plugins/axios'
   export default {
     middleware: 'auth',
     head () {
@@ -34,8 +33,8 @@
     fetch ({ store }) {
       store.commit('SET_HEAD', ['New Agent', 'Invite an agent to join.'])
     },
-    asyncData ({ store }) {
-      axios.setBearer(store.state.authUser)
+    asyncData ({ store, axios }) {
+      
       return {
         name: '',
         email: '',
@@ -43,9 +42,14 @@
         confirmation: ''
       }
     },
+    data () {
+      return {
+        axios: this.$root.$options.axios
+      }
+    },
     methods: {
       async sendInvitation () {
-        let { data } = await axios.post('user/invitation', this.$data)
+        let { data } = await this.axios.post('user/invitation', this.$data)
         this.confirmation = data
       }
     }

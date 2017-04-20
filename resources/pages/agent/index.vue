@@ -77,21 +77,19 @@
         title: `Agent Page`
       }
     },
-    fetch ({ store }) {
+    async asyncData ({ store, axios }) {
       store.commit('SET_HEAD', ['Agent', 'View list of the agents.'])
-    },
-    async asyncData ({ store }) {
-      // axios.setBearer(store.state.authUser)
-     // let { data } = await store.state.axios.get('agents')
-     let data = []
+      let { data } = await axios.get('agents')
       return {
         list: data,
         search: '',
         confirmation: false
       }
     },
-    created () {
-      // axios.setBearer(this.$store.state.authUser)
+    data () {
+      return {
+        axios: this.$root.$options.axios
+      }
     },
     destroyed () {
       this.list = []
@@ -111,8 +109,7 @@
         this.confirmation = false
       },
       async searchAgent () {
-        console.log(this.$store.state.axios)
-        let { data } = await this.$store.state.axios.get(`agent/search?key=${this.search}`)
+        let { data } = await this.axios.get(`agent/search?key=${this.search}`)
         this.list = data
       }
     }

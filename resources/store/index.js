@@ -1,10 +1,8 @@
 'use strict'
-
 import axios from 'axios'
 import cookie from '~/plugins/cookie'
 
 export const state = {
-  axios: {},
   authUser: null,
   role: '',
   permissions: [],
@@ -23,15 +21,6 @@ export const mutations = {
   SET_HEAD: function (state, heading) {
     state.heading.title = heading[0]
     state.heading.subtitle = heading[1]
-  },
-  SET_AXIOS: function (state, token) {
-    const ax = axios.create({
-      baseURL: `${process.env.baseUrl}/api`,
-      headers: {
-        'Authorization': 'Bearer ' + token
-      }
-    })
-    state.axios = ax
   }
 }
 
@@ -43,7 +32,6 @@ export const actions = {
         const user = JSON.parse(userStr)
         if (user.token && user.token.length > 0) {
           commit('SET_USER', user)
-          commit('SET_AXIOS', user.token)
         }
       } catch (e) {
         return false
@@ -57,7 +45,6 @@ export const actions = {
     })
     .then((res) => {
       commit('SET_USER', res.data)
-      commit('SET_AXIOS', res.data.token)
       const userStr = JSON.stringify(res.data)
       cookie.set('backend-app', userStr, 1)
     })

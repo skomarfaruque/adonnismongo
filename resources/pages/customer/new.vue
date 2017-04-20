@@ -53,7 +53,6 @@
 </template>
 
 <script>
-import axios from '~/plugins/axios'
 import MaskedInput from 'vue-text-mask'
 export default {
   middleware: 'auth',
@@ -68,29 +67,31 @@ export default {
   components: {
     MaskedInput
   },
-  asyncData ({ store }) {
-    axios.setBearer(store.state.authUser)
+  asyncData ({ store, axios }) {
+    
     return {
       user: {}
     }
   },
-  beforeCreate () {
-    
+  data () {
+    return {
+      axios: this.$root.$options.axios
+    }
   },
   methods: {
     async save () {
       if (!this.user._id) {
-        const customer = await axios.post('customers', this.user)
+        const customer = await this.axios.post('customers', this.user)
         this.user._id = customer.data._id
       }
       if (this.$store.state.role === 'Agent') {
-        const agentCustomer = await axios.get(`agent/me/assign-customer/${this.user._id}`)
+        const agentCustomer = await this.axios.get(`agent/me/assign-customer/${this.user._id}`)
       }
       this.$router.push('/customer')
     },
     async checkEmail () {
       let email = this.user.email
-      let { data } = await axios.get(`customer/search?key=${this.user.email}`)
+      let { data } = await this.axios.get(`customer/search?key=${this.user.email}`)
       this.user = data[0] || { email }
     }
   }

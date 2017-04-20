@@ -51,15 +51,19 @@
 </style>
 
 <script>
-  import axios from '~/plugins/axios'
   export default {
     layout: 'header-less',
-    asyncData ({ query }) {
+    asyncData ({ axios, query }) {
       return {
         token: query.token,
         password: '',
         pass: query.pass,
         confirmed:  false
+      }
+    },
+    data () {
+      return {
+        axios: this.$root.$options.axios
       }
     },
     created () {
@@ -69,7 +73,7 @@
     },
     methods: {
       async sendConfirmation () {
-        let { data } = await axios.post('user/signup/cofirmation', { token: this.token, password: this.password })
+        let { data } = await this.axios.post('user/signup/cofirmation', { token: this.token, password: this.password })
         this.confirmed = data.success
       }
     }

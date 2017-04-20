@@ -79,7 +79,7 @@
   }
 </style>
 <script>
-  import axios from '~/plugins/axios'
+
 export default {
   middleware: 'auth',
   head () {
@@ -87,9 +87,9 @@ export default {
       title: `Customer Page`
     }
   },
-  async asyncData ({ store }) {
+  async asyncData ({ store, axios }) {
     store.commit('SET_HEAD', ['Your Customer', 'View list of the customers.'])
-    axios.setBearer(store.state.authUser)
+    
     let { data } = store.state.role === 'Agent' ? await axios.get('agent/me/customer') : await axios.get('customers')
     return {
       list: data,
@@ -97,8 +97,10 @@ export default {
       confirmation: false
     }
   },
-  created () {
-    axios.setBearer(this.$store.state.authUser)
+  data () {
+    return {
+      axios: this.$root.$options.axios
+    }
   },
   destroyed () {
     this.list = []
@@ -113,12 +115,12 @@ export default {
   },
   methods: {
     async remove (item, ind) {
-      await axios.delete(`customers/${item._id}`)
+      await this.axios.delete(`customers/${item._id}`)
       this.list.splice(ind, 1)
       this.confirmation = false
     },
     async searchCustomer () {
-      let { data } = await axios.get(`customer/search?key=${this.search}`)
+      let { data } = await this.axios.get(`customer/search?key=${this.search}`)
       this.list = data
     }
   }

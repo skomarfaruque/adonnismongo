@@ -61,7 +61,6 @@
 </template>
 
 <script>
-import axios from '~/plugins/axios'
 import MaskedInput from 'vue-text-mask'
 
 export default {
@@ -77,8 +76,7 @@ export default {
   components: {
     MaskedInput
   },
-  async asyncData ({ store, params }) {
-    axios.setBearer(store.state.authUser)
+  async asyncData ({ store, axios, params }) {
     let { data } = await axios.get(`users/${params.id}`)
     if (!data.zipCode) {
       data.zipCode = []
@@ -87,8 +85,10 @@ export default {
       user: data
     }
   },
-  mounted () {
-    axios.setBearer(this.$store.state.authUser)
+  data () {
+    return {
+      axios: this.$root.$options.axios
+    }
   },
   methods: {
     addZip () {
@@ -98,7 +98,7 @@ export default {
       this.user.zipCode.splice(ind, 1)
     },
     async saveInfo () {
-      await axios.put(`users/${this.user._id}`, this.user)
+      await this.axios.put(`users/${this.user._id}`, this.user)
       this.$router.push('/agent')
     }
   }

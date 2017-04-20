@@ -45,7 +45,6 @@
 </template>
 
 <script>
-import axios from '~/plugins/axios'
 import Scheduler from '~components/Scheduler.vue'
 export default {
   middleware: '',
@@ -57,8 +56,8 @@ export default {
       title: `Appointments`
     }
   },
-  async asyncData ({ store, query }) {
-    axios.setBearer(store.state.authUser)
+  async asyncData ({ store, axios, query }) {
+    
     let event = await axios.get(`appointment/customer/${query.id}`)
     let customer = await axios.get(`customers/${query.id}`)
     store.commit('SET_HEAD', ['Customer Appointents', `View appointments of ${customer.data.name}.`])

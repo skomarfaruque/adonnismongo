@@ -68,7 +68,6 @@
   
 </style>
 <script>
-  import axios from '~/plugins/axios'
   export default {
     middleware: 'auth',
     head () {
@@ -79,8 +78,7 @@
     fetch ({ store }) {
       store.commit('SET_HEAD', ['Admin - Staff', 'View list of the staffs.'])
     },
-    async asyncData ({ store }) {
-      axios.setBearer(store.state.authUser)
+    async asyncData ({ store, axios }) {
       let { data } = await axios.get('staffs')
       return {
         list: data,
@@ -88,8 +86,10 @@
         confirmation: false
       }
     },
-    created () {
-      axios.setBearer(this.$store.state.authUser)
+    data () {
+      return {
+        axios: this.$root.$options.axios
+      }
     },
     destroyed () {
       this.list = []
@@ -104,12 +104,12 @@
     },
     methods: {
       async remove (item, ind) {
-        await axios.delete(`staffs/${item._id}`)
+        await this.axios.delete(`staffs/${item._id}`)
         this.list.splice(ind, 1)
         this.confirmation = false
       },
       async searchStaff () {
-        let { data } = await axios.get(`staff/search?key=${this.search}`)
+        let { data } = await this.axios.get(`staff/search?key=${this.search}`)
         this.list = data
       }
     }

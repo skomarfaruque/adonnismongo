@@ -14,22 +14,19 @@
 </template>
 {{{{/raw}}}}
 <script>
-import axios from '~/plugins/axios'
-export default {
-  async asyncData ({ store, req }) {
-    axios.setBearer(store.state.authUser)
-    const { data } = await axios.get('api/users')
-    return {
-      name: req ? 'server' : 'client',
-      list: data
-    }
-  },
-  head () {
-    return {
-      title: `About Page (${this.name}-side)`
-    }
-  },
-  middleware: 'auth'
-}
+  export default {
+    async asyncData ({ store, req }) {
+      return {
+        name: req ? 'server' : 'client',
+        list: data
+      }
+    },
+    head () {
+      return {
+        title: `About Page (${this.name}-side)`
+      }
+    },
+    middleware: 'auth'
+  }
 </script>
 

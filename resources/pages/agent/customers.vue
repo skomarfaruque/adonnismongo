@@ -87,7 +87,6 @@
   }
 </style>
 <script>
-  import axios from '~/plugins/axios'
   export default {
     middleware: 'auth',
     head () {
@@ -95,9 +94,9 @@
         title: `Customer Page`
       }
     },
-    async asyncData ({ store, query }) {
+    async asyncData ({ store, axios, query }) {
       store.commit('SET_HEAD', ['Agent Customers', 'View and add customers.'])
-      axios.setBearer(store.state.authUser)
+      
       let { data } = await axios.get(`agent/${query.id}/customer`)
       return {
         id: query.id,
@@ -110,8 +109,10 @@
         highlightedPosition: 0
       }
     },
-    created () {
-      axios.setBearer(this.$store.state.authUser)
+    data () {
+      return {
+        axios: this.$root.$options.axios
+      }
     },
     destroyed () {
       this.list = []
@@ -119,14 +120,14 @@
     },
     methods: {
       async remove (item, ind) {
-        await axios.delete(`customers/${item._id}?agent=${this.id}`)
+        await this.axios.delete(`customers/${item._id}?agent=${this.id}`)
         this.list.splice(ind, 1)
         this.confirmation = false
       },
       async addCustomer () {
         if (this.customer && !this.errors.has('customer')) {
-          const { data } = await axios.post('customers', { name: this.customer, email: this.customer })
-          await axios.get(`agent/${this.id}/assign-customer/${data._id}`)
+          const { data } = await this.axios.post('customers', { name: this.customer, email: this.customer })
+          await this.axios.get(`agent/${this.id}/assign-customer/${data._id}`)
           this.list.push(data)
           this.isAdded = true
         }
@@ -135,7 +136,7 @@
         this.highlightedPosition = 0
         this.isAdded = false
         if (value) {
-          let { data } = await axios.get(`customer/search?agent=${this.id}&key=${value}&excl=1`)
+          let { data } = await this.axios.get(`customer/search?agent=${this.id}&key=${value}&excl=1`)
           this.searchedCustomers = data || []
           this.isOpen = this.searchedCustomers.length > 0
         }

@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import axios from '~/plugins/axios'
 import MaskedInput from 'vue-text-mask'
 export default {
   middleware: 'auth',
@@ -64,8 +63,8 @@ export default {
   components: {
     MaskedInput
   },
-  async asyncData ({ store, params }) {
-    axios.setBearer(store.state.authUser)
+  async asyncData ({ store, axios, params }) {
+    
     let { data } = await axios.get(`customers/${params.id}`)
     return {
       id: data._id,
@@ -79,9 +78,14 @@ export default {
       address2: data.address2
     }
   },
+  data () {
+    return {
+      axios: this.$root.$options.axios
+    }
+  },
   methods: {
     async save () {
-      await axios.put(`customers/${this.id}`, this.$data)
+      await this.axios.put(`customers/${this.id}`, this.$data)
       this.$router.go(-1)
     }
   }
