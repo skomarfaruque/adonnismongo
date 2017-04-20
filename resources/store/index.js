@@ -1,9 +1,10 @@
 'use strict'
 
-import axios from '~/plugins/axios'
+import axios from 'axios'
 import cookie from '~/plugins/cookie'
 
 export const state = {
+  axios: {},
   authUser: null,
   role: '',
   permissions: [],
@@ -22,6 +23,15 @@ export const mutations = {
   SET_HEAD: function (state, heading) {
     state.heading.title = heading[0]
     state.heading.subtitle = heading[1]
+  },
+  SET_AXIOS: function (state, token) {
+    const ax = axios.create({
+      baseURL: `${process.env.baseUrl}/api`,
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    state.axios = ax
   }
 }
 
@@ -33,6 +43,7 @@ export const actions = {
         const user = JSON.parse(userStr)
         if (user.token && user.token.length > 0) {
           commit('SET_USER', user)
+          commit('SET_AXIOS', user.token)
         }
       } catch (e) {
         return false
@@ -40,12 +51,13 @@ export const actions = {
     }
   },
   login ({ commit }, { email, password }) {
-    return axios.post('user/login', {
+    return axios.post('api/user/login', {
       email,
       password
     })
     .then((res) => {
       commit('SET_USER', res.data)
+      commit('SET_AXIOS', res.data.token)
       const userStr = JSON.stringify(res.data)
       cookie.set('backend-app', userStr, 1)
     })
@@ -61,7 +73,7 @@ export const actions = {
     cookie.set('backend-app', '{}')
   },
   forgotpassword ({ commit }, { email }) {
-    return axios.post('user/forgotpassword', {
+    return axios.post('api/user/forgotpassword', {
       email
     })
     .then((res) => {

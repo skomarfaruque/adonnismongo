@@ -119,8 +119,7 @@
       }
     },
     mounted () {
-      axios.setBearer(this.$store.state.authUser)
-      if (process.BROWSER_BUILD) {
+      if (this.isAgent && process.BROWSER_BUILD) {
         const flatpicker = require('flatpickr')
         let options = { enableTime: true, noCalendar: true }
         new flatpicker(document.getElementById('start-time'), options)
@@ -128,6 +127,12 @@
       }
     },
     methods: {
+      addZip () {
+        this.user.zipCode.push('')
+      },
+      removeZip (ind) {
+        this.user.zipCode.splice(ind, 1)
+      },
       async saveInfo () {
         const blockTime = {
           days: this.block_days,

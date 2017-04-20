@@ -70,7 +70,6 @@
   
 </style>
 <script>
-  import axios from '~/plugins/axios'
   export default {
     middleware: 'auth',
     head () {
@@ -82,8 +81,9 @@
       store.commit('SET_HEAD', ['Agent', 'View list of the agents.'])
     },
     async asyncData ({ store }) {
-      axios.setBearer(store.state.authUser)
-      let { data } = await axios.get('agents')  
+      // axios.setBearer(store.state.authUser)
+     // let { data } = await store.state.axios.get('agents')
+     let data = []
       return {
         list: data,
         search: '',
@@ -91,7 +91,7 @@
       }
     },
     created () {
-      axios.setBearer(this.$store.state.authUser)
+      // axios.setBearer(this.$store.state.authUser)
     },
     destroyed () {
       this.list = []
@@ -106,12 +106,13 @@
     },
     methods: {
       async remove (item, ind) {
-        await axios.delete(`agents/${item._id}`)
+        await this.axios.delete(`agents/${item._id}`)
         this.list.splice(ind, 1)
         this.confirmation = false
       },
       async searchAgent () {
-        let { data } = await axios.get(`agent/search?key=${this.search}`)
+        console.log(this.$store.state.axios)
+        let { data } = await this.$store.state.axios.get(`agent/search?key=${this.search}`)
         this.list = data
       }
     }

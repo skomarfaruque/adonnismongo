@@ -69,12 +69,13 @@ export default {
     MaskedInput
   },
   asyncData ({ store }) {
+    axios.setBearer(store.state.authUser)
     return {
       user: {}
     }
   },
   beforeCreate () {
-    axios.setBearer(this.$store.state.authUser)
+    
   },
   methods: {
     async save () {
