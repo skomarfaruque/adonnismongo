@@ -56,25 +56,24 @@
 
           </div>
         </div>
-        <section v-if="isAgent">
+        <section v-if="!isAgent">
           <label class="label">Working Hour</label>
           <div class="columns">
-            <div class="column is-6">            
-              <label class="label">Start Time</label>
-              <input id="start-time" class="input" v-model="work_start_time" type="text" placeholder="Block Time">
-            </div>
-            <div class="column is-6">
-              <label class="label">End Time</label>
-              <input id="end-time" class="input" v-model="work_end_time" type="text" placeholder="Block Time">
-            </div>
+            
           </div>
           <label class="label">Block Day(s)</label>
-          <div class="columns is-multiline">
-            <div class="column is-3" v-for="(d, i) in allDay">
+          <div class="columns is-multiline" v-for="(d, i) in allDay">
+            <div class="column is-3" >
                 <label class="checkbox">
-                  <input type="checkbox" v-bind:value="i" v-model="block_days">
+                  <input type="checkbox" v-bind:true-value="i" v-model="block_days[i].day">
                   {{d}}
                 </label>
+            </div>
+            <div class="column is-3">            
+              <input id="start-time" class="input" v-model="block_days[i].work_start_time" value="08:00" type="text" placeholder="Block Time">
+            </div>
+            <div class="column is-3">
+              <input id="end-time" class="input" v-model="block_days[i].work_end_time" type="text" placeholder="Block Time">
             </div>
           </div>
         </section>
@@ -107,14 +106,15 @@
       if (!data.zipCode) {
         data.zipCode = []
       }
-      let blockTime = JSON.parse(data.block_time || '{}')
+      let blockTime = JSON.parse('[{},{},{},{},{},{},{}]')
+      console.log(blockTime)
       return {
         user: data,
         isAgent: store.state.role === 'Agent',
         allDay: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         work_start_time: blockTime.work_start_time || '08:00',
         work_end_time: blockTime.work_end_time || '18:00',
-        block_days: blockTime.days || []
+        block_days: blockTime || []
       }
     },
     data () {
@@ -143,7 +143,7 @@
           work_start_time: this.work_start_time,
           work_end_time: this.work_end_time
         }
-        this.user.block_time = JSON.stringify(blockTime)
+        this.user.block_time = JSON.stringify(this.block_days)
         await this.axios.put(`users/${this.user._id}`, this.user)
         notify({
           title: 'Save',
