@@ -56,23 +56,25 @@
 
           </div>
         </div>
-        <section v-if="!isAgent">
-          <label class="label">Working Hour</label>
+        <section v-if="isAgent">
+          <h2 class="subtitle">Working Hour</h2>
           <div class="columns">
-
+            <div class="column is-4"><label class="label">Block Day(s)</label></div>
+            <div class="column is-4"><label class="label">Start Time</label></div>
+            <div class="column is-4"><label class="label">End Time</label></div>
           </div>
-          <label class="label">Block Day(s)</label>
+          
           <div class="columns is-multiline" v-for="(d, i) in allDay">
-            <div class="column is-3" >
+            <div class="column is-4" >
                 <label class="checkbox">
                   <input type="checkbox" v-bind:true-value="i" v-model="block_days[i].day">
                   {{d}}
                 </label>
             </div>
-            <div class="column is-3">
+            <div class="column is-4">
               <input id="start-time" class="input" v-model="block_days[i].start" value="08:00" type="text" placeholder="Block Time">
             </div>
-            <div class="column is-3">
+            <div class="column is-4">
               <input id="end-time" class="input" v-model="block_days[i].end" type="text" placeholder="Block Time">
             </div>
           </div>

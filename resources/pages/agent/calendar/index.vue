@@ -137,7 +137,7 @@
 <script>
   import Scheduler from '~components/Scheduler.vue'
   export default {
-    middleware: '',
+    middleware: 'auth',
     components: {
       Scheduler
     },
@@ -153,7 +153,7 @@
 
       let blockDays = await axios.get(`agent/${agent.data._id}/block-dates`)
       store.commit('SET_HEAD', [`Agent Calendar`, `View appointments of ${agent.data.name}.`])
-      let blockTime = agent.data.block_time ? JSON.parse(agent.data.block_time) : { days: [], work_start_time: '08:00', work_end_time: '16:00' }
+      let blockTime = agent.data.block_time ? JSON.parse(agent.data.block_time) : [{ day: false, start: '09:00', end: '17:00' }]
       return {
         id: agent.data._id,
         events: event.data,
@@ -207,17 +207,34 @@
           agent: m.agent.email
         })
       })
-      const startTimes = this.block_time.work_start_time.split(':')
-      const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
-      const endTimes = this.block_time.work_end_time.split(':')
-      const endMinute = parseInt(endTimes[0]) * 60 + parseInt(endTimes[1])
-      let offDay = {
-        days: this.block_time.days,
-        zones: 'fullday',
-        css: 'holiday',
-        html: 'Personal Off',
-        type: 'dhx_time_block'
-      }
+      this.block_time.forEach((b, i) => {
+        let off
+        if (typeof b.day === 'number') {
+          off = {
+            days: b.day,
+            zones: 'fullday',
+            css: 'holiday',
+            html: 'Personal Off',
+            type: 'dhx_time_block'
+          }
+        } else {
+          const startTimes = b.start.split(':')
+          const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
+          const endTimes = b.end.split(':')
+          const endMinute = parseInt(endTimes[0]) * 60 + parseInt(endTimes[1])
+          off = {
+            days: i,
+            zones: [startMinute, endMinute],
+            invert_zones: true,
+            type: 'dhx_time_block',
+            css: 'fat_lines_section'
+          }          
+        }
+        scheduler.addMarkedTimespan(off)
+        self.allMarkedId.push(off)
+      })
+
+      
       this.blockDays.forEach((b) => {
         let day = {
           days: new Date(b.blockDate),
@@ -229,25 +246,13 @@
         scheduler.addMarkedTimespan(day)
         self.allMarkedId.push(day)
       })
-      let difference = [0, 1, 2, 3, 4, 5, 6].filter(x => this.block_time.days.indexOf(x) === -1)
-      // let workingHour = {
-      //   days: difference,
-      //   zones: [startMinute, endMinute],
-      //   css: 'green'
-      // }
-      let offHour = {
-        days: difference,
-        zones: [startMinute, endMinute],
-        invert_zones: true,
-        type: 'dhx_time_block',
-        css: 'fat_lines_section'
-      }
+      
       scheduler.parse(events, 'json')
       // scheduler.addMarkedTimespan(workingHour)
-      let id1 = scheduler.addMarkedTimespan(offHour)
-      this.allMarkedId.push(offDay)
-      let id2 = scheduler.addMarkedTimespan(offDay)
-      this.allMarkedId.push(offHour)
+      
+      
+      // scheduler.addMarkedTimespan(offDay)
+
       scheduler.updateView()
     },
     destroyed () {
