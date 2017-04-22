@@ -70,10 +70,10 @@
                 </label>
             </div>
             <div class="column is-3">            
-              <input id="start-time" class="input" v-model="block_days[i].work_start_time" value="08:00" type="text" placeholder="Block Time">
+              <input id="start-time" class="input" v-model="block_days[i].start" value="08:00" type="text" placeholder="Block Time">
             </div>
             <div class="column is-3">
-              <input id="end-time" class="input" v-model="block_days[i].work_end_time" type="text" placeholder="Block Time">
+              <input id="end-time" class="input" v-model="block_days[i].end" type="text" placeholder="Block Time">
             </div>
           </div>
         </section>
@@ -106,7 +106,7 @@
       if (!data.zipCode) {
         data.zipCode = []
       }
-      let blockTime = JSON.parse('[{},{},{},{},{},{},{}]')
+      let blockTime = JSON.parse(/* data.block_time  || */ '[{day: false, start: '09:00', end: '17:00'},{},{},{},{},{},{}]')
       console.log(blockTime)
       return {
         user: data,
@@ -148,8 +148,7 @@
         notify({
           title: 'Save',
           message: 'Your profile is saved successfully.',
-          type: 'success',
-          duration: 15000
+          type: 'success'
         })
       }
     }
