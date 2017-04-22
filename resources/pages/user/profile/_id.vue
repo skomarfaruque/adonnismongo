@@ -72,10 +72,10 @@
                 </label>
             </div>
             <div class="column is-4">
-              <input id="start-time" class="input" v-model="block_days[i].start" value="08:00" type="text" placeholder="Block Time">
+              <input id="" class="input start-time" v-model="block_days[i].start" value="08:00" type="text" placeholder="Block Time">
             </div>
             <div class="column is-4">
-              <input id="end-time" class="input" v-model="block_days[i].end" type="text" placeholder="Block Time">
+              <input id="" class="input end-time" v-model="block_days[i].end" type="text" placeholder="Block Time">
             </div>
           </div>
         </section>
@@ -109,7 +109,6 @@
         data.zipCode = []
       }
       let blockTime = JSON.parse(data.block_time  || '[{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"}]')
-      console.log(blockTime)
       return {
         user: data,
         isAgent: store.state.role === 'Agent',
@@ -128,8 +127,12 @@
       if (this.isAgent && process.BROWSER_BUILD) {
         const flatpicker = require('flatpickr')
         let options = { enableTime: true, noCalendar: true }
-        new flatpicker(document.getElementById('start-time'), options)
-        new flatpicker(document.getElementById('end-time'), options)
+        let starts = document.getElementsByClassName('start-time')
+        let ends = document.getElementsByClassName('end-time')
+        for(var i = 0; i < starts.length; i++) {
+          new flatpicker(starts[i], options)
+          new flatpicker(ends[i], options)
+        }        
       }
     },
     methods: {
