@@ -106,7 +106,7 @@
       if (!data.zipCode) {
         data.zipCode = []
       }
-      let blockTime = JSON.parse(/* data.block_time  || */ '[{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"}]')
+      let blockTime = JSON.parse(data.block_time  || '[{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"}]')
       console.log(blockTime)
       return {
         user: data,
