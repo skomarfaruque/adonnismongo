@@ -14,6 +14,7 @@ const scheduleSchema = mongoose.Schema({
   start_time: Date,
   end_time: Date,
   description: String,
+  comment: String,
   created: {
     type: Date,
     default: Date.now

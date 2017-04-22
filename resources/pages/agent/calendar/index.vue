@@ -14,9 +14,10 @@
     </div>
     <div id="custom_form" class="modal">
       <div class="modal-content">
-        <div class="box">
-          <div v-if="!isPersonalOff">          
-            <h1 class="title">Create Appointment for {{name}}</h1>
+        <div class="box" v-if="!isCustomer"> 
+          <h1 class="title">Create Appointment for {{name}}</h1>
+          <div class="box">          
+           
             <div class="columns">
               <div class="column is-2">
                 <label class="label">Title</label>
@@ -40,7 +41,7 @@
                     <span class="help is-danger" v-show="errors.has('customer')" >{{ errors.first('customer') }}</span>
                   </p>
                   <p class="control">
-                    <button class="button" @click="addCustomer">
+                    <button class="button" @click="isCustomer=true">
                       <i class="fa fa-plus"></i>
                     </button>
                   </p>
@@ -58,24 +59,23 @@
               <div class="column is-2">
                 <label class="label">Time</label>
               </div>
-              <div class="column is-10">
+              <div class="column is-4">
                 <input id="start-time" class="input" type="text" v-model="block_time.work_start_time" placeholder="Appoinemnt Time">
               </div>
+              <div class="column is-2 has-text-centered">
+                <label class="label">To</label>
+              </div>
+              <div class="column is-4">
+                <input id="end-time" class="input" type="text" v-model="block_time.work_end_time" placeholder="Appoinemnt Time">
+              </div>
             </div>
-          </div>
-          <br>
-          <div class="box">
-            <div class="field">
-              <p class="control block">
-                <label class="checkbox">
-                  <input type="checkbox" v-model="isPersonalOff">
-                  Mark this day as off day.
-                </label>
-                <!--<label class="checkbox">
-                  <input type="checkbox" v-model="isRepeat">
-                  Repeat for this day
-                </label>-->
-              </p>
+            <div class="columns">
+              <div class="column is-2">
+                <label class="label">Comment</label>
+              </div>
+              <div class="column is-10">
+                <textarea class="input" type="text" style="height:70px" v-model="comment"></textarea>
+              </div>
             </div>
           </div>
           <div class="level">
@@ -89,7 +89,43 @@
               <button class="button is-danger" @click="remove">Delete</button>
             </div>
           </div>
+        </div>
+        <div class="box" v-if="isCustomer">
+          <h2 class="title">Create Customer</h2>
+          <div class="box">
+            <div class="columns">
+              <div class="column is-6">
+                <label for="" class="label">Email Address</label>
+                <p><input class="input" type="text" v-model="customer"></p>
+                <label for="" class="label">Name</label>
+                <p><input class="input" type="text"></p>
+                <label for="" class="label">Cell Phone</label>
+                <p><input class="input" type="text"></p>
+                <label for="" class="label">Address</label>
+                <p><textarea class="textarea" style="min-height:60px !important"></textarea></p>
+              </div>
+              <div class="column is-6">
+                <label for="" class="label">Zip</label>
+                <p><input class="input" type="text"></p>
+                <label for="" class="label">City</label>
+                <p><input class="input" type="text"></p>
+                <label for="" class="label">Country</label>
+                <p><input class="input" type="text"></p>
+                <label for="" class="label">State</label>
+                <p><input class="input" type="text"></p>
+              </div>
+            </div>
           </div>
+          <div class="level">
+            <div class="level-left is-6">
+              
+            </div>
+            <div class="level-right is-6 block">
+              <a class="button is-info" @click="addCustomer">Save</a>
+              <a class="button is-info" @click="isCustomer=false">Cancel</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -121,7 +157,7 @@
   .fat_lines_section {
     opacity: 0.04;
   }
-  .block a {
+  .block a:first-child {
     margin-right: 10px;
   }
   #custom_form .modal-content {
@@ -157,6 +193,7 @@
       return {
         id: agent.data._id,
         events: event.data,
+        comment: '',
         blockDays: blockDays.data,
         title: 'Scanning Session',
         email: agent.data.email,
@@ -165,6 +202,7 @@
         allMarkedId: [],
         searchedCustomers: [],
         customer: '',
+        isCustomer: false,
         isOpen: false,
         highlightedPosition: 0,
         isPersonalOff: false,
@@ -182,6 +220,7 @@
         const flatpicker = require('flatpickr')
         let options = { allowInput: true, enableTime: true, noCalendar: true } // , dateFormat: 'h:i K'
         new flatpicker(document.getElementById('start-time'), options)
+        new flatpicker(document.getElementById('end-time'), options)
       }
       var custom_form = document.getElementById('custom_form')
       scheduler.showLightbox = function(id){
@@ -189,11 +228,15 @@
         scheduler.startLightbox(id, document.getElementById('custom_form'))
         self.title = ev.text
         self.customer = ev.customer
-        let hour = `${ev.start_date.getHours()}`
-        hour = ('00'+hour).substring(hour.length)
-        let minute = `${ev.start_date.getMinutes()}`
-        minute = ('00'+minute).substring(minute.length)
-        self.block_time.work_start_time = `${hour}:${minute}`
+        let timeFormat = (date) => {
+          let hour = `${date.getHours()}`
+          hour = ('00'+hour).substring(hour.length)
+          let minute = `${date.getMinutes()}`
+          minute = ('00'+minute).substring(minute.length)
+          return `${hour}:${minute}`
+        }
+        self.block_time.work_start_time = timeFormat(ev.start_date)
+        self.block_time.work_end_time = timeFormat(ev.end_date)
       }
       var events = []
       this.events.forEach(m => {
