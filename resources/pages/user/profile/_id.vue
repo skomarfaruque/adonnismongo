@@ -42,12 +42,12 @@
                 <div class="columns">
                   <div class="column is-1">
                     <a href="javascript:" class="button is-danger" @click="removeZip(ind)"><i class="fa fa-minus"></i></a>
-                  </div> 
+                  </div>
                   <div class="column is-5"><input class="input" v-model="user.zipCode[ind]" type="text" placeholder="Zip Code"></div>
                 </div>
               </li>
             </ul>
-            
+
             <div class="columns">
               <div class="column is-1"><a href="javascript:"
                   class="button is-info"
@@ -59,7 +59,7 @@
         <section v-if="!isAgent">
           <label class="label">Working Hour</label>
           <div class="columns">
-            
+
           </div>
           <label class="label">Block Day(s)</label>
           <div class="columns is-multiline" v-for="(d, i) in allDay">
@@ -69,7 +69,7 @@
                   {{d}}
                 </label>
             </div>
-            <div class="column is-3">            
+            <div class="column is-3">
               <input id="start-time" class="input" v-model="block_days[i].start" value="08:00" type="text" placeholder="Block Time">
             </div>
             <div class="column is-3">
@@ -101,12 +101,12 @@
       MaskedInput
     },
     async asyncData ({ store, axios, params }) {
-      
+
       let { data } = await axios.get('users/me')
       if (!data.zipCode) {
         data.zipCode = []
       }
-      let blockTime = JSON.parse(/* data.block_time  || */ '[{day: false, start: '09:00', end: '17:00'},{},{},{},{},{},{}]')
+      let blockTime = JSON.parse(/* data.block_time  || */ '[{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"}]')
       console.log(blockTime)
       return {
         user: data,
