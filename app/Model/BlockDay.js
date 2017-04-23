@@ -7,7 +7,12 @@ const blockDay = mongoose.Schema({
     type: 'ObjectId',
     ref: 'Agent'
   },
-  blockDate: Date
+  blockDate: Date,
+  start: String,
+  end: String,
+  fullday: Boolean,
+  isRepeat: Boolean,
+  comment: String
 })
 
 const BlockDay = mongoose.model('BlockDay', blockDay)

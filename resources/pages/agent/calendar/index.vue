@@ -1,16 +1,72 @@
 <template>
   <section>
-    <div class='levels'>
+    <div v-bind:class="{ modal: true, 'is-active': isPersonalOff }">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          <h1 class="title">Book Personal Task</h1>
+          <div class="box">
+            <div class="columns">
+              <div class="column is-6">
+                <label class="label">Provider</label>
+                <span class="subtitle">{{name}}</span>
+                <label for="" class="label">Date</label>
+                <p class="control"><input id="date-off" class="input" type="date" v-model="personal.blockDate"></p>
+                <label class="checkbox">
+                  <input type="checkbox" v-model="personal.fullday">
+                Whole Day Off
+                </label>
+                 <label for="" class="label">Time Period</label>
+                <div class="columns">
+                  <div class="column is-5">
+                    <input id="personal-start" class="input" type="text" v-model="personal.start">
+                  </div>
+                  <div class="column is-2 has-text-centered">to</div>  
+                  <div class="column is-5">
+                    <input id="personal-end" class="input" type="text" v-model="personal.end">
+                  </div>
+                </div>
+              </div>
+              <div class="column is-6">
+                <label class="checkbox">
+                  <input type="checkbox" v-model="personal.isRepeat">
+                  Repeat
+                </label>
+                <label for="" class="label">Comment</label>
+                <p class="control">
+                  <textarea name="" id="" cols="30" rows="10" class="textarea" v-model="personal.comment"></textarea>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="level">
+            <div class="level-left is-6">
+              
+            </div>
+            <div class="level-right is-6 block">
+              <a class="button is-info" @click="saveOff">Save</a>
+              <a class="button is-info" @click="isPersonalOff=false">Cancel</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="modal-close" @click="isPersonalOff=false"></button>
+    </div>
+    <div class='level'>
       <div class='level-left'>
 
       </div>
       <div class='level-right'>
         <div class='level-item'>
+          <a href="javascript:" class="button is-info" @click="isPersonalOff=true"> 
+            <i class="fa fa-plus"></i> &nbsp;
+            Personal Task
+          </a>
         </div>
       </div>
     </div>
     <div class='columns'>
-      <scheduler />
+      <calendar />
     </div>
     <div id="custom_form" class="modal">
       <div class="modal-content">
@@ -96,23 +152,34 @@
             <div class="columns">
               <div class="column is-6">
                 <label for="" class="label">Email Address</label>
-                <p><input class="input" type="text" v-model="customer"></p>
+                <p class="control"><input v-validate="'required|email'" class="input" type="text" name="customer" v-model="customer"></p>
+                <span class="help is-danger" v-show="errors.has('customer')" >{{ errors.first('customer') }}</span>
                 <label for="" class="label">Name</label>
-                <p><input class="input" type="text"></p>
+                <p class="control"><input class="input" type="text" v-model="customerData.name"></p>
                 <label for="" class="label">Cell Phone</label>
-                <p><input class="input" type="text"></p>
+                <p class="control">
+                  <masked-input
+                    type="text"
+                    name="phone"
+                    class="input"
+                    v-model="customerData.phone"
+                    :mask="['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]"
+                    :guide="false"
+                    placeholderChar="#">
+                  </masked-input>
+                </p>
                 <label for="" class="label">Address</label>
-                <p><textarea class="textarea" style="min-height:60px !important"></textarea></p>
+                <p class="control"><textarea class="textarea" style="min-height:60px !important" v-model="customerData.address1"></textarea></p>
               </div>
               <div class="column is-6">
                 <label for="" class="label">Zip</label>
-                <p><input class="input" type="text"></p>
+                <p class="control"><input class="input" type="text" v-model="customerData.zip"></p>
                 <label for="" class="label">City</label>
-                <p><input class="input" type="text"></p>
+                <p class="control"><input class="input" type="text" v-model="customerData.city"></p>
                 <label for="" class="label">Country</label>
-                <p><input class="input" type="text"></p>
+                <p class="control"><input class="input" type="text" v-model="customerData.country"></p>
                 <label for="" class="label">State</label>
-                <p><input class="input" type="text"></p>
+                <p class="control"><input class="input" type="text" v-model="customerData.state"></p>
               </div>
             </div>
           </div>
@@ -157,6 +224,7 @@
   .fat_lines_section {
     opacity: 0.04;
   }
+
   .block a:first-child {
     margin-right: 10px;
   }
@@ -171,11 +239,13 @@
   }
 </style>
 <script>
-  import Scheduler from '~components/Scheduler.vue'
+  import Calendar from '~components/Scheduler.vue'
+  import MaskedInput from 'vue-text-mask'
   export default {
     middleware: 'auth',
     components: {
-      Scheduler
+      Calendar,
+      MaskedInput
     },
     head () {
       return {
@@ -202,11 +272,28 @@
         allMarkedId: [],
         searchedCustomers: [],
         customer: '',
+        customerData: {
+          name: '',
+          email: '',
+          phone: '',
+          address1: '',
+          zipCode: '',
+          city: '',
+          country: '',
+          state: ''
+        },
         isCustomer: false,
         isOpen: false,
         highlightedPosition: 0,
         isPersonalOff: false,
-        isAdded: false
+        isAdded: false,
+        personal: {
+          blockDate: (new Date()).toLocaleDateString(),
+          fullday: false,
+          start: '09:00',
+          end: '17:00',
+          isRepeat: false
+        }
       }
     },
     data () {
@@ -219,6 +306,9 @@
       if (process.BROWSER_BUILD) {
         const flatpicker = require('flatpickr')
         let options = { allowInput: true, enableTime: true, noCalendar: true } // , dateFormat: 'h:i K'
+        new flatpicker(document.getElementById('date-off'))
+        new flatpicker(document.getElementById('personal-start'), options)
+        new flatpicker(document.getElementById('personal-end'), options)
         new flatpicker(document.getElementById('start-time'), options)
         new flatpicker(document.getElementById('end-time'), options)
       }
@@ -279,9 +369,14 @@
 
       
       this.blockDays.forEach((b) => {
+        const startTimes = b.start.split(':')
+        const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
+        const endTimes = b.end.split(':')
+        const endMinute = parseInt(endTimes[0]) * 60 + parseInt(endTimes[1])
+        let date = new Date(b.blockDate)
         let day = {
-          days: new Date(b.blockDate),
-          zones: 'fullday',
+          days: b.isRepeat ? date.getDay() : date,
+          zones: b.fullday ? 'fullday' : [startMinute, endMinute],
           css: 'holiday',
           html: 'Personal Off',
           type: 'dhx_time_block'
@@ -311,26 +406,34 @@
       async save () {
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
-        if (!this.isPersonalOff) {
+        if (this.errors.any()) {
+          return
+        }
+        const startTimes = this.block_time.work_start_time.split(':')
+        const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
+        ev.start_date.setHours(startTimes[0], startTimes[1])
+        const obj = { agent: this.email, description: this.title, customer: this.customer, start: ev.start_date, comment: this.comment }
+        let { data } = await this.axios.post('appointment', obj)
+        ev.customer = data.customer.email
+        ev.text = data.description
+        ev._id = data._id
+        scheduler.endLightbox(true, document.getElementById('custom_form'))
+        this.isCustomer = false
+      },
+      async saveOff () {
           if (this.errors.any()) {
             return
           }
-          const startTimes = this.block_time.work_start_time.split(':')
-          const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
-          ev.start_date.setHours(startTimes[0], startTimes[1])
-          const obj = { agent: this.email, description: this.title, customer: this.customer, start: ev.start_date }
-          let { data } = await this.axios.post('appointment', obj)
-          ev.customer = data.customer.email
-          ev.text = data.description
-          ev._id = data._id
-          scheduler.endLightbox(true, document.getElementById('custom_form'))
-        } else {
-          this.isPersonalOff = false
           this.isAdded = false
-          await this.axios.get(`agent/${this.id}/block-date/${ev.start_date.toISOString()}`)
+          await this.axios.post(`agent/${this.id}/block-date`, this.personal)
+          const startTimes = this.personal.start.split(':')
+          const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
+          const endTimes = this.personal.end.split(':')
+          const endMinute = parseInt(endTimes[0]) * 60 + parseInt(endTimes[1])
+          let date = new Date(this.personal.blockDate)
           let offDay = {
-            days: ev.start_date,
-            zones: 'fullday',
+            days: this.personal.isRepeat ? date.getDay() : date,
+            zones: this.personal.fullday ? 'fullday' : [startMinute, endMinute],
             css: 'holiday',
             html: 'Personal Off',
             type: 'dhx_time_block'
@@ -339,7 +442,7 @@
           this.allMarkedId.push(offDay)
           scheduler.endLightbox(false, document.getElementById('custom_form'))
           scheduler.updateView()
-        }
+          this.isPersonalOff = false
       },
       async remove () {
         let id = scheduler.getState().lightbox_id
@@ -356,9 +459,11 @@
       },
       async addCustomer () {
         if (this.customer && !this.errors.has('customer')) {
-          const { data } = await this.axios.post('customers', { name: this.customer, email: this.customer })
+          this.customerData.email = this.customer
+          const { data } = await this.axios.post('customers', this.customerData)
           await this.axios.get(`agent/${this.id}/assign-customer/${data._id}`)
           this.isAdded = true
+          this.customerData = {}
         }
       },
       async searchCustomer (value) {

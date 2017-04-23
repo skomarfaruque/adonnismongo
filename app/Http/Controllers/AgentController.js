@@ -39,9 +39,10 @@ class AgentController {
 
   * addBlockDay (req, res) {
     const agentId = req.param('id')
-    const date = req.param('date')
-    yield BlockDay.deleteOne({ agent: agentId, blockDate: date })
-    const blockDay = yield BlockDay.create({ agent: agentId, blockDate: date })
+    let date = req.only('blockDate', 'fullday', 'start', 'end', 'isRepeat', 'comment')
+    date.agent = agentId
+    yield BlockDay.deleteOne({ agent: agentId, blockDate: date.blockDate })
+    const blockDay = yield BlockDay.create(date)
     res.ok(blockDay)
   }
   * getBlockDays (req, res) {

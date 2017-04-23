@@ -88,7 +88,6 @@
 
 <script>
   import MaskedInput from 'vue-text-mask'
-  import notify from '~/plugins/vnotification'
   export default {
     middleware: 'auth',
     head () {
@@ -113,8 +112,6 @@
         user: data,
         isAgent: store.state.role === 'Agent',
         allDay: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        work_start_time: blockTime.work_start_time || '08:00',
-        work_end_time: blockTime.work_end_time || '18:00',
         block_days: blockTime || []
       }
     },
@@ -143,18 +140,9 @@
         this.user.zipCode.splice(ind, 1)
       },
       async saveInfo () {
-        const blockTime = {
-          days: this.block_days,
-          work_start_time: this.work_start_time,
-          work_end_time: this.work_end_time
-        }
         this.user.block_time = JSON.stringify(this.block_days)
         await this.axios.put(`users/${this.user._id}`, this.user)
-        notify({
-          title: 'Save',
-          message: 'Your profile is saved successfully.',
-          type: 'success'
-        })
+        this.$toasted.show('Profile Saved Successfully.', { duration: 4500 })
       }
     }
   }
