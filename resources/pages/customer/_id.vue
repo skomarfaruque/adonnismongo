@@ -64,7 +64,6 @@ export default {
     MaskedInput
   },
   async asyncData ({ store, axios, params }) {
-    
     let { data } = await axios.get(`customers/${params.id}`)
     return {
       id: data._id,

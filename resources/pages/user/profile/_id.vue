@@ -102,12 +102,11 @@
       MaskedInput
     },
     async asyncData ({ store, axios, params }) {
-
       let { data } = await axios.get('users/me')
       if (!data.zipCode) {
         data.zipCode = []
       }
-      let blockTime = JSON.parse(data.block_time  || '[{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"}]')
+      let blockTime = JSON.parse(data.block_time || '[{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"},{"day": false, "start": "09:00", "end": "17:00"}]')
       return {
         user: data,
         isAgent: store.state.role === 'Agent',
@@ -123,10 +122,10 @@
     mounted () {
       if (this.isAgent && process.BROWSER_BUILD) {
         const flatpicker = require('flatpickr')
-        let options = { enableTime: true, noCalendar: true }
+        let options = { enableTime: true, noCalendar: true, dateFormat: 'h:i K' }
         let starts = document.getElementsByClassName('start-time')
         let ends = document.getElementsByClassName('end-time')
-        for(var i = 0; i < starts.length; i++) {
+        for (var i = 0; i < starts.length; i++) {
           new flatpicker(starts[i], options)
           new flatpicker(ends[i], options)
         }        

@@ -259,7 +259,7 @@
 
       let blockDays = await axios.get(`agent/${agent.data._id}/block-dates`)
       store.commit('SET_HEAD', [`Agent Calendar`, `View appointments of ${agent.data.name}.`])
-      let blockTime = agent.data.block_time ? JSON.parse(agent.data.block_time) : [{ day: false, start: '09:00', end: '17:00' }]
+      let blockTime = agent.data.block_time ? JSON.parse(agent.data.block_time) : [{ day: false, start: '09:00 AM', end: '05:00 PM' }]
       return {
         id: agent.data._id,
         events: event.data,
@@ -290,8 +290,8 @@
         personal: {
           blockDate: (new Date()).toLocaleDateString(),
           fullday: false,
-          start: '09:00',
-          end: '17:00',
+          start: '09:00 AM',
+          end: '05:00 PM',
           isRepeat: false
         }
       }
@@ -301,30 +301,54 @@
         axios: this.$root.$options.axios
       }
     },
+    watch: {
+      'block_time.work_start_time': (val) => {
+        console.log(val)
+      }
+    },
     mounted () {
       let self = this
-      if (process.BROWSER_BUILD) {
-        const flatpicker = require('flatpickr')
-        let options = { allowInput: true, enableTime: true, noCalendar: true } // , dateFormat: 'h:i K'
-        new flatpicker(document.getElementById('date-off'))
+      const flatpicker = require('flatpickr')
+      var options = { allowInput: false, enableTime: true, noCalendar: true, dateFormat: 'h:i K' }
+      new flatpicker(document.getElementById('date-off'))
         new flatpicker(document.getElementById('personal-start'), options)
         new flatpicker(document.getElementById('personal-end'), options)
-        new flatpicker(document.getElementById('start-time'), options)
-        new flatpicker(document.getElementById('end-time'), options)
+
+      let startOption = Object.assign({}, options)
+      startOption.onChange = (date, datestr, instance) => {
+        let dt = date[0]
+        if (!dt) return false
+        dt.setHours(dt.getHours() + 2)
+        dt.setMinutes(dt.getMinutes())
+        endTime.setDate(dt)
       }
+      let startTime = window.startTime = new flatpicker(document.getElementById('start-time'), startOption)
+  
+      let endTime = new flatpicker(document.getElementById('end-time'), options)
       var custom_form = document.getElementById('custom_form')
-      scheduler.showLightbox = function(id){
+      scheduler.showLightbox = function (id) {
         var ev = scheduler.getEvent(id)
         scheduler.startLightbox(id, document.getElementById('custom_form'))
         self.title = ev.text
         self.customer = ev.customer
         let timeFormat = (date) => {
-          let hour = `${date.getHours()}`
-          hour = ('00'+hour).substring(hour.length)
-          let minute = `${date.getMinutes()}`
-          minute = ('00'+minute).substring(minute.length)
-          return `${hour}:${minute}`
+          var hours = date.getHours()
+          var minutes = date.getMinutes()
+          var ampm = hours >= 12 ? 'PM' : 'AM'
+          hours = hours % 12
+          hours = hours || 12 // the hour '0' should be '12'
+          minutes = minutes < 10 ? '0' + minutes : minutes
+          var strTime = hours + ':' + minutes + ' ' + ampm
+          return strTime
         }
+        startTime.setDate(ev.start_date)
+        endTime.setDate(ev.end_date)
+        // startTime.config.defaultHour = ev.start_date.getHours()
+        // startTime.config.defaultMinute = ev.start_date.getMinutes()
+
+        // endTime.config.defaultHour = ev.end_date.getHours()
+        // endTime.config.defaultMinute = ev.end_date.getMinutes()
+
         self.block_time.work_start_time = timeFormat(ev.start_date)
         self.block_time.work_end_time = timeFormat(ev.end_date)
       }
@@ -335,7 +359,7 @@
           _id: m._id,
           text: m.description,
           start_date: new Date(m.start_time),
-          end_date: new Date(m.start_time),
+          end_date: new Date(m.end_time),
           customer: m.customer.email,
           agent: m.agent.email
         })
@@ -348,7 +372,7 @@
             zones: 'fullday',
             css: 'holiday',
             html: 'Personal Off',
-            type: 'dhx_time_block'
+            // type: 'dhx_time_block'
           }
         } else {
           const startTimes = b.start.split(':')
@@ -361,13 +385,12 @@
             invert_zones: true,
             type: 'dhx_time_block',
             css: 'fat_lines_section'
-          }          
+          }
         }
         scheduler.addMarkedTimespan(off)
         self.allMarkedId.push(off)
       })
 
-      
       this.blockDays.forEach((b) => {
         const startTimes = b.start.split(':')
         const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
@@ -384,11 +407,10 @@
         scheduler.addMarkedTimespan(day)
         self.allMarkedId.push(day)
       })
-      
+
       scheduler.parse(events, 'json')
       // scheduler.addMarkedTimespan(workingHour)
-      
-      
+
       // scheduler.addMarkedTimespan(offDay)
 
       scheduler.updateView()
@@ -463,6 +485,7 @@
           const { data } = await this.axios.post('customers', this.customerData)
           await this.axios.get(`agent/${this.id}/assign-customer/${data._id}`)
           this.isAdded = true
+          this.isCustomer = false
           this.customerData = {}
         }
       },
