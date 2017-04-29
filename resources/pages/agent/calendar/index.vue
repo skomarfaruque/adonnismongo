@@ -239,6 +239,7 @@
   }
 </style>
 <script>
+  
   import Calendar from '~components/Scheduler.vue'
   import MaskedInput from 'vue-text-mask'
   export default {
@@ -307,6 +308,7 @@
       }
     },
     mounted () {
+      window.calendar = this 
       let self = this
       const flatpicker = require('flatpickr')
       var options = { allowInput: false, enableTime: true, noCalendar: true, dateFormat: 'h:i K' }
@@ -343,11 +345,6 @@
         }
         startTime.setDate(ev.start_date)
         endTime.setDate(ev.end_date)
-        // startTime.config.defaultHour = ev.start_date.getHours()
-        // startTime.config.defaultMinute = ev.start_date.getMinutes()
-
-        // endTime.config.defaultHour = ev.end_date.getHours()
-        // endTime.config.defaultMinute = ev.end_date.getMinutes()
 
         self.block_time.work_start_time = timeFormat(ev.start_date)
         self.block_time.work_end_time = timeFormat(ev.end_date)
@@ -371,8 +368,8 @@
             days: b.day,
             zones: 'fullday',
             css: 'holiday',
-            html: 'Personal Off',
-            // type: 'dhx_time_block'
+            html: 'Off Day',
+            type: 'dhx_time_block'
           }
         } else {
           const startTimes = b.start.split(':')
@@ -390,7 +387,9 @@
         scheduler.addMarkedTimespan(off)
         self.allMarkedId.push(off)
       })
-
+      function showPersonalTask (id) {
+        this.showPersonalTask(id)
+      }
       this.blockDays.forEach((b) => {
         const startTimes = b.start.split(':')
         const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
@@ -398,10 +397,11 @@
         const endMinute = parseInt(endTimes[0]) * 60 + parseInt(endTimes[1])
         let date = new Date(b.blockDate)
         let day = {
+          _id: `${b._id}`,
           days: b.isRepeat ? date.getDay() : date,
           zones: b.fullday ? 'fullday' : [startMinute, endMinute],
           css: 'holiday',
-          html: 'Personal Off',
+          html: `<a href="javascript:" onclick="calendar.showPersonalTask('${b._id}')">Personal Task</a>`,
           type: 'dhx_time_block'
         }
         scheduler.addMarkedTimespan(day)
@@ -447,13 +447,15 @@
             return
           }
           this.isAdded = false
-          await this.axios.post(`agent/${this.id}/block-date`, this.personal)
+          const { data } = await this.axios.post(`agent/${this.id}/block-date`, this.personal)
+          this.blockDays.push(data)
           const startTimes = this.personal.start.split(':')
           const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
           const endTimes = this.personal.end.split(':')
           const endMinute = parseInt(endTimes[0]) * 60 + parseInt(endTimes[1])
           let date = new Date(this.personal.blockDate)
           let offDay = {
+            _id: `${data._id}`,
             days: this.personal.isRepeat ? date.getDay() : date,
             zones: this.personal.fullday ? 'fullday' : [startMinute, endMinute],
             css: 'holiday',
@@ -497,6 +499,32 @@
           this.searchedCustomers = data || []
           this.isOpen = this.searchedCustomers.length > 0
         }
+      },
+      showPersonalTask (id) {
+        this.isPersonalOff = true
+
+        for (var i = 0; i < this.blockDays.length; i++ ) {
+          let off = this.blockDays[i]
+          
+          if (off._id && off._id === id) {      
+            this.personal = off
+            break;         
+          }
+        } 
+        
+      },
+      deletePersonalTask() {
+        const id = this.personal._id
+        for (var i = 0; i < this.allMarkedId.length; i++ ) {
+          let off = this.allMarkedId[i]
+          
+          if (off._id && off._id === id) {      
+            scheduler.deleteMarkedTimespan(off)
+            scheduler.updateView()
+            this.allMarkedId.splice(i, 1)
+            break;         
+          }
+        } 
       },
       moveDown () {
         if (!this.isOpen) {
