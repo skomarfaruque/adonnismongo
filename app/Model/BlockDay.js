@@ -8,6 +8,7 @@ const blockDay = mongoose.Schema({
     ref: 'Agent'
   },
   blockDate: Date,
+  endDate: Date,
   start: String,
   end: String,
   fullday: Boolean,
