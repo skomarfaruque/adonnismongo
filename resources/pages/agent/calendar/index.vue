@@ -376,10 +376,8 @@
             type: 'dhx_time_block'
           }
         } else {
-          const startTimes = b.start.split(':')
-          const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
-          const endTimes = b.end.split(':')
-          const endMinute = parseInt(endTimes[0]) * 60 + parseInt(endTimes[1])
+          const startMinute = helper.covertTimetoInt(b.start)
+          const endMinute = helper.covertTimetoInt(b.end)
           off = {
             days: i,
             zones: [startMinute, endMinute],
@@ -404,6 +402,7 @@
           _id: `${b._id}`,
           days: b.isRepeat ? date.getDay() : date,
           zones: b.fullday ? 'fullday' : [startMinute, endMinute],
+          invert_zones: true,
           css: 'holiday',
           html: `<a href="javascript:" onclick="calendar.showPersonalTask('${b._id}')">Personal Task</a>`,
           type: 'dhx_time_block'
