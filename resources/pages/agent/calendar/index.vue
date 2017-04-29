@@ -41,7 +41,7 @@
           </div>
           <div class="level">
             <div class="level-left is-6">
-              
+              <a class="button is-danger" @click="deletePersonalTask" v-show="isDeletePersonalOff">Delete</a>
             </div>
             <div class="level-right is-6 block">
               <a class="button is-info" @click="saveOff">Save</a>
@@ -294,7 +294,8 @@
           start: '09:00 AM',
           end: '05:00 PM',
           isRepeat: false
-        }
+        },
+        isDeletePersonalOff: false
       }
     },
     data () {
@@ -510,11 +511,13 @@
             this.personal = off
             break;         
           }
-        } 
+        }
+        this.isDeletePersonalOff = true
         
       },
-      deletePersonalTask() {
+      async deletePersonalTask() {
         const id = this.personal._id
+        await this.axios.delete(`agent/${this.id}/block-date/${this.personal.blockDate}`)
         for (var i = 0; i < this.allMarkedId.length; i++ ) {
           let off = this.allMarkedId[i]
           
@@ -524,7 +527,9 @@
             this.allMarkedId.splice(i, 1)
             break;         
           }
-        } 
+        }
+        this.isPersonalOff = false
+        this.isDeletePersonalOff = false
       },
       moveDown () {
         if (!this.isOpen) {
