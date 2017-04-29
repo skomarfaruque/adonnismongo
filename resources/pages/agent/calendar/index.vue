@@ -242,6 +242,7 @@
   
   import Calendar from '~components/Scheduler.vue'
   import MaskedInput from 'vue-text-mask'
+  import helper from '~/plugins/helper'
   export default {
     middleware: 'auth',
     components: {
@@ -334,16 +335,6 @@
         scheduler.startLightbox(id, document.getElementById('custom_form'))
         self.title = ev.text
         self.customer = ev.customer
-        let timeFormat = (date) => {
-          var hours = date.getHours()
-          var minutes = date.getMinutes()
-          var ampm = hours >= 12 ? 'PM' : 'AM'
-          hours = hours % 12
-          hours = hours || 12 // the hour '0' should be '12'
-          minutes = minutes < 10 ? '0' + minutes : minutes
-          var strTime = hours + ':' + minutes + ' ' + ampm
-          return strTime
-        }
         startTime.setDate(ev.start_date)
         endTime.setDate(ev.end_date)
 
@@ -392,10 +383,9 @@
         this.showPersonalTask(id)
       }
       this.blockDays.forEach((b) => {
-        const startTimes = b.start.split(':')
-        const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
-        const endTimes = b.end.split(':')
-        const endMinute = parseInt(endTimes[0]) * 60 + parseInt(endTimes[1])
+        
+        const startMinute = helper.covertTimetoInt(b.start)
+        const endMinute = helper.covertTimetoInt(b.end)
         let date = new Date(b.blockDate)
         let day = {
           _id: `${b._id}`,
@@ -432,9 +422,9 @@
         if (this.errors.any()) {
           return
         }
-        const startTimes = this.block_time.work_start_time.split(':')
-        const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
-        ev.start_date.setHours(startTimes[0], startTimes[1])
+        const startMinute = helper.convertTimetoInt(this.block_time.work_start_time)
+        ev.start_date.setHours(0, 0, 0)
+        ev.start_date.setMinutes(startMinute)
         const obj = { agent: this.email, description: this.title, customer: this.customer, start: ev.start_date, comment: this.comment }
         let { data } = await this.axios.post('appointment', obj)
         ev.customer = data.customer.email
@@ -450,10 +440,8 @@
           this.isAdded = false
           const { data } = await this.axios.post(`agent/${this.id}/block-date`, this.personal)
           this.blockDays.push(data)
-          const startTimes = this.personal.start.split(':')
-          const startMinute = parseInt(startTimes[0]) * 60 + parseInt(startTimes[1])
-          const endTimes = this.personal.end.split(':')
-          const endMinute = parseInt(endTimes[0]) * 60 + parseInt(endTimes[1])
+          const startMinute = helper.covertTimetoInt(b.start)
+          const endMinute = helper.covertTimetoInt(b.end)
           let date = new Date(this.personal.blockDate)
           let offDay = {
             _id: `${data._id}`,
