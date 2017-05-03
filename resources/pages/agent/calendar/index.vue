@@ -180,7 +180,13 @@
                 <label for="" class="label">Country</label>
                 <p class="control"><input class="input" type="text" v-model="customerData.country"></p>
                 <label for="" class="label">State</label>
-                <p class="control"><input class="input" type="text" v-model="customerData.state"></p>
+                <p class="control">
+                  <span class="select">
+                    <select v-model="customerData.state">
+                      <option :value="s.name" v-for="s in states">{{s.name}}</option>
+                    </select>
+                  </span>
+                </p>
               </div>
             </div>
           </div>
@@ -263,8 +269,12 @@
       let blockDays = await axios.get(`agent/${agent.data._id}/block-dates`)
       store.commit('SET_HEAD', [`Agent Calendar`, `View appointments of ${agent.data.name}.`])
       let blockTime = agent.data.block_time ? JSON.parse(agent.data.block_time) : [{ day: false, start: '09:00 AM', end: '05:00 PM' }]
+      let states = [{name:"Alabama",abbreviation:"AL"},{name:"Alaska",abbreviation:"AK"},{name:"American Samoa",abbreviation:"AS"},{name:"Arizona",abbreviation:"AZ"},{name:"Arkansas",abbreviation:"AR"},{name:"California",abbreviation:"CA"},{name:"Colorado",abbreviation:"CO"},{name:"Connecticut",abbreviation:"CT"},{name:"Delaware",abbreviation:"DE"},{name:"District Of Columbia",abbreviation:"DC"},{name:"Federated States Of Micronesia",abbreviation:"FM"},{name:"Florida",abbreviation:"FL"},{name:"Georgia",abbreviation:"GA"},{name:"Guam",abbreviation:"GU"},{name:"Hawaii",abbreviation:"HI"},{name:"Idaho",abbreviation:"ID"},{name:"Illinois",abbreviation:"IL"},{name:"Indiana",abbreviation:"IN"},{name:"Iowa",abbreviation:"IA"},{name:"Kansas",abbreviation:"KS"},{name:"Kentucky",abbreviation:"KY"},{name:"Louisiana",abbreviation:"LA"},{name:"Maine",abbreviation:"ME"},{name:"Marshall Islands",abbreviation:"MH"},{name:"Maryland",abbreviation:"MD"},{name:"Massachusetts",abbreviation:"MA"},{name:"Michigan",abbreviation:"MI"},{name:"Minnesota",abbreviation:"MN"},{name:"Mississippi",abbreviation:"MS"},{name:"Missouri",abbreviation:"MO"},{name:"Montana",abbreviation:"MT"},{name:"Nebraska",abbreviation:"NE"},{name:"Nevada",abbreviation:"NV"},{name:"New Hampshire",abbreviation:"NH"},{name:"New Jersey",abbreviation:"NJ"},{name:"New Mexico",abbreviation:"NM"},{name:"New York",abbreviation:"NY"},{name:"North Carolina",abbreviation:"NC"},{name:"North Dakota",abbreviation:"ND"},{name:"Northern Mariana Islands",abbreviation:"MP"},{name:"Ohio",abbreviation:"OH"},{name:"Oklahoma",abbreviation:"OK"},{name:"Oregon",abbreviation:"OR"},{name:"Palau",abbreviation:"PW"},{name:"Pennsylvania",abbreviation:"PA"},{name:"Puerto Rico",abbreviation:"PR"},{name:"Rhode Island",abbreviation:"RI"},{name:"South Carolina",abbreviation:"SC"},{name:"South Dakota",abbreviation:"SD"},{name:"Tennessee",abbreviation:"TN"},{name:"Texas",abbreviation:"TX"},{name:"Utah",abbreviation:"UT"},{name:"Vermont",abbreviation:"VT"},{name:"Virgin Islands",abbreviation:"VI"},{name:"Virginia",abbreviation:"VA"},{name:"Washington",abbreviation:"WA"},{name:"West Virginia",abbreviation:"WV"},{name:"Wisconsin",abbreviation:"WI"},{name:"Wyoming",abbreviation:"WY"}];
+      let tomorrow = new Date()
+      tomorrow.setHours(24)
       return {
         id: agent.data._id,
+        states,
         events: event.data,
         comment: '',
         blockDays: blockDays.data,
@@ -291,8 +301,8 @@
         isPersonalOff: false,
         isAdded: false,
         personal: {
-          blockDate: (new Date()).toLocaleDateString(),
-          endDate: (new Date().toLocaleDateString()),
+          blockDate: tomorrow.toLocaleDateString(),
+          endDate: tomorrow.toLocaleDateString(),
           fullday: false,
           start: '09:00 AM',
           end: '05:00 PM',
@@ -323,8 +333,9 @@
 
       let startOption = Object.assign({}, options)
       startOption.onChange = (date, datestr, instance) => {
-        let dt = date[0]
-        if (!dt) return false
+        
+        if (!date[0]) return false
+        let dt = new Date(date[0])
         dt.setHours(dt.getHours() + 2)
         dt.setMinutes(dt.getMinutes())
         endTime.setDate(dt)
@@ -339,7 +350,9 @@
         self.title = ev.text
         self.customer = ev.customer
         startTime.setDate(ev.start_date)
-        endTime.setDate(ev.end_date)
+        let endDate = new Date(ev.start_date)
+        endDate.setHours(ev.start_date.getHours() + 2)
+        endTime.setDate(endDate)
         let timeFormat = (date) => {
           var hours = date.getHours()
           var minutes = date.getMinutes()
@@ -351,7 +364,7 @@
           return strTime
         }
         self.block_time.work_start_time = timeFormat(ev.start_date)
-        self.block_time.work_end_time = timeFormat(ev.end_date)
+        self.block_time.work_end_time = timeFormat(endDate)
       }
       var events = []
       this.events.forEach(m => {
@@ -360,9 +373,10 @@
           _id: m._id,
           text: m.description,
           start_date: new Date(m.start_time),
-          end_date: new Date(m.end_time),
+          end_date: new Date(m.start_time),
           customer: m.customer.email,
-          agent: m.agent.email
+          agent: m.agent.email,
+          comment: m.comment
         })
       })
       this.block_time.forEach((b, i) => {
@@ -376,8 +390,8 @@
             type: 'dhx_time_block'
           }
         } else {
-          const startMinute = helper.covertTimetoInt(b.start)
-          const endMinute = helper.covertTimetoInt(b.end)
+          const startMinute = helper.convertTimetoInt(b.start)
+          const endMinute = helper.convertTimetoInt(b.end)
           off = {
             days: i,
             zones: [startMinute, endMinute],
@@ -394,8 +408,8 @@
       }
       this.blockDays.forEach((b) => {
         
-        const startMinute = helper.covertTimetoInt(b.start)
-        const endMinute = helper.covertTimetoInt(b.end)
+        const startMinute = helper.convertTimetoInt(b.start)
+        const endMinute = helper.convertTimetoInt(b.end)
         let date = new Date(b.blockDate)
         date.setHours(0, 0, 0)
         let day = {
@@ -479,8 +493,8 @@
           const { data } = await this.axios.post(`agent/${this.id}/block-date`, this.personal)
 
           this.blockDays.push(data)
-          const startMinute = helper.covertTimetoInt(this.personal.start)
-          const endMinute = helper.covertTimetoInt(this.personal.end)
+          const startMinute = helper.convertTimetoInt(this.personal.start)
+          const endMinute = helper.convertTimetoInt(this.personal.end)
           let date = new Date(this.personal.blockDate)
           date.setHours(0, 0, 0)
           let endDate = new Date(this.personal.endDate)

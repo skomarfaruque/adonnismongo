@@ -1,6 +1,6 @@
 let helper = {}
 
-helper.covertTimetoInt = (timeStr) => {
+helper.convertTimetoInt = (timeStr) => {
   const [time, modifier] = timeStr.split(' ')
 
   let [hours, minutes] = time.split(':')

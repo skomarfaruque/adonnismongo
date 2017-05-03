@@ -46,7 +46,7 @@
               </div>
             </li>
           </ul>
-          
+  lo        
           <div class="columns">
             <div class="column is-1"><a href="javascript:"
                 class="button is-info"
