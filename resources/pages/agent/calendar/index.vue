@@ -211,6 +211,7 @@
   		/* enabling marked timespans for month view */
   .dhx_scheduler_month .dhx_marked_timespan {
     display: block;
+    overflow: hidden;
   }
   /* style to display special dates, e.g. holidays */
   .holiday {
@@ -420,7 +421,7 @@
           zones: b.fullday ? 'fullday' : [startMinute, endMinute],
           invert_zones: true,
           css: 'holiday',
-          html: `<a href="javascript:" onclick="calendar.showPersonalTask('${b._id}')">Personal Task</a>`,
+          html: `<a href="javascript:" title="Personal Task" onclick="calendar.showPersonalTask('${b._id}')">Personal Task</a>`,
           type: 'dhx_time_block'
         }
         if (b.isRepeat) {
@@ -507,7 +508,7 @@
             days: this.personal.isRepeat ? date.getDay() : date,
             zones: this.personal.fullday ? 'fullday' : [startMinute, endMinute],
             css: 'holiday',
-            html: `<a href="javascript:" onclick="calendar.showPersonalTask('${data._id}')">Personal Task</a>`,
+            html: `<a href="javascript:" title="Personal Task" onclick="calendar.showPersonalTask('${data._id}')">Personal Task</a>`,
             type: 'dhx_time_block'
           }
           if (this.personal.isRepeat) {
