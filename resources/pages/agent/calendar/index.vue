@@ -306,6 +306,7 @@
           fullday: false,
           start: '09:00 AM',
           end: '05:00 PM',
+          comment: '',
           isRepeat: false
         },
         isDeletePersonalOff: false
@@ -349,6 +350,7 @@
         scheduler.startLightbox(id, document.getElementById('custom_form'))
         self.title = ev.text
         self.customer = ev.customer
+        self.comment = ev.comment
         startTime.setDate(ev.start_date)
         let endDate = new Date(ev.start_date)
         endDate.setHours(ev.start_date.getHours() + 2)
@@ -461,6 +463,7 @@
         let { data } = await this.axios.post('appointment', obj)
         ev.customer = data.customer.email
         ev.text = data.description
+        ev.comment = data.comment
         ev._id = data._id
         scheduler.endLightbox(true, document.getElementById('custom_form'))
         this.isCustomer = false
@@ -521,6 +524,7 @@
             fullday: false,
             start: '09:00 AM',
             end: '05:00 PM',
+            comment: '',
             isRepeat: false
           }
           this.isPersonalOff = false
@@ -593,6 +597,7 @@
           fullday: false,
           start: '09:00 AM',
           end: '05:00 PM',
+          comment: '',
           isRepeat: false
         }
         this.isPersonalOff = false
