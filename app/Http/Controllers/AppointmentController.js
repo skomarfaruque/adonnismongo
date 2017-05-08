@@ -40,6 +40,8 @@ class AppointmentController {
     const start = req.input('start')
     const comment = req.input('comment')
     const description = req.input('description')
+    const id = req.input('_id')
+
     const agent = yield User.findOne({ email: agentId }).exec()
     if (!agent) {
       return res.send('Agent not Found')
@@ -48,7 +50,12 @@ class AppointmentController {
     if (!customer) {
       return res.send('Customer not Found')
     }
-    const appointment = yield Appointment.create({ customer, agent, start_time: start, description, comment })
+    let appointment = yield Appointment.findOne({ _id: id }).exec()
+    if (appointment) {
+      yield Appointment.update(id, { customer, agent, start_time: start, description, comment })
+    } else {
+      appointment = yield Appointment.create({ customer, agent, start_time: start, description, comment })
+    }
     res.send(appointment)
   }
 

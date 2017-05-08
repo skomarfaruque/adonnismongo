@@ -174,7 +174,7 @@
               </div>
               <div class="column is-6">
                 <label for="" class="label">Zip</label>
-                <p class="control"><input class="input" type="text" v-model="customerData.zip"></p>
+                <p class="control"><input class="input" type="text" v-model="customerData.zipCode"></p>
                 <label for="" class="label">City</label>
                 <p class="control"><input class="input" type="text" v-model="customerData.city"></p>
                 <label for="" class="label">Country</label>
@@ -222,7 +222,7 @@
     color: #e2b8ac;
   }
   .green {
-    background-color: rgba(173, 255, 47, 0.05);
+    background-color: rgba(173, 255, 47, 0.25);
     text-align: center;
     font-size: 24px;
     opacity: 0.8;
@@ -230,7 +230,7 @@
   }
 
   .fat_lines_section {
-    opacity: 0.04;
+    opacity: 0.15;
   }
 
   .block a:first-child {
@@ -419,9 +419,8 @@
           _id: `${b._id}`,
           days: b.isRepeat ? date.getDay() : date,
           zones: b.fullday ? 'fullday' : [startMinute, endMinute],
-          invert_zones: true,
           css: 'holiday',
-          html: `<a href="javascript:" title="Personal Task" onclick="calendar.showPersonalTask('${b._id}')">Personal Task</a>`,
+          html: `<a href="javascript:" title="Personal Task" style="color:#3273dc" onclick="calendar.showPersonalTask('${b._id}')">Personal Task</a>`,
           type: 'dhx_time_block'
         }
         if (b.isRepeat) {
@@ -460,7 +459,7 @@
         const startMinute = helper.convertTimetoInt(this.block_time.work_start_time)
         ev.start_date.setHours(0, 0, 0)
         ev.start_date.setMinutes(startMinute)
-        const obj = { agent: this.email, description: this.title, customer: this.customer, start: ev.start_date, comment: this.comment }
+        const obj = { _id: ev._id, agent: this.email, description: this.title, customer: this.customer, start: ev.start_date, comment: this.comment }
         let { data } = await this.axios.post('appointment', obj)
         ev.customer = data.customer.email
         ev.text = data.description
@@ -508,7 +507,7 @@
             days: this.personal.isRepeat ? date.getDay() : date,
             zones: this.personal.fullday ? 'fullday' : [startMinute, endMinute],
             css: 'holiday',
-            html: `<a href="javascript:" title="Personal Task" onclick="calendar.showPersonalTask('${data._id}')">Personal Task</a>`,
+            html: `<a href="javascript:" title="Personal Task" style="color:#3273dc" onclick="calendar.showPersonalTask('${data._id}')">Personal Task</a>`,
             type: 'dhx_time_block'
           }
           if (this.personal.isRepeat) {
