@@ -43,6 +43,9 @@ module.exports = {
       },
       {
         src: '/calendar/dhtmlxscheduler_limit.js'
+      },
+      {
+        src: '/calendar/dhtmlxscheduler_tooltip.js'
       }
     ]
   },

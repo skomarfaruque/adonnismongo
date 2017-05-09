@@ -71,7 +71,20 @@
     </div>
     <div id="custom_form" class="modal">
       <div class="modal-content">
-        <div class="box" v-if="!isCustomer"> 
+        <div class="box" v-show="isAgent && !isEdit">
+          <h1 class="title">Start Appointment</h1>
+          <div class="box">
+
+          </div>
+          <div class="level">
+            <div class="level-left is-6">
+            </div>
+            <div class="level-right is-6">
+              <button class="button is-info" @click="isEdit = true">Edit</button>
+            </div>
+          </div>
+        </div>
+        <div class="box" v-show="!isCustomer && (isEdit || !isAgent)"> 
           <h1 class="title">Create Appointment for {{name}}</h1>
           <div class="box">          
            
@@ -147,7 +160,7 @@
             </div>
           </div>
         </div>
-        <div class="box" v-if="isCustomer">
+        <div class="box" v-show="isCustomer">
           <h2 class="title">Create Customer</h2>
           <div class="box">
             <div class="columns">
@@ -274,6 +287,8 @@
       let tomorrow = new Date()
       tomorrow.setHours(24)
       return {
+        isAgent: store.state.role === 'Agent',
+        isEdit: store.state.role !== 'Agent',
         id: agent.data._id,
         states,
         events: event.data,
@@ -346,11 +361,17 @@
   
       let endTime = new flatpicker(document.getElementById('end-time'), options)
       var custom_form = document.getElementById('custom_form')
+      scheduler.templates.tooltip_text = function(start,end,ev){
+        return `<b>Event:</b> ${ev.text} <br/><b>Start date:</b> 
+        ${scheduler.templates.tooltip_date_format(start)} <br/><b>End date:</b> ${scheduler.templates.tooltip_date_format(end)}
+        <br/><b>Customer:</b> ${ev.customer.name} <br/> <b>Address:</b> ${ev.customer.address1}, ${ev.customer.address2}
+        <br/> <b>City:</b> ${ev.customer.city} <br/> <b>State:</b> ${ev.customer.state} <br/> <b>Zip Code:</b> ${ev.customer.zipCode}`
+      }
       scheduler.showLightbox = function (id) {
         var ev = scheduler.getEvent(id)
         scheduler.startLightbox(id, document.getElementById('custom_form'))
         self.title = ev.text
-        self.customer = ev.customer
+        self.customer = ev.customer.email
         self.comment = ev.comment
         startTime.setDate(ev.start_date)
         let endDate = new Date(ev.start_date)
@@ -377,7 +398,7 @@
           text: m.description,
           start_date: new Date(m.start_time),
           end_date: new Date(m.start_time),
-          customer: m.customer.email,
+          customer: m.customer,
           agent: m.agent.email,
           comment: m.comment
         })
@@ -461,7 +482,7 @@
         ev.start_date.setMinutes(startMinute)
         const obj = { _id: ev._id, agent: this.email, description: this.title, customer: this.customer, start: ev.start_date, comment: this.comment }
         let { data } = await this.axios.post('appointment', obj)
-        ev.customer = data.customer.email
+        ev.customer.email = data.customer.email
         ev.text = data.description
         ev.comment = data.comment
         ev._id = data._id
@@ -528,6 +549,9 @@
             isRepeat: false
           }
           this.isPersonalOff = false
+          if (this.isAgent) {
+            this.isEdit = false
+          }
       },
       async remove () {
         let id = scheduler.getState().lightbox_id
@@ -540,6 +564,9 @@
       closeForm () {
         this.isPersonalOff = false
         this.isAdded = false
+        if (this.isAgent) {
+          this.isEdit = false
+        }
         scheduler.endLightbox(false, document.getElementById('custom_form'))
       },
       async addCustomer () {
