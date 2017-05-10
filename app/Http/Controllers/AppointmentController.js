@@ -83,9 +83,31 @@ class AppointmentController {
   * stopAppointment (req, res) {
     const id = req.input('_id')
     const end = req.input('end')
-    let appointment = yield Appointment.update({ _id: id }, { ended: end })
+    yield Appointment.update({ _id: id }, { ended: end })
+    let appointment = yield Appointment.findOne({ _id: id }).exec()
+    let invoice = { appointment }
+    invoice.title = 'Scanning Appointment'
+    invoice.agent = appointment.agent
+    invoice.customer = appointment.customer
+    let start = appointment.started
+    let distance = end - start
+    let minutes = Math.floor(distance / (1000 * 60))
+    let remaining = minutes % 120
+    let quarter = Math.ceil(remaining / 15)
+    invoice.items = [{
+      description: '2 Hour Scanning',
+      price: 170,
+      quantity: 1
+    }]
 
-    yield Invoice.create({ appointment })
+    if (quarter > 0) {
+      invoice.items.push({
+        description: 'Scanning 1/4 Hour',
+        price: 21.25,
+        quantity: quarter
+      })
+    }
+    yield Invoice.create(invoice)
     res.ok('stopped')
   }
 }
