@@ -57,4 +57,11 @@ Route.group('appointment', () => {
   Route.delete(':id', 'AppointmentController.destroy')
 }).prefix('api/appointment')
 
+Route.group('invoice', () => {
+  Route.get('/', 'InvoiceController.index')
+  Route.get('/:id', 'InvoiceController.show')
+  Route.get('agent/:id', 'InvoiceController.getByAgent')
+  Route.post('/item-add', 'InvoiceController.addItem')
+}).prefix('api/invoice')
+
 Route.any('*', 'NuxtController.render')

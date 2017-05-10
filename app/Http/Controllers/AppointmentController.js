@@ -3,6 +3,7 @@
 const Appointment = use('App/Model/Appointment')
 const User = use('App/Model/User')
 const Customer = use('App/Model/Customer')
+const Invoice = use('App/Model/Invoice')
 class AppointmentController {
   * show (req, res) {
     const id = req.input('id')
@@ -82,8 +83,10 @@ class AppointmentController {
   * stopAppointment (req, res) {
     const id = req.input('_id')
     const end = req.input('end')
-    yield Appointment.update({ _id: id }, { ended: end })
-    res.ok('started')
+    let appointment = yield Appointment.update({ _id: id }, { ended: end })
+
+    yield Invoice.create({ appointment })
+    res.ok('stopped')
   }
 }
 

@@ -669,9 +669,9 @@
         function toTimeString (now, countDownDate) {
           var distance =  now - countDownDate;
           
-          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+          var seconds = Math.floor((distance % (1000 * 60)) / 1000)
           
           // Output the result in an element with id="demo"
           self.timer = `${('00'+hours).slice(-2)}:${('00'+minutes).slice(-2)}:${('00'+seconds).slice(-2)}`
@@ -704,6 +704,7 @@
         let ev = scheduler.getEvent(id) 
         this.axios.post('appointment/stop', { _id: ev._id, end: new Date().getTime() })
         this.stopButton = false
+        this.isFinished = true
       }
     }
   }
