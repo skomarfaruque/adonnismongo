@@ -15,6 +15,12 @@ const scheduleSchema = mongoose.Schema({
   end_time: Date,
   description: String,
   comment: String,
+  isStarted: {
+    type: Boolean,
+    default: false
+  },
+  started: Number,
+  ended: Number,
   created: {
     type: Date,
     default: Date.now

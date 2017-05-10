@@ -69,19 +69,15 @@
     <div class='columns'>
       <calendar />
     </div>
-    <div id="custom_form" class="modal">
+    <div id="custom_form" v-bind:class="{ modal: true }">
       <div class="modal-content">
         <div class="box" v-show="isAgent && !isEdit">
-          <h1 class="title">Start Appointment</h1>
-          <div class="box">
-
-          </div>
-          <div class="level">
-            <div class="level-left is-6">
-            </div>
-            <div class="level-right is-6">
-              <button class="button is-info" @click="isEdit = true">Edit</button>
-            </div>
+          <h1 class="title">Appointment Timer</h1>
+          <div class="box has-text-centered">
+            <h1 style="font-size:64px;">{{timer}}</h1>
+            <button class="button is-large is-info" @click="startWatch" v-show="!stopButton && !isFinished">Start</button>
+            <button class="button is-large is-danger" @click="stopWatch" v-show="stopButton && !isFinished">Stop</button>
+            <h2 style="font-size:40px;" v-show="isFinished">Job Finished</h2>
           </div>
         </div>
         <div class="box" v-show="!isCustomer && (isEdit || !isAgent)"> 
@@ -214,6 +210,7 @@
           </div>
         </div>
       </div>
+      <button class="modal-close" @click="closeForm"></button>
     </div>
   </section>
 </template>
@@ -289,9 +286,12 @@
       return {
         isAgent: store.state.role === 'Agent',
         isEdit: store.state.role !== 'Agent',
+        timer: '00:00:00',
+        stopButton: false,
         id: agent.data._id,
         states,
         events: event.data,
+        isFinished: false,
         comment: '',
         blockDays: blockDays.data,
         title: 'Scanning Session',
@@ -325,7 +325,8 @@
           comment: '',
           isRepeat: false
         },
-        isDeletePersonalOff: false
+        isDeletePersonalOff: false,
+        isModal: false
       }
     },
     data () {
@@ -362,6 +363,7 @@
       let endTime = new flatpicker(document.getElementById('end-time'), options)
       var custom_form = document.getElementById('custom_form')
       scheduler.templates.tooltip_text = function(start,end,ev){
+        if (!ev.customer) return 
         return `<b>Event:</b> ${ev.text} <br/><b>Start date:</b> 
         ${scheduler.templates.tooltip_date_format(start)} <br/><b>End date:</b> ${scheduler.templates.tooltip_date_format(end)}
         <br/><b>Customer:</b> ${ev.customer.name} <br/> <b>Address:</b> ${ev.customer.address1}, ${ev.customer.address2}
@@ -370,8 +372,11 @@
       scheduler.showLightbox = function (id) {
         var ev = scheduler.getEvent(id)
         scheduler.startLightbox(id, document.getElementById('custom_form'))
+        if (!ev.customer) {
+          self.isEdit = true
+        }
         self.title = ev.text
-        self.customer = ev.customer.email
+        self.customer = ev.customer ? ev.customer.email : ''
         self.comment = ev.comment
         startTime.setDate(ev.start_date)
         let endDate = new Date(ev.start_date)
@@ -389,6 +394,9 @@
         }
         self.block_time.work_start_time = timeFormat(ev.start_date)
         self.block_time.work_end_time = timeFormat(endDate)
+        if (ev.isStarted) {
+          self.startWatch()
+        }
       }
       var events = []
       this.events.forEach(m => {
@@ -400,7 +408,10 @@
           end_date: new Date(m.start_time),
           customer: m.customer,
           agent: m.agent.email,
-          comment: m.comment
+          comment: m.comment,
+          isStarted: m.isStarted,
+          started: m.started,
+          ended: m.ended
         })
       })
       this.block_time.forEach((b, i) => {
@@ -482,12 +493,15 @@
         ev.start_date.setMinutes(startMinute)
         const obj = { _id: ev._id, agent: this.email, description: this.title, customer: this.customer, start: ev.start_date, comment: this.comment }
         let { data } = await this.axios.post('appointment', obj)
-        ev.customer.email = data.customer.email
+        ev.customer = data.customer
         ev.text = data.description
         ev.comment = data.comment
         ev._id = data._id
         scheduler.endLightbox(true, document.getElementById('custom_form'))
         this.isCustomer = false
+        if (this.isAgent) {
+          this.isEdit = false
+        }
       },
       async saveOff () {
           if (this.errors.any()) {
@@ -567,6 +581,7 @@
         if (this.isAgent) {
           this.isEdit = false
         }
+
         scheduler.endLightbox(false, document.getElementById('custom_form'))
       },
       async addCustomer () {
@@ -645,6 +660,50 @@
       selectOption (customer) {
         this.customer = this.searchedCustomers[this.highlightedPosition].email
         this.isOpen = false
+      },
+      startWatch () {
+        let self = this
+        this.isFinshed = false
+        let id = scheduler.getState().lightbox_id
+        let ev = scheduler.getEvent(id) 
+        function toTimeString (now, countDownDate) {
+          var distance =  now - countDownDate;
+          
+          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          
+          // Output the result in an element with id="demo"
+          self.timer = `${('00'+hours).slice(-2)}:${('00'+minutes).slice(-2)}:${('00'+seconds).slice(-2)}`
+        }
+
+        // Set the date we're counting down to
+        if (ev.isStarted && ev.ended) {
+          toTimeString(ev.ended, ev.started)
+          this.isFinished = true
+          return
+          
+        } else if (ev.isStarted && !ev.ended) {
+          var countDownDate = ev.started
+        } else {
+          var countDownDate = new Date().getTime();
+          this.axios.post('appointment/start', { _id: ev._id, start: countDownDate })
+          
+        }
+        this.sw = setInterval(function() {
+          var now = new Date().getTime()
+          toTimeString(now, countDownDate)      
+        }, 1000)
+        this.stopButton = true
+        // Update the count down every 1 second
+        
+      },
+      stopWatch () {
+        clearInterval(this.sw)
+        let id = scheduler.getState().lightbox_id
+        let ev = scheduler.getEvent(id) 
+        this.axios.post('appointment/stop', { _id: ev._id, end: new Date().getTime() })
+        this.stopButton = false
       }
     }
   }

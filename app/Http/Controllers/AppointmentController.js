@@ -71,6 +71,20 @@ class AppointmentController {
       res.send(e)
     }
   }
+
+  * startAppointment (req, res) {
+    const id = req.input('_id')
+    const start = req.input('start')
+    yield Appointment.update({ _id: id }, { isStarted: true, started: start })
+    res.ok('started')
+  }
+
+  * stopAppointment (req, res) {
+    const id = req.input('_id')
+    const end = req.input('end')
+    yield Appointment.update({ _id: id }, { ended: end })
+    res.ok('started')
+  }
 }
 
 module.exports = AppointmentController
