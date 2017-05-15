@@ -55,7 +55,7 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `About Page (${this.name}-side)`
+      title: `Invoice Page (${this.name}-side)`
     }
   },
   fetch ({ store }) {

@@ -1,6 +1,6 @@
 <template>
   <section>
-    
+
   </section>
 </template>
 
@@ -9,7 +9,7 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `About Page (${this.name}-side)`
+      title: `Supplies Page (${this.name}-side)`
     }
   },
   fetch ({ store }) {
