@@ -194,7 +194,7 @@ export default {
       total,
       discount: 0,
       shipping: 0,
-      description: ''
+      description: '',
       price: 0,
       quantity: 0
     }
