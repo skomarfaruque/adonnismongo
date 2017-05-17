@@ -32,16 +32,7 @@
             <td>{{ item.customer.zipCode }}</td>
             <td>{{ item.customer.city }}</td>
             <td class="action">
-              <section v-show="confirmation === false">
-                <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
-                <nuxt-link class="button is-info" :to="`/invoice/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
-              </section>
-              <section v-show="confirmation">
-                <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>
-                 <a href="javascript:" class="button is-info" @click="confirmation = false" title="Cancel"> <i class="fa fa-times"></i> </a>
-              </section>
-
-
+              <nuxt-link class="button is-info" :to="`/invoice/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
             </td>
           </tr>
         </tbody>
@@ -55,7 +46,7 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `Invoice Page (${this.name}-side)`
+      title: `Invoice Page`
     }
   },
   fetch ({ store }) {

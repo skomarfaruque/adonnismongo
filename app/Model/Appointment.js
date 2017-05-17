@@ -21,6 +21,14 @@ const scheduleSchema = mongoose.Schema({
   },
   started: Number,
   ended: Number,
+  invoice_title: String,
+  invoice_no: String,
+  items: [],
+  invoice_description: String,
+  invoice_date: Date,
+  invoice_settled: {
+    type: Boolean
+  },
   created: {
     type: Date,
     default: Date.now

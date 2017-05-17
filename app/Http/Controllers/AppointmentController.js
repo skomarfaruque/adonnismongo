@@ -3,7 +3,6 @@
 const Appointment = use('App/Model/Appointment')
 const User = use('App/Model/User')
 const Customer = use('App/Model/Customer')
-const Invoice = use('App/Model/Invoice')
 class AppointmentController {
   * show (req, res) {
     const id = req.input('id')
@@ -51,12 +50,14 @@ class AppointmentController {
     if (!customer) {
       return res.send('Customer not Found')
     }
-    let appointment = yield Appointment.findOne({ _id: id }).exec()
-    if (appointment) {
-      yield Appointment.update(id, { customer, agent, start_time: start, description, comment })
+    let appointment
+    if (id) {
+     yield Appointment.update({ _id: id }, { customer, agent, start_time: start, description, comment })
+     appointment = yield Appointment.findOne({ _id: id }).populate('customer').exec()
     } else {
-      appointment = yield Appointment.create({ customer, agent, start_time: start, description, comment })
+     appointment = yield Appointment.create({ customer, agent, start_time: start, description, comment })
     }
+    
     res.send(appointment)
   }
 
@@ -83,32 +84,30 @@ class AppointmentController {
   * stopAppointment (req, res) {
     const id = req.input('_id')
     const end = req.input('end')
-    yield Appointment.update({ _id: id }, { ended: end })
-    let appointment = yield Appointment.findOne({ _id: id }).exec()
-    let invoice = { appointment }
-    invoice.title = 'Scanning Appointment'
-    invoice.agent = appointment.agent
-    invoice.customer = appointment.customer
-    let start = appointment.started
+    const start = req.input('start')
+   
+    const title = 'Scanning Appointment'
+
     let distance = end - start
     let minutes = Math.floor(distance / (1000 * 60))
-    let remaining = minutes % 120
+    let remaining = minutes < 120 ? 0 : minutes % 120
     let quarter = Math.ceil(remaining / 15)
-    invoice.items = [{
+    let items = [{
       description: '2 Hour Scanning',
       price: 170,
       quantity: 1
     }]
 
     if (quarter > 0) {
-      invoice.items.push({
+      items.push({
         description: 'Scanning 1/4 Hour',
         price: 21.25,
         quantity: quarter
       })
     }
-    yield Invoice.create(invoice)
-    res.ok('stopped')
+    yield Appointment.update({ _id: id }, { ended: end, invoice_title: title, items, invoice_date: new Date(), invoice_settled: false })
+
+    res.ok('Stopped')
   }
 }
 

@@ -71,16 +71,16 @@
     </div>
     <div id="custom_form" v-bind:class="{ modal: true }">
       <div class="modal-content">
-        <div class="box" v-show="isAgent && !isEdit">
-          <h1 class="title">Appointment Timer</h1>
+        <div class="box" v-show="!isEdit">
+          <h1 class="title">Appointment Timer <span style="float:right"> <a class="button" @click="isEdit=true">X</a></span></h1>
           <div class="box has-text-centered">
             <h1 style="font-size:64px;">{{timer}}</h1>
             <button class="button is-large is-info" @click="startWatch" v-show="!stopButton && !isFinished">Start</button>
             <button class="button is-large is-danger" @click="stopWatch" v-show="stopButton && !isFinished">Stop</button>
-            <h2 style="font-size:40px;" v-show="isFinished">Job Finished</h2>
+            <h2 style="font-size:28px;" v-show="isFinished">Job Finished <span @click="closeForm"> <nuxt-link class="phosto-blue" @click="closeForm" :to="`/invoice/${invoice}`" title="Edit"> View Invoice </nuxt-link></span></h2>
           </div>
         </div>
-        <div class="box" v-show="!isCustomer && (isEdit || !isAgent)"> 
+        <div class="box" v-show="!isCustomer && isEdit"> 
           <h1 class="title">Create Appointment for {{name}}</h1>
           <div class="box">          
            
@@ -145,13 +145,14 @@
             </div>
           </div>
           <div class="level">
-            <div class="level-left is-6">
+            <div class="level-left is-9">
               <div class="block">
                 <a class="button is-info" name="save" value="Save" id="" @click="save"> Save </a>          
                 <a class="button is-info" name="close" value="Close" id="" @click="closeForm">Close</a>
+                <a class="button is-primary" @click="isEdit = false" v-if="invoice">Start Appointment</a>
               </div>
             </div>
-            <div class="level-right is-6">
+            <div class="level-right is-3">
               <button class="button is-danger" @click="remove">Delete</button>
             </div>
           </div>
@@ -218,6 +219,9 @@
   .gray {
     background-color: gray
   }
+  .phosto-blue {
+    color:#3273dc
+  }
   		/* enabling marked timespans for month view */
   .dhx_scheduler_month .dhx_marked_timespan {
     display: block;
@@ -243,8 +247,8 @@
     opacity: 0.15;
   }
 
-  .block a:first-child {
-    margin-right: 10px;
+  .block a:not(:first-child) {
+    margin-left: 10px;
   }
   #custom_form .modal-content {
     overflow: visible !important;
@@ -284,8 +288,7 @@
       let tomorrow = new Date()
       tomorrow.setHours(24)
       return {
-        isAgent: store.state.role === 'Agent',
-        isEdit: store.state.role !== 'Agent',
+        isEdit: true,
         timer: '00:00:00',
         stopButton: false,
         id: agent.data._id,
@@ -312,6 +315,7 @@
           state: ''
         },
         isCustomer: false,
+        invoice: null,
         isOpen: false,
         highlightedPosition: 0,
         isPersonalOff: false,
@@ -378,6 +382,7 @@
         self.title = ev.text
         self.customer = ev.customer ? ev.customer.email : ''
         self.comment = ev.comment
+        
         startTime.setDate(ev.start_date)
         let endDate = new Date(ev.start_date)
         endDate.setHours(ev.start_date.getHours() + 2)
@@ -397,6 +402,7 @@
         if (ev.isStarted) {
           self.startWatch()
         }
+        self.invoice = ev._id
       }
       var events = []
       this.events.forEach(m => {
@@ -452,7 +458,7 @@
           days: b.isRepeat ? date.getDay() : date,
           zones: b.fullday ? 'fullday' : [startMinute, endMinute],
           css: 'holiday',
-          html: `<a href="javascript:" title="Personal Task" style="color:#3273dc" onclick="calendar.showPersonalTask('${b._id}')">Personal Task</a>`,
+          html: `<a href="javascript:" title="Personal Task" class="phosto-blue" onclick="calendar.showPersonalTask('${b._id}')">Personal Task</a>`,
           type: 'dhx_time_block'
         }
         if (b.isRepeat) {
@@ -499,9 +505,6 @@
         ev._id = data._id
         scheduler.endLightbox(true, document.getElementById('custom_form'))
         this.isCustomer = false
-        if (this.isAgent) {
-          this.isEdit = false
-        }
       },
       async saveOff () {
           if (this.errors.any()) {
@@ -542,7 +545,7 @@
             days: this.personal.isRepeat ? date.getDay() : date,
             zones: this.personal.fullday ? 'fullday' : [startMinute, endMinute],
             css: 'holiday',
-            html: `<a href="javascript:" title="Personal Task" style="color:#3273dc" onclick="calendar.showPersonalTask('${data._id}')">Personal Task</a>`,
+            html: `<a href="javascript:" title="Personal Task" class="phosto-blue" onclick="calendar.showPersonalTask('${data._id}')">Personal Task</a>`,
             type: 'dhx_time_block'
           }
           if (this.personal.isRepeat) {
@@ -562,16 +565,13 @@
             comment: '',
             isRepeat: false
           }
-          this.isPersonalOff = false
-          if (this.isAgent) {
-            this.isEdit = false
-          }
+          this.isPersonalOff = false    
       },
       async remove () {
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
         let { date } = await this.axios.delete(`appointment/${ev._id}`)
-
+        scheduler.deleteEvent(id)
         scheduler.endLightbox(false, document.getElementById('custom_form'))
         scheduler.deleteEvent(id)
       },
@@ -688,7 +688,7 @@
         } else {
           var countDownDate = new Date().getTime();
           this.axios.post('appointment/start', { _id: ev._id, start: countDownDate })
-          
+          ev.started = countDownDate
         }
         this.sw = setInterval(function() {
           var now = new Date().getTime()
@@ -702,7 +702,7 @@
         clearInterval(this.sw)
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id) 
-        this.axios.post('appointment/stop', { _id: ev._id, end: new Date().getTime() })
+        this.axios.post('appointment/stop', { _id: ev._id, start: ev.started, end: new Date().getTime() })
         this.stopButton = false
         this.isFinished = true
       }
