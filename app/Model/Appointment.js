@@ -29,6 +29,8 @@ const scheduleSchema = mongoose.Schema({
   invoice_settled: {
     type: Boolean
   },
+  shipping: Number,
+  discount: Number,
   created: {
     type: Date,
     default: Date.now
