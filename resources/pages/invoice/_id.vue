@@ -23,6 +23,13 @@
     <div class="columns">
       <div class="column is-1"></div>
       <div class="column is-10 box">
+        <div class="level">
+          <div class="level-item">
+            <div class="level-right">
+              
+            </div>
+          </div>
+        </div>
         <table>
           <thead>
             <tr>
@@ -52,26 +59,112 @@
               <td>${{item.total}}</td>
               
             </tr>
+            <tr>
+              <td>
+                <a class="button" @click="addItem">+</a>
+              </td>
+              <td>
+                <input type="text" class="input" v-model="description">
+              </td>
+              <td>
+                <input type="number" class="input" v-model="price">
+              </td>
+              <td>
+                <input type="number" class="input" v-model="quantity">
+              </td>
+              <td>
+                {{price*quantity}}
+              </td>
             
+            </tr>
           </tbody>
           <tfoot>
-          <tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><label class="label">Discount Saving</label></td>
+              <td>${{discount}}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><label class="label">Shipping</label></td>
+              <td>${{shipping}}</td>
+            </tr>
+            <tr>
               <td></td>
               <td></td>
               <td></td>
               <td><label class="label">Total</label></td>
-              <td>${{total}}</td>
-            </tr></tfoot>
+              <td>${{total - parseInt(discount) + parseInt(shipping)}}</td>
+            </tr>
+          </tfoot>
         </table>
+      </div>
+      <div class="column is-1"></div>
+    </div>
+    <div class="columns">
+      <div class="column is-1"></div>
+      <div class="column is-10">
+        <div class="columns">
+          <div class="column is-6">
+            <div class="columns">
+              
+              <div class="column is-2">
+                <label class="label">Shipping</label>
+
+              </div>
+              <div class="column is-5">
+                <input class="input" type="number" v-model="shipping">
+              </div>
+              <!--<div class="column is-2">
+                <a class="button">Apply</a>
+              </div>-->
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="columns">
+              
+              <div class="column is-3">
+                <label class="label">Discount</label>
+
+              </div>
+              <div class="column is-5">
+                <input class="input" type="number" v-model="discount">
+              </div>
+              <!--<div class="column is-2">
+                <a class="button">Apply</a>
+              </div>-->
+            </div>
+            
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-2"></div>
+          <div class="column is-8 block has-text-centered">
+            <a class="button is-info is-large">Cash</a>
+            <a class="button is-info is-large">Check</a>
+            <a class="button is-info is-large">Credit</a>
+          </div>
+          <div class="column is-2"></div>
+        </div>
       </div>
       <div class="column is-1"></div>
     </div>
   </section>
 </template>
 <style scoped>
+  tbody tr td {
+    padding: 5px;
+  }
   tfoot {
     margin-top: 10px;
     border-top: 1px solid #e3e3e3;
+  }
+  .block a.button {
+    margin: 10px;
   }
 </style>
 <script>
@@ -98,7 +191,12 @@ export default {
     })
     return {
       invoice: data,
-      total
+      total,
+      discount: 0,
+      shipping: 0,
+      description: ''
+      price: 0,
+      quantity: 0
     }
   },
   data () {
@@ -109,7 +207,16 @@ export default {
   methods: {
     save () {
       
+    },
+    async addItem () {
+      this.invoice.items.push({
+        description: this.description,
+        price: this.price,
+        quantity: this.quantity
+      })
+      await this.axios.post('invoice/item-add', this.invoice.items)
     }
+
   }
 }
 </script>
