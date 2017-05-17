@@ -41,12 +41,11 @@
               <div class="columns">
                 <div class="column is-1">
                   <a href="javascript:" class="button is-danger" @click="removeZip(ind)"><i class="fa fa-minus"></i></a>
-                </div> 
+                </div>
                 <div class="column is-5"><input class="input" v-model="user.zipCode[ind]" type="text" placeholder="Zip Code"></div>
               </div>
             </li>
           </ul>
-  lo        
           <div class="columns">
             <div class="column is-1"><a href="javascript:"
                 class="button is-info"
