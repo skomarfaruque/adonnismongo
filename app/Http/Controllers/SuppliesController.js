@@ -18,7 +18,7 @@ class SuppliesController {
    * Create Supply
    */
   * store (req, res) {
-    const obj = req.only('name', 'price', 'description')
+    const obj = req.only('name', 'price', 'description', 'commission')
     let supplies = yield Supplies.findOne({ name: obj.name }).exec()
     if (!supplies) {
       supplies = yield Supplies.create(obj)

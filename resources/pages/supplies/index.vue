@@ -35,6 +35,9 @@
               Price
             </th>
             <th>
+              commission
+            </th>
+            <th>
               Action
             </th>
           </tr>
@@ -44,6 +47,7 @@
             <td>{{ item.name }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.price }}</td>
+            <td>{{ item.commission }}</td>
             <td class="action">
               <i class="fa fa-pencil"></i>
               <!--<section v-show="confirmation === false">

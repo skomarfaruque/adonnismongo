@@ -6,6 +6,7 @@ const suppliesSchema = mongoose.Schema({
   name: String,
   description: String,
   price: String,
+  commission: String,
   synced: {
     type: Boolean,
     default: false
