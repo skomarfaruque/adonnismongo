@@ -17,7 +17,7 @@
       </div>
       <div class="level-right">   
         <div class="level-item">
-          <nuxt-link href="javascript:" class="button is-info" title="Add New" to="/supply/new"> <i class="fa fa-plus"></i> </nuxt-link>
+          <nuxt-link href="javascript:" class="button is-info" title="Add New" to="/supplies/new"> <i class="fa fa-plus"></i> </nuxt-link>
         </div>
       </div>
     </nav>
@@ -29,10 +29,10 @@
               Name
             </th>
             <th>
-              Price
+              Description
             </th>
             <th>
-              Description
+              Price
             </th>
             <th>
               Action
@@ -40,11 +40,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Name</td>
-            <td>Price</td>
-            <td>Description</td>
+          <tr v-for="(item, ind) in list">
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.price }}</td>
             <td class="action">
+              <i class="fa fa-pencil"></i>
               <!--<section v-show="confirmation === false">
                 <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
                 <nuxt-link class="button is-info" :to="`/customer/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
@@ -68,6 +69,7 @@
 </template>
 
 <script>
+
 export default {
   middleware: 'auth',
   head () {
@@ -75,8 +77,20 @@ export default {
       title: `Supplies Page (${this.name}-side)`
     }
   },
-  fetch ({ store }) {
-    store.commit('SET_HEAD', ['Supplies', 'View all your supply items.'])
-  }
+  async asyncData ({ store, axios }) {
+      store.commit('SET_HEAD', ['Supplies', 'View all your supply items.'])
+      let { data } = await axios.get('supplies')
+      return {
+        list: data,
+        confirmation: false
+      }
+    },
+  data () {
+    return {
+      axios: this.$root.$options.axios
+    }
+  },
+  
+  
 }
 </script>

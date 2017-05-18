@@ -2,7 +2,7 @@
 
 const mongoose = use('Mongoose')
 
-const supplySchema = mongoose.Schema({
+const suppliesSchema = mongoose.Schema({
   name: String,
   description: String,
   price: String,
@@ -16,6 +16,6 @@ const supplySchema = mongoose.Schema({
   }
 })
 
-const Supply = mongoose.model('Supply', supplySchema)
+const Supplies = mongoose.model('Supplies', suppliesSchema)
 
-module.exports = Supply
+module.exports = Supplies

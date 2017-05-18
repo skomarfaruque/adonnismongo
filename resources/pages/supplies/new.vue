@@ -2,7 +2,19 @@
   <section>
     <div class="columns">
       <div class="column is-6">
-        supply@page
+        <label class="label">Name</label>
+        <p class="control">
+          <input class="input" v-model="supplies.name" type="text" placeholder="Supplier Name">
+        </p>
+        <label class="label">description</label>
+        <p class="control">
+          <input class="input" v-model="supplies.description" name="" id=""/>
+        </p>
+        <label class="label">Price</label>
+        <p class="control">
+          <input class="input" v-model="supplies.price" name="" />
+        </p>
+        <a href="javascript:" class="button is-info" @click="save">Save Information</a>
       </div>
     </div>
   </section>
@@ -14,11 +26,11 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `New Customer Page`
+      title: `New Suppliies Page`
     }
   },
   fetch ({ store }) {
-    store.commit('SET_HEAD', ['New Customer', 'Add a new customer.'])
+    store.commit('SET_HEAD', ['New Supplier', 'Add a new Supplier.'])
   },
   components: {
     MaskedInput
@@ -26,7 +38,7 @@ export default {
   asyncData ({ store, axios }) {
     
     return {
-      user: {}
+      supplies: {}
     }
   },
   data () {
@@ -36,20 +48,13 @@ export default {
   },
   methods: {
     async save () {
-      if (!this.user._id) {
-        const customer = await this.axios.post('customers', this.user)
-        this.user._id = customer.data._id
+      if (!this.supplies._id) {
+        const supplies = await this.axios.post('supplies', this.supplies)
+        this.supplies._id = supplies.data._id
       }
-      if (this.$store.state.role === 'Agent') {
-        const agentCustomer = await this.axios.get(`agent/me/assign-customer/${this.user._id}`)
-      }
-      this.$router.push('/customer')
-    },
-    async checkEmail () {
-      let email = this.user.email
-      let { data } = await this.axios.get(`customer/search?key=${this.user.email}`)
-      this.user = data[0] || { email }
+      this.$router.push('/supplies')
     }
   }
 }
 </script>
+
