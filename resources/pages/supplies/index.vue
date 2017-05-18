@@ -5,10 +5,10 @@
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <input class="input" type="search" placeholder="Search by Name, Price, Description" v-model="search" @keyup.enter="searchCustomer">
+              <input class="input" type="search" placeholder="Search by Name, Price, Description">
             </p>
             <p class="control">
-              <button class="button" @click="searchSupplies">
+              <button class="button">
                 <i class="fa fa-search"></i>
               </button>
             </p>
