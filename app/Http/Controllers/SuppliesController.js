@@ -26,6 +26,13 @@ class SuppliesController {
     res.send(supplies)
   }
 
+  * update (req, res) {
+    const id = req.param('id')
+    const obj = req.only('name', 'description', 'price', 'commission')
+    const supplies = yield Supplies.update({ _id: id }, { name: obj.name, description: obj.description, price: obj.price, commission: obj.commission }).exec()
+    res.send(supplies)
+  }
+
   * destroy (req, res) {
     const suppliesId = req.param('id')
     yield Supplies.deleteOne({ _id: suppliesId })
