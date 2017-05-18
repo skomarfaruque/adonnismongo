@@ -26,6 +26,13 @@ class SuppliesController {
     res.send(supplies)
   }
 
+  * destroy (req, res) {
+    const suppliesId = req.param('id')
+    yield Supplies.deleteOne({ _id: suppliesId })
+    yield Supplies.remove({ supplies: suppliesId })
+    res.send('destroy')
+  }
+
   * import (req, res) {
     res.ok()
   }

@@ -49,16 +49,14 @@
             <td>{{ item.price }}</td>
             <td>{{ item.commission }}</td>
             <td class="action">
-              <i class="fa fa-pencil"></i>
-              <!--<section v-show="confirmation === false">
+              <section v-show="confirmation === false">
                 <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
-                <nuxt-link class="button is-info" :to="`/customer/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
-                <nuxt-link class="button is-info" :to="`/customer/appointment?id=${item._id}`" title="View Appointments"><i class="fa fa-list-ul"></i> </nuxt-link>
+                <nuxt-link class="button is-info" :to="`/supplies/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
               </section>
               <section v-show="confirmation">
                 <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>
                  <a href="javascript:" class="button is-info" @click="confirmation = false" title="Cancel"> <i class="fa fa-times"></i> </a>
-              </section>-->
+              </section>
 
 
             </td>
@@ -94,6 +92,17 @@ export default {
       axios: this.$root.$options.axios
     }
   },
+  destroyed () {
+    this.list = []
+    this.confirmation = false
+  },
+  methods: {
+    async remove (item, ind) {
+      await this.axios.delete(`supplies/${item._id}`)
+      this.list.splice(ind, 1)
+      this.confirmation = false
+    },
+  }
   
   
 }
