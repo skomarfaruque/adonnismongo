@@ -66,15 +66,15 @@
               <td>
                 <p class="control">
                   <span class="select">
-                    <select v-model="description">
+                    <select v-model="newItem" @change="changePrice">
                       <option>Select any</option>
-                      <option v-for="(item, ind) in products">{{ item.name }}</option>
+                      <option v-for="(item, ind) in products" v-bind:value="item">{{ item.name }}</option>
                     </select>
                   </span>
                 </p>
               </td>
               <td>
-                <input type="number" class="input" v-model="price">
+                ${{price}}
               </td>
               <td>
                 <input type="number" class="input" v-model="quantity">
@@ -192,21 +192,13 @@ export default {
   async asyncData ({ store, axios, params }) {
     let { data } = await axios.get(`invoice/${params.id}`)
     let { data: products } = await axios.get('supplies')
-    let total = 0
-    if (data.items) {
-      data.items.forEach(item => {
-        item.total = item.quantity * item.price
-        total += item.total
-      })
-    }
     
     return {
       invoice: data,
       products,
-      total,
       discount: 0,
       shipping: 0,
-      description: '',
+      newItem: '',
       price: 0,
       quantity: 0
     }
@@ -216,17 +208,30 @@ export default {
       axios: this.$root.$options.axios
     }
   },
+  computed: {
+    total () {
+      let total = 0
+      this.invoice.items.forEach(item => {
+        item.total = item.quantity * item.price
+        total += item.total
+      })
+      return total
+    }
+  },
   methods: {
     save () {
       
     },
     async addItem () {
       this.invoice.items.push({
-        description: this.description,
-        price: this.price,
+        description: this.newItem.name,
+        price: this.newItem.price,
         quantity: this.quantity
       })
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
+    },
+    changePrice () {
+      this.price = this.newItem.price
     }
 
   }
