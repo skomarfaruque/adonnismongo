@@ -64,7 +64,14 @@
                 <a class="button" @click="addItem">+</a>
               </td>
               <td>
-                <input type="text" class="input" v-model="description">
+                <p class="control">
+                  <span class="select">
+                    <select v-model="description">
+                      <option>Select any</option>
+                      <option v-for="(item, ind) in products">{{ item.name }}</option>
+                    </select>
+                  </span>
+                </p>
               </td>
               <td>
                 <input type="number" class="input" v-model="price">
@@ -184,13 +191,18 @@ export default {
   },
   async asyncData ({ store, axios, params }) {
     let { data } = await axios.get(`invoice/${params.id}`)
+    let { data: products } = await axios.get('supplies')
     let total = 0
-    data.items.forEach(item => {
-      item.total = item.quantity * item.price
-      total += item.total
-    })
+    if (data.items) {
+      data.items.forEach(item => {
+        item.total = item.quantity * item.price
+        total += item.total
+      })
+    }
+    
     return {
       invoice: data,
+      products,
       total,
       discount: 0,
       shipping: 0,
@@ -214,7 +226,7 @@ export default {
         price: this.price,
         quantity: this.quantity
       })
-      await this.axios.post('invoice/item-add', this.invoice.items)
+      await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
     }
 
   }

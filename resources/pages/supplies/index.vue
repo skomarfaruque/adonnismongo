@@ -1,6 +1,6 @@
 <template>
   <section>
-<nav class="level">
+    <nav class="level">
       <div class="level-left">   
         <div class="level-item">
           <div class="field has-addons">
@@ -57,8 +57,6 @@
                 <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>
                  <a href="javascript:" class="button is-info" @click="confirmation = false" title="Cancel"> <i class="fa fa-times"></i> </a>
               </section>
-
-
             </td>
           </tr>
         </tbody>
@@ -80,13 +78,13 @@ export default {
     }
   },
   async asyncData ({ store, axios }) {
-      store.commit('SET_HEAD', ['Supplies', 'View all your supply items.'])
-      let { data } = await axios.get('supplies')
-      return {
-        list: data,
-        confirmation: false
-      }
-    },
+    store.commit('SET_HEAD', ['Supplies', 'View all your supply items.'])
+    let { data } = await axios.get('supplies')
+    return {
+      list: data,
+      confirmation: false
+    }
+  },
   data () {
     return {
       axios: this.$root.$options.axios
