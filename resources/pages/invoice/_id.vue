@@ -237,14 +237,7 @@ watch: {
         this.discount = 0
       }
     },
-    quantity: function (newValue) {
-      if(newValue < 1){
-        this.quantity = 1
-        this.$toasted.show('Quantity can not be less than 1.', { duration: 4500 })
-      }else if(newValue== ''){
-        this.quantity = 1
-      }
-    },
+
   },
   computed: {
     total () {
@@ -281,7 +274,11 @@ watch: {
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
     },
     changePrice () {
-      this.price = this.newItem.price
+        this.price = 0
+        if(this.newItem.price){
+        this.price = this.newItem.price
+}
+
     }
 
   }
