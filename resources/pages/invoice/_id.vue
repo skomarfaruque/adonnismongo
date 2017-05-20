@@ -68,7 +68,7 @@
                 <a class="button" @click="addItem">+</a>
               </td>
               <td>
-                
+
               </td>
               <td>
                 <p class="control">
@@ -220,15 +220,27 @@ export default {
   },
 watch: {
     shipping: function (newValue) {
-      if(newValue < 0){
+      if(newValue < 0 ){
         this.shipping = 0
         this.$toasted.show('Shipping can not be less than 0.', { duration: 4500 })
+      }else if(newValue== ''){
+        this.shipping = 0
       }
     },
     discount: function (newValue) {
       if(newValue < 0){
         this.discount = 0
         this.$toasted.show('Discount can not be less than 0.', { duration: 4500 })
+      }else if(newValue== ''){
+        this.discount = 0
+      }
+    },
+    quantity: function (newValue) {
+      if(newValue < 1){
+        this.quantity = 1
+        this.$toasted.show('Quantity can not be less than 1.', { duration: 4500 })
+      }else if(newValue== ''){
+        this.quantity = 1
       }
     },
   },
