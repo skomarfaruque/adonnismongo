@@ -26,7 +26,7 @@
         <div class="level">
           <div class="level-item">
             <div class="level-right">
-              
+
             </div>
           </div>
         </div>
@@ -52,30 +52,37 @@
           </thead>
           <tbody>
             <tr v-for="(item, i) in invoice.items">
-              <td>{{i + 1}}</td>
+              <td><a class="button" @click="removeItem(i)">-</a>{{i + 1}} </td>
               <td>{{item.description}}</td>
               <td>${{item.price}}</td>
               <td>{{item.quantity}}</td>
-              <td>${{item.total}}</td>
-              
+              <td>${{item.price * item.quantity}}</td>
+
             </tr>
             <tr>
               <td>
                 <a class="button" @click="addItem">+</a>
               </td>
               <td>
-                <input type="text" class="input" v-model="description">
+                <p class="control">
+                  <span class="select">
+                    <select v-model="newItem" @change="changePrice">
+                      <option>Select any</option>
+                      <option v-for="(item, ind) in products" v-bind:value="item">{{ item.name }}</option>
+                    </select>
+                  </span>
+                </p>
               </td>
               <td>
-                <input type="number" class="input" v-model="price">
+                ${{price}}
               </td>
               <td>
-                <input type="number" class="input" v-model="quantity">
+                <input type="number" class="input" min="1"  v-model="quantity">
               </td>
               <td>
                 {{price*quantity}}
               </td>
-            
+
             </tr>
           </tbody>
           <tfoot>
@@ -111,13 +118,13 @@
         <div class="columns">
           <div class="column is-6">
             <div class="columns">
-              
+
               <div class="column is-2">
                 <label class="label">Shipping</label>
 
               </div>
               <div class="column is-5">
-                <input class="input" type="number" v-model="shipping">
+                <input class="input" type="number" min="0" v-model="shipping">
               </div>
               <!--<div class="column is-2">
                 <a class="button">Apply</a>
@@ -126,19 +133,19 @@
           </div>
           <div class="column is-6">
             <div class="columns">
-              
+
               <div class="column is-3">
                 <label class="label">Discount</label>
 
               </div>
               <div class="column is-5">
-                <input class="input" type="number" v-model="discount">
+                <input class="input" type="number" min="0" v-model="discount">
               </div>
               <!--<div class="column is-2">
                 <a class="button">Apply</a>
               </div>-->
             </div>
-            
+
           </div>
         </div>
         <div class="columns">
@@ -184,19 +191,16 @@ export default {
   },
   async asyncData ({ store, axios, params }) {
     let { data } = await axios.get(`invoice/${params.id}`)
-    let total = 0
-    data.items.forEach(item => {
-      item.total = item.quantity * item.price
-      total += item.total
-    })
+    let { data: products } = await axios.get('supplies')
+
     return {
       invoice: data,
-      total,
+      products,
       discount: 0,
       shipping: 0,
-      description: '',
+      newItem: '',
       price: 0,
-      quantity: 0
+      quantity: 1
     }
   },
   data () {
@@ -204,17 +208,56 @@ export default {
       axios: this.$root.$options.axios
     }
   },
+watch: {
+    shipping: function (newValue) {
+      if(newValue < 0){
+        this.shipping = 0
+        this.$toasted.show('Shipping can not be less than 0.', { duration: 4500 })
+      }
+    },
+    discount: function (newValue) {
+      if(newValue < 0){
+        this.discount = 0
+        this.$toasted.show('Discount can not be less than 0.', { duration: 4500 })
+      }
+    },
+  },
+  computed: {
+    total () {
+      let total = 0
+      this.invoice.items.forEach(item => {
+        total += item.quantity * item.price
+      })
+      return total
+    }
+  },
   methods: {
     save () {
-      
+
     },
     async addItem () {
-      this.invoice.items.push({
-        description: this.description,
-        price: this.price,
-        quantity: this.quantity
+      if(this.newItem.name){
+        if(this.quantity > 0){
+          this.invoice.items.push({
+          description: this.newItem.name,
+          price: this.newItem.price,
+          quantity: this.quantity
       })
-      await this.axios.post('invoice/item-add', this.invoice.items)
+        await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
+        }else{
+        this.$toasted.show('Quantity must be greater than 0.', { duration: 4500 })
+        }
+
+      }else{
+       this.$toasted.show('Items must be selected.', { duration: 4500 })
+     }
+    },
+    async removeItem (index) {
+      this.invoice.items.splice(index, 1)
+      await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
+    },
+    changePrice () {
+      this.price = this.newItem.price
     }
 
   }

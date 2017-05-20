@@ -64,8 +64,8 @@ Route.group('invoice', () => {
   Route.post('/item-add', 'InvoiceController.addItem')
 }).prefix('api/invoice')
 
-Route.group('supply', () => {
-  Route.resource('supply', 'SupplyController').except('create')
+Route.group('supplies', () => {
+  Route.resource('supplies', 'SuppliesController').except('create', 'edit')
 }).prefix('api').middleware('auth')
 
 Route.any('*', 'NuxtController.render')

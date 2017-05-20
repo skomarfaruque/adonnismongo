@@ -1,6 +1,6 @@
 <template>
   <section>
-<nav class="level">
+    <nav class="level">
       <div class="level-left">   
         <div class="level-item">
           <div class="field has-addons">
@@ -17,7 +17,7 @@
       </div>
       <div class="level-right">   
         <div class="level-item">
-          <nuxt-link href="javascript:" class="button is-info" title="Add New" to="/supply/new"> <i class="fa fa-plus"></i> </nuxt-link>
+          <nuxt-link href="javascript:" class="button is-info" title="Add New" to="/supplies/new"> <i class="fa fa-plus"></i> </nuxt-link>
         </div>
       </div>
     </nav>
@@ -29,10 +29,13 @@
               Name
             </th>
             <th>
+              Description
+            </th>
+            <th>
               Price
             </th>
             <th>
-              Description
+              commission
             </th>
             <th>
               Action
@@ -40,22 +43,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Name</td>
-            <td>Price</td>
-            <td>Description</td>
+          <tr v-for="(item, ind) in list">
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.commission }}</td>
             <td class="action">
-              <!--<section v-show="confirmation === false">
+              <section v-show="confirmation === false">
                 <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
-                <nuxt-link class="button is-info" :to="`/customer/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
-                <nuxt-link class="button is-info" :to="`/customer/appointment?id=${item._id}`" title="View Appointments"><i class="fa fa-list-ul"></i> </nuxt-link>
+                <nuxt-link class="button is-info" :to="`/supplies/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
               </section>
               <section v-show="confirmation">
                 <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>
                  <a href="javascript:" class="button is-info" @click="confirmation = false" title="Cancel"> <i class="fa fa-times"></i> </a>
-              </section>-->
-
-
+              </section>
             </td>
           </tr>
         </tbody>
@@ -68,6 +69,7 @@
 </template>
 
 <script>
+
 export default {
   middleware: 'auth',
   head () {
@@ -75,8 +77,31 @@ export default {
       title: `Supplies Page (${this.name}-side)`
     }
   },
-  fetch ({ store }) {
+  async asyncData ({ store, axios }) {
     store.commit('SET_HEAD', ['Supplies', 'View all your supply items.'])
+    let { data } = await axios.get('supplies')
+    return {
+      list: data,
+      confirmation: false
+    }
+  },
+  data () {
+    return {
+      axios: this.$root.$options.axios
+    }
+  },
+  destroyed () {
+    this.list = []
+    this.confirmation = false
+  },
+  methods: {
+    async remove (item, ind) {
+      await this.axios.delete(`supplies/${item._id}`)
+      this.list.splice(ind, 1)
+      this.confirmation = false
+    },
   }
+  
+  
 }
 </script>
