@@ -55,7 +55,9 @@
           </thead>
           <tbody>
             <tr v-for="(item, i) in invoice.items">
-              <td><a class="button" @click="removeItem(i)">-</a></td>
+              <td>
+              <a v-if="item.description !== '2 Hour Scanning' && item.description !== 'Scanning 1/4 Hour'" class="button" @click="removeItem(i)">-</a>
+              </td>
               <td>{{i + 1}} </td>
               <td>{{item.description}}</td>
               <td>${{item.price}}</td>
