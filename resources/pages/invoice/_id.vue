@@ -34,6 +34,9 @@
           <thead>
             <tr>
               <th>
+                Action
+              </th>
+              <th>
                 Sl#
               </th>
               <th>
@@ -52,7 +55,8 @@
           </thead>
           <tbody>
             <tr v-for="(item, i) in invoice.items">
-              <td><a class="button" @click="removeItem(i)">-</a>{{i + 1}} </td>
+              <td><a class="button" @click="removeItem(i)">-</a></td>
+              <td>{{i + 1}} </td>
               <td>{{item.description}}</td>
               <td>${{item.price}}</td>
               <td>{{item.quantity}}</td>
@@ -64,10 +68,13 @@
                 <a class="button" @click="addItem">+</a>
               </td>
               <td>
+                
+              </td>
+              <td>
                 <p class="control">
                   <span class="select">
                     <select v-model="newItem" @change="changePrice">
-                      <option>Select any</option>
+                      <option value="" selected>Select item</option>
                       <option v-for="(item, ind) in products" v-bind:value="item">{{ item.name }}</option>
                     </select>
                   </span>
@@ -80,13 +87,14 @@
                 <input type="number" class="input" min="1"  v-model="quantity">
               </td>
               <td>
-                {{price*quantity}}
+                ${{price*quantity}}
               </td>
 
             </tr>
           </tbody>
           <tfoot>
             <tr>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -97,10 +105,12 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td><label class="label">Shipping</label></td>
               <td>${{shipping}}</td>
             </tr>
             <tr>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
