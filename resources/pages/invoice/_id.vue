@@ -26,7 +26,7 @@
         <div class="level">
           <div class="level-item">
             <div class="level-right">
-              
+
             </div>
           </div>
         </div>
@@ -56,8 +56,8 @@
               <td>{{item.description}}</td>
               <td>${{item.price}}</td>
               <td>{{item.quantity}}</td>
-              <td>${{item.total}}</td>
-              
+              <td>${{item.price * item.quantity}}</td>
+
             </tr>
             <tr>
               <td>
@@ -82,7 +82,7 @@
               <td>
                 {{price*quantity}}
               </td>
-            
+
             </tr>
           </tbody>
           <tfoot>
@@ -118,7 +118,7 @@
         <div class="columns">
           <div class="column is-6">
             <div class="columns">
-              
+
               <div class="column is-2">
                 <label class="label">Shipping</label>
 
@@ -133,7 +133,7 @@
           </div>
           <div class="column is-6">
             <div class="columns">
-              
+
               <div class="column is-3">
                 <label class="label">Discount</label>
 
@@ -145,7 +145,7 @@
                 <a class="button">Apply</a>
               </div>-->
             </div>
-            
+
           </div>
         </div>
         <div class="columns">
@@ -192,7 +192,7 @@ export default {
   async asyncData ({ store, axios, params }) {
     let { data } = await axios.get(`invoice/${params.id}`)
     let { data: products } = await axios.get('supplies')
-    
+
     return {
       invoice: data,
       products,
@@ -212,15 +212,14 @@ export default {
     total () {
       let total = 0
       this.invoice.items.forEach(item => {
-        item.total = item.quantity * item.price
-        total += item.total
+        total += item.quantity * item.price
       })
       return total
     }
   },
   methods: {
     save () {
-      
+
     },
     async addItem () {
       this.invoice.items.push({
