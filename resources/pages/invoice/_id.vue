@@ -258,7 +258,8 @@ watch: {
           this.invoice.items.push({
           description: this.newItem.name,
           price: this.newItem.price,
-          quantity: this.quantity
+          quantity: this.quantity,
+          commission: this.newItem.commission
       })
         await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
         }else{

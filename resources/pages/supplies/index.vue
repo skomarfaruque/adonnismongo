@@ -1,7 +1,7 @@
 <template>
   <section>
     <nav class="level">
-      <div class="level-left">   
+      <div class="level-left">
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <div class="level-right">   
+      <div class="level-right">
         <div class="level-item">
           <nuxt-link href="javascript:" class="button is-info" title="Add New" to="/supplies/new"> <i class="fa fa-plus"></i> </nuxt-link>
         </div>
@@ -101,7 +101,7 @@ export default {
       this.confirmation = false
     },
   }
-  
-  
+
+
 }
 </script>

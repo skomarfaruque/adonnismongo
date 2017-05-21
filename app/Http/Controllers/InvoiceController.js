@@ -8,6 +8,21 @@ use('App/Model/Customer')
 class InvoiceController {
   * index (req, res) {
     const invoices = yield Appointment.find({ invoice_settled: false }).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
+    if (invoices.length) {
+      var firstPayment = []
+      var myTotal = 0
+      invoices.forEach(function (word, key) {
+        if (word.items.length) {
+          word.items.forEach(function (val, newKey) {
+            if (val.description === '2 Hour Scanning') {
+              firstPayment.push = val.price * val.quantity
+              myTotal += word.newKey.price
+            }
+          })
+        }
+        console.log(myTotal)
+      })
+    }
     res.ok(invoices)
   }
   * show (req, res) {
