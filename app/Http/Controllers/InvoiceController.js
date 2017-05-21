@@ -9,7 +9,7 @@ class InvoiceController {
   * index (req, res) {
     const invoices = yield Appointment.find({ invoice_settled: false }).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
     var scanningTotal = 0
-    var staffsArray = []
+    var suppliesArray = []
     if (invoices.length) {
       invoices.forEach(function (word, key) {
         if (word.items.length) {
@@ -18,23 +18,23 @@ class InvoiceController {
               scanningTotal += val.price * val.quantity
             } else {
               var priceCal = val.price * val.quantity * val.commission / 100
-              var filterObj = staffsArray.find(function (e) {
+              var filterObj = suppliesArray.find(function (e) {
                 return e.name === val.description
               })
               // console.log(filterObj)
               if (filterObj == null) {
-                staffsArray.push({name: val.description, price: priceCal})
+                suppliesArray.push({name: val.description, price: priceCal})
               } else {
                 filterObj.price = parseInt(filterObj.price) + parseInt(priceCal)
-                // staffsArray.push(filterObj)
+                // suppliesArray.push(filterObj)
               }
             }
           })
         }
       })
     }
-    console.log(staffsArray)
-    res.ok({'invoices': invoices, 'scanningTotal': scanningTotal, 'othersTotal': staffsArray})
+    console.log(suppliesArray)
+    res.ok({'invoices': invoices, 'scanningTotal': scanningTotal, 'othersTotal': suppliesArray})
   }
   * show (req, res) {
     const id = req.param('id')

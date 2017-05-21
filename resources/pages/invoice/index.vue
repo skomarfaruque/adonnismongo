@@ -43,7 +43,7 @@
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span class="invoice-head">$2625.50</span>
+              <span class="invoice-head">${{list.grandTotal}}</span>
             </div>
           </div>
         </nav>

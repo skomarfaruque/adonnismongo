@@ -49,7 +49,7 @@ class SuppliesController {
   * search (req, res) {
     let regex = req.input('key')
     const supplies = yield Supplies
-      .find( { $or: [{ name: regex }] })
+      .find({ $or: [{ name: regex }] })
       .exec()
 
     res.ok(supplies)

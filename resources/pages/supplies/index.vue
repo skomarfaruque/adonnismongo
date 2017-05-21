@@ -95,13 +95,6 @@ export default {
     this.list = []
     this.confirmation = false
   },
-  watch: {
-    search (value) {
-      if (value.length === 0) {
-        this.searchSupplies()
-      }
-    }
-  },
   methods: {
     async remove (item, ind) {
       await this.axios.delete(`supplies/${item._id}`)
@@ -109,7 +102,7 @@ export default {
       this.confirmation = false
     },
     async searchSupplies () {
-      let { data } = await this.axios.get(`supplies/search?key=${this.search}`)
+      let { data } = await this.axios.get(`customer/supplies?key=${this.search}`)
       this.list = data
     }
   }

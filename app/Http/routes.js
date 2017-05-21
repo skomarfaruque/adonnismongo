@@ -46,6 +46,7 @@ Route.group('staff', () => {
 Route.group('customer', () => {
   Route.resource('customers', 'CustomerController').except('create', 'edit')
   Route.get('customer/search', 'CustomerController.search')
+  Route.get('customer/supplies', 'SuppliesController.search')
 }).prefix('api').middleware('auth')
 Route.group('appointment', () => {
   Route.get('/:id', 'AppointmentController.show')
