@@ -55,7 +55,9 @@
           </thead>
           <tbody>
             <tr v-for="(item, i) in invoice.items">
-              <td><a class="button" @click="removeItem(i)">-</a></td>
+              <td>
+              <a v-if="item.description !== '2 Hour Scanning' && item.description !== 'Scanning 1/4 Hour'" class="button" @click="removeItem(i)">-</a>
+              </td>
               <td>{{i + 1}} </td>
               <td>{{item.description}}</td>
               <td>${{item.price}}</td>
@@ -235,14 +237,7 @@ watch: {
         this.discount = 0
       }
     },
-    quantity: function (newValue) {
-      if(newValue < 1){
-        this.quantity = 1
-        this.$toasted.show('Quantity can not be less than 1.', { duration: 4500 })
-      }else if(newValue== ''){
-        this.quantity = 1
-      }
-    },
+
   },
   computed: {
     total () {
@@ -263,7 +258,8 @@ watch: {
           this.invoice.items.push({
           description: this.newItem.name,
           price: this.newItem.price,
-          quantity: this.quantity
+          quantity: this.quantity,
+          commission: this.newItem.commission
       })
         await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
         }else{
@@ -279,7 +275,11 @@ watch: {
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
     },
     changePrice () {
-      this.price = this.newItem.price
+        this.price = 0
+        if(this.newItem.price){
+        this.price = this.newItem.price
+}
+
     }
 
   }

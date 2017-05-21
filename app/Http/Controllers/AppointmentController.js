@@ -57,7 +57,7 @@ class AppointmentController {
     } else {
      appointment = yield Appointment.create({ customer, agent, start_time: start, description, comment })
     }
-    
+
     res.send(appointment)
   }
 
@@ -85,12 +85,13 @@ class AppointmentController {
     const id = req.input('_id')
     const end = req.input('end')
     const start = req.input('start')
-   
+
     const title = 'Scanning Appointment'
 
     let distance = end - start
-    let minutes = Math.floor(distance / (1000 * 60))
-    let remaining = minutes < 120 ? 0 : minutes % 120
+    // let minutes = Math.floor(distance / (1000 * 60))
+    let minutes = Math.floor(distance)
+    let remaining = minutes < 120 ? 0 : (minutes - 120)
     let quarter = Math.ceil(remaining / 15)
     let items = [{
       description: '2 Hour Scanning',
