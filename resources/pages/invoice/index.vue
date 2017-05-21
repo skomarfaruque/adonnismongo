@@ -1,15 +1,6 @@
 <template>
   <section>
-{{list}}
-         <ul>
-    <li v-for="invoice in list">
-      <ul>
-        <li v-for="subject in invoice.items">
-          {{ subject.description }} price {{subject.price * subject.quantity}}
-        </li>
-      </ul>
-    </li>
-  </ul>
+
     <div class="columns invoice-week">
       <div class="column is-12">
         <label class="invoice-head">Week of April 21st, 2017</label>
@@ -26,58 +17,24 @@
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span>$1,650.00</span><br/>
+              <span>${{list.scanningTotal}}</span><br/>
             </div>
           </div>
         </nav>
-        <nav class="level">
+        <nav v-for="other in list.othersTotal" class="level">
           <div class="level-left">
             <div class="level-item">
-              <span>VHS</span><br/>
+              <span>{{other.name}}</span><br/>
             </div>
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span>$224.00</span><br/>
+              <span>${{other.price}}</span><br/>
             </div>
           </div>
         </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>Prints</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$250.00</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>...</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$25</span>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>...</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$75.50</span>
-            </div>
-          </div>
-        </nav>
+
+
         <nav class="level">
           <div class="level-left">
             <div class="level-item">

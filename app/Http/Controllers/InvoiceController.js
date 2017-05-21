@@ -8,22 +8,33 @@ use('App/Model/Customer')
 class InvoiceController {
   * index (req, res) {
     const invoices = yield Appointment.find({ invoice_settled: false }).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
+    var scanningTotal = 0
+    var staffsArray = []
     if (invoices.length) {
-      var firstPayment = []
-      var myTotal = 0
       invoices.forEach(function (word, key) {
         if (word.items.length) {
           word.items.forEach(function (val, newKey) {
-            if (val.description === '2 Hour Scanning') {
-              firstPayment.push = val.price * val.quantity
-              myTotal += word.newKey.price
+            if (val.description === '2 Hour Scanning' || val.description === 'Scanning 1/4 Hour') {
+              scanningTotal += val.price * val.quantity
+            } else {
+              var priceCal = val.price * val.quantity * val.commission / 100
+              var filterObj = staffsArray.find(function (e) {
+                return e.name === val.description
+              })
+              // console.log(filterObj)
+              if (filterObj == null) {
+                staffsArray.push({name: val.description, price: priceCal})
+              } else {
+                filterObj.price = parseInt(filterObj.price) + parseInt(priceCal)
+                // staffsArray.push(filterObj)
+              }
             }
           })
         }
-        console.log(myTotal)
       })
     }
-    res.ok(invoices)
+    console.log(staffsArray)
+    res.ok({'invoices': invoices, 'scanningTotal': scanningTotal, 'othersTotal': staffsArray})
   }
   * show (req, res) {
     const id = req.param('id')
