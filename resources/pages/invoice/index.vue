@@ -43,7 +43,7 @@
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span class="invoice-head">${{list.grandTotal}}</span>
+              <span class="invoice-head">${{total}}</span>
             </div>
           </div>
         </nav>
@@ -433,6 +433,15 @@ export default {
   data () {
     return {
       axios: this.$root.$options.axios
+    }
+  },
+  computed: {
+    total () {
+      let total = this.list.scanningTotal
+      this.list.othersTotal.forEach(item => {
+        total += item.price
+      })
+      return total
     }
   },
   methods: {

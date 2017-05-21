@@ -21,12 +21,10 @@ class InvoiceController {
               var filterObj = suppliesArray.find(function (e) {
                 return e.name === val.description
               })
-              // console.log(filterObj)
               if (filterObj == null) {
                 suppliesArray.push({name: val.description, price: priceCal})
               } else {
                 filterObj.price = parseInt(filterObj.price) + parseInt(priceCal)
-                // suppliesArray.push(filterObj)
               }
             }
           })
