@@ -43,7 +43,18 @@ class SuppliesController {
   * import (req, res) {
     res.ok()
   }
+  /**
+   * Search supplies by Name, description, price
+   */
+  * search (req, res) {
+    let regex = req.input('key')
+    const supplies = yield Supplies
+      .find( { $or: [{ name: regex }] })
+      .exec()
 
+    res.ok(supplies)
+    console.log(supplies)
+  }
 }
 
 module.exports = SuppliesController

@@ -5,10 +5,10 @@
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <input class="input" type="search" placeholder="Search by Name, Price, Description">
+              <input class="input" type="search" placeholder="Search by Name, Price, Description" v-model="search" @keyup.enter="searchSupplies">
             </p>
             <p class="control">
-              <button class="button">
+              <button class="button" @click="searchSupplies">
                 <i class="fa fa-search"></i>
               </button>
             </p>
@@ -82,6 +82,7 @@ export default {
     let { data } = await axios.get('supplies')
     return {
       list: data,
+      search: '',
       confirmation: false
     }
   },
@@ -94,12 +95,23 @@ export default {
     this.list = []
     this.confirmation = false
   },
+  watch: {
+    search (value) {
+      if (value.length === 0) {
+        this.searchSupplies()
+      }
+    }
+  },
   methods: {
     async remove (item, ind) {
       await this.axios.delete(`supplies/${item._id}`)
       this.list.splice(ind, 1)
       this.confirmation = false
     },
+    async searchSupplies () {
+      let { data } = await this.axios.get(`supplies/search?key=${this.search}`)
+      this.list = data
+    }
   }
   
   

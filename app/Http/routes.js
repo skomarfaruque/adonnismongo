@@ -66,6 +66,7 @@ Route.group('invoice', () => {
 
 Route.group('supplies', () => {
   Route.resource('supplies', 'SuppliesController').except('create', 'edit')
+  Route.get('supplies/search', 'SuppliesController.search')
 }).prefix('api').middleware('auth')
 
 Route.any('*', 'NuxtController.render')
