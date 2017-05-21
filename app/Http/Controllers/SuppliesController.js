@@ -47,13 +47,15 @@ class SuppliesController {
    * Search supplies by Name, description, price
    */
   * search (req, res) {
-    let regex = req.input('key')
-    const supplies = yield Supplies
-      .find({ $or: [{ name: regex }, { price: regex }, { description: regex }, { commission: regex }] })
-      .exec()
+    if(req.input('key') != '') {
+      let regex = req.input('key')
+      const supplies = yield Supplies
+        .find({ $or: [{ name: regex }, { price: regex }, { description: regex }, { commission: regex }] })
+        .exec()
 
-    res.ok(supplies)
-    console.log(supplies)
+      res.ok(supplies)
+      console.log(supplies)
+    }
   }
 }
 
