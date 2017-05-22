@@ -421,8 +421,8 @@ export default {
   fetch ({ store }) {
     store.commit('SET_HEAD', ['Commissions', 'View your earnings.'])
   },
-  async asyncData ({ store, axios }) {
-     let { data } =  await axios.get('invoice/agent/591fd0ce76a2a850102ba515') //in future it will be "me"
+  async asyncData ({ store, axios, query }) {
+     let { data } =  await axios.get(`invoice/agent/${query.agentId}`) //in future it will be "me"
      var info = data
     return {
       list: data,

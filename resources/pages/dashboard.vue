@@ -23,12 +23,12 @@
             <p class="title">Supplies</p>
             <p class="subtitle">View all your supply items.</p>
           </nuxt-link>
-          <nuxt-link class="tile is-child notification is-info" to="/invoice" v-if="isInvoice">
+          <nuxt-link class="tile is-child notification is-info" to="/invoice?agentId=me" v-if="isInvoice">
             <p class="title">Invoice</p>
             <p class="subtitle">Create and print invoices.</p>
           </nuxt-link>
         </div>
-        
+
       </div>
     </div>
 

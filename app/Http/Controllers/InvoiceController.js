@@ -1,5 +1,6 @@
 'use strict'
-var moment = require('moment');
+const moment = require('moment')
+const _ = require('lodash')
 const Appointment = use('App/Model/Appointment')
 use('App/Model/User')
 use('App/Model/Customer')
@@ -52,6 +53,33 @@ class InvoiceController {
     }
     const invoices = yield Appointment.find({invoice_settled: false, agent: userId, invoice_date: {$gte: lastYear, $lt: today}}).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
     var weeks = []
+    var year = []
+    if (invoices.length) {
+      invoices.forEach(function (invoiceVal, key) {
+        if (invoiceVal.items.length) {
+          invoiceVal.items.forEach(function (supplyVal, newKey) {
+            var name = supplyVal.description
+            var price = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
+            year.push({name: name, price: price})
+          })
+        }
+      })
+    }
+    var grp = _.chain(year)
+    .groupBy("platformId")
+    .map(function(value, key) {
+        return [key, _.reduce(value, function(result, currentObject) {
+            return {
+                total: result.price + currentObject.price,
+            }
+        }, {
+            payout: 0,
+            numOfPeople: 0
+        })];
+    })
+    .object()
+    .value()
+    console.log(grp)
     for (var i = 0; i < 4; i++) {
       var weekData = {}
       weekData.items = []
@@ -74,7 +102,7 @@ class InvoiceController {
       }
       weeks.push(weekData)
     }
-    console.log(weeks)
+    console.log(year)
     res.ok(invoices)
   }
   * addItem (req, res) {
