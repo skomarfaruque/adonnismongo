@@ -309,6 +309,7 @@ watch: {
     total () {
       let total = 0
       this.invoice.items.forEach(item => {
+        item.total = item.quantity * item.price * item.commission / 100
         total += item.quantity * item.price
       })
       return total
@@ -319,22 +320,19 @@ watch: {
 
     },
     async addItem () {
-      if(this.newItem.name){
-        if(this.quantity > 0){
-          this.invoice.items.push({
-          description: this.newItem.name,
-          price: this.newItem.price,
-          quantity: this.quantity,
-          commission: this.newItem.commission
+      if(!this.newItem.name) {
+        return this.$toasted.show('Items must be selected.', { duration: 4500 })
+      }
+      if(this.quantity === 0) {
+        return this.$toasted.show('Quantity must be greater than 0.', { duration: 4500 })
+      }
+      this.invoice.items.push({
+        description: this.newItem.name,
+        price: this.newItem.price,
+        quantity: this.quantity,
+        commission: this.newItem.commission
       })
-        await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
-        }else{
-        this.$toasted.show('Quantity must be greater than 0.', { duration: 4500 })
-        }
-
-      }else{
-       this.$toasted.show('Items must be selected.', { duration: 4500 })
-     }
+      await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })        
     },
     async removeItem (index) {
       this.invoice.items.splice(index, 1)
