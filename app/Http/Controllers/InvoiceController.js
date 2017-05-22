@@ -44,11 +44,13 @@ class InvoiceController {
     res.ok(invoice)
   }
   * getByAgent (req, res) {
+    var lastYear = moment().subtract(1,'year').toDate()
+    var today = moment().toDate()
     let userId = req.param('id')
     if (userId === 'me') {
       userId = req.currentUser._id
     }
-    const invoices = yield Appointment.find({ invoice_settled: false, agent: userId }).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
+    const invoices = yield Appointment.find({invoice_settled: false, agent: userId, invoice_date: {$gte: lastYear, $lt: today}}).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
     var weeks = []
     for (var i = 0; i < 4; i++) {
       var weekData = {}
@@ -72,7 +74,7 @@ class InvoiceController {
       }
       weeks.push(weekData)
     }
-    console.log(invoices)
+    console.log(weeks)
     res.ok(invoices)
   }
   * addItem (req, res) {
