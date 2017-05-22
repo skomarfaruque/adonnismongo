@@ -163,7 +163,7 @@
         <div class="columns">
           <div class="column is-2"></div>
           <div class="column is-8 block has-text-centered">
-            <a href="javascript:" class="button is-info is-large" @click="isPersonalOff=true">Cash</a>
+            <a href="javascript:" class="button is-info is-large" @click="isCashOff=true">Cash</a>
             <a class="button is-info is-large">Check</a>
             <a class="button is-info is-large">Credit</a>
           </div>
@@ -172,7 +172,7 @@
       </div>
       <div class="column is-1"></div>
     </div>
-    <div v-bind:class="{ modal: true, 'is-active': isPersonalOff }">
+    <div v-bind:class="{ modal: true, 'is-active': isCashOff }">
       <div class="modal-background"></div>
       <div class="modal-content">
         <div class="box">
@@ -223,15 +223,15 @@
           </div>
           <div class="level">
             <div class="level-left is-6">
-              <a class="button is-danger" @click="deletePersonalTask" v-show="isDeletePersonalOff">Delete</a>
+              
             </div>
             <div class="level-right is-6 block">
               <a class="button is-info">Submit</a>
-              <a class="button is-info" @click="isPersonalOff=false">Cancel</a>
+              <a class="button is-info" @click="isCashOff=false">Cancel</a>
             </div>
           </div>
         </div>
-        <button class="modal-close" @click="isPersonalOff=false"></button>
+        <button class="modal-close" @click="isCashOff=false"></button>
       </div>
     </div>
   </section>
@@ -278,7 +278,7 @@ export default {
       newItem: '',
       price: 0,
       quantity: 1,
-      isPersonalOff: false,
+      isCashOff: false,
     }
   },
   data () {
