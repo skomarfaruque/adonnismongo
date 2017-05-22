@@ -17,19 +17,19 @@
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span>${{list.scanningTotal}}</span><br/>
+              <span>$12</span><br/>
             </div>
           </div>
         </nav>
-        <nav v-for="other in list.othersTotal" class="level">
+        <nav class="level">
           <div class="level-left">
             <div class="level-item">
-              <span>{{other.name}}</span><br/>
+              <span>demo name</span><br/>
             </div>
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span>${{other.price}}</span><br/>
+              <span>$12</span><br/>
             </div>
           </div>
         </nav>
@@ -43,7 +43,7 @@
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span class="invoice-head">${{total}}</span>
+              <span class="invoice-head">$s</span>
             </div>
           </div>
         </nav>
@@ -422,7 +422,7 @@ export default {
     store.commit('SET_HEAD', ['Commissions', 'View your earnings.'])
   },
   async asyncData ({ store, axios }) {
-     let { data } =  await axios.get('invoice') // store.state.role === 'Agent' ? await axios.get('agent/me/customer') : await axios.get('customers')
+     let { data } =  await axios.get('invoice/agent/591fd0ce76a2a850102ba515') //in future it will be "me"
      var info = data
     return {
       list: data,
@@ -435,15 +435,7 @@ export default {
       axios: this.$root.$options.axios
     }
   },
-  computed: {
-    total () {
-      let total = this.list.scanningTotal
-      this.list.othersTotal.forEach(item => {
-        total += item.price
-      })
-      return total
-    }
-  },
+
   methods: {
     remove (item, ind) {
 

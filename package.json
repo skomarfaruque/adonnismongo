@@ -29,6 +29,7 @@
     "bulma": "^0.3.2",
     "cross-env": "^3.1.4",
     "flatpickr": "^2.4.8",
+    "moment": "^2.18.1",
     "mongoose": "^4.9.0",
     "nuxt": "latest",
     "standard": "^8.6.0",

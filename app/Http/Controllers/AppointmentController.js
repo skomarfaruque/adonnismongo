@@ -96,14 +96,16 @@ class AppointmentController {
     let items = [{
       description: '2 Hour Scanning',
       price: 170,
-      quantity: 1
+      quantity: 1,
+      commission: 100
     }]
 
     if (quarter > 0) {
       items.push({
         description: 'Scanning 1/4 Hour',
         price: 21.25,
-        quantity: quarter
+        quantity: quarter,
+        commission: 100
       })
     }
     yield Appointment.update({ _id: id }, { ended: end, invoice_title: title, items, invoice_date: new Date(), invoice_settled: false })

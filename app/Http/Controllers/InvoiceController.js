@@ -1,5 +1,5 @@
 'use strict'
-
+var moment = require('moment');
 const Appointment = use('App/Model/Appointment')
 use('App/Model/User')
 use('App/Model/Customer')
@@ -7,32 +7,36 @@ use('App/Model/Customer')
 
 class InvoiceController {
   * index (req, res) {
-    const invoices = yield Appointment.find({ invoice_settled: false }).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
-    var scanningTotal = 0
-    var suppliesArray = []
-    if (invoices.length) {
-      invoices.forEach(function (word, key) {
-        if (word.items.length) {
-          word.items.forEach(function (val, newKey) {
-            if (val.description === '2 Hour Scanning' || val.description === 'Scanning 1/4 Hour') {
-              scanningTotal += val.price * val.quantity
-            } else {
-              var priceCal = val.price * val.quantity * val.commission / 100
-              var filterObj = suppliesArray.find(function (e) {
-                return e.name === val.description
-              })
-              if (filterObj == null) {
-                suppliesArray.push({name: val.description, price: priceCal})
-              } else {
-                filterObj.price = parseInt(filterObj.price) + parseInt(priceCal)
-              }
-            }
-          })
-        }
-      })
+    let userId = req.param('id')
+    if (userId === 'me') {
+      userId = req.currentUser._id
     }
-    console.log(suppliesArray)
-    res.ok({'invoices': invoices, 'scanningTotal': scanningTotal, 'othersTotal': suppliesArray})
+    const invoices = yield Appointment.find({ invoice_settled: false, agent: userId }).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
+    var weeks = []
+    for (var i = 0; i < 4; i++) {
+      var weekData = {}
+      weekData.items = []
+      var date = moment().subtract(i, 'week').startOf('isoWeek').toDate()
+      var datePrevious = moment().subtract(i + 1, 'week').startOf('isoWeek').toDate()
+      weekData.date = date
+      if (invoices.length) {
+        invoices.forEach(function (invoiceVal, key) {
+          if (datePrevious <= invoiceVal.invoice_date && invoiceVal.invoice_date < date) {
+            if (invoiceVal.items.length) {
+              invoiceVal.items.forEach(function (supplyVal, newKey) {
+                var pushData = {}
+                pushData.name = supplyVal.description
+                pushData.price = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
+                weekData.items.push(pushData)
+              })
+            }
+          }
+        })
+      }
+      weeks.push(weekData)
+    }
+    console.log(weeks)
+    res.ok(invoices)
   }
   * show (req, res) {
     const id = req.param('id')
@@ -40,8 +44,35 @@ class InvoiceController {
     res.ok(invoice)
   }
   * getByAgent (req, res) {
-    const agentId = req.param('agent')
-    const invoices = yield Appointment.find({ agent: agentId }).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
+    let userId = req.param('id')
+    if (userId === 'me') {
+      userId = req.currentUser._id
+    }
+    const invoices = yield Appointment.find({ invoice_settled: false, agent: userId }).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
+    var weeks = []
+    for (var i = 0; i < 4; i++) {
+      var weekData = {}
+      weekData.items = []
+      var date = moment().subtract(i, 'week').startOf('isoWeek').toDate()
+      var datePrevious = moment().subtract(i + 1, 'week').startOf('isoWeek').toDate()
+      weekData.date = date
+      if (invoices.length) {
+        invoices.forEach(function (invoiceVal, key) {
+          if (datePrevious <= invoiceVal.invoice_date && invoiceVal.invoice_date < date) {
+            if (invoiceVal.items.length) {
+              invoiceVal.items.forEach(function (supplyVal, newKey) {
+                var pushData = {}
+                pushData.name = supplyVal.description
+                pushData.price = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
+                weekData.items.push(pushData)
+              })
+            }
+          }
+        })
+      }
+      weeks.push(weekData)
+    }
+    console.log(invoices)
     res.ok(invoices)
   }
   * addItem (req, res) {
