@@ -89,21 +89,22 @@ class AppointmentController {
     const title = 'Scanning Appointment'
 
     let distance = end - start
-    // let minutes = Math.floor(distance / (1000 * 60))
-    let minutes = Math.floor(distance)
+    let minutes = Math.floor(distance / (1000 * 60))
     let remaining = minutes < 120 ? 0 : (minutes - 120)
     let quarter = Math.ceil(remaining / 15)
     let items = [{
       description: '2 Hour Scanning',
       price: 170,
-      quantity: 1
+      quantity: 1,
+      commission: 100
     }]
 
     if (quarter > 0) {
       items.push({
         description: 'Scanning 1/4 Hour',
         price: 21.25,
-        quantity: quarter
+        quantity: quarter,
+        commission: 100
       })
     }
     yield Appointment.update({ _id: id }, { ended: end, invoice_title: title, items, invoice_date: new Date(), invoice_settled: false })

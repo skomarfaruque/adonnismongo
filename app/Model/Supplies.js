@@ -5,8 +5,8 @@ const mongoose = use('Mongoose')
 const suppliesSchema = mongoose.Schema({
   name: String,
   description: String,
-  price: String,
-  commission: String,
+  price: Number,
+  commission: Number,
   synced: {
     type: Boolean,
     default: false
