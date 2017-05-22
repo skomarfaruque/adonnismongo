@@ -401,6 +401,9 @@
         self.block_time.work_end_time = timeFormat(endDate)
         if (ev.isStarted) {
           self.startWatch()
+        } else {
+          self.timer = '00:00:00'
+          self.isFinished = false
         }
         self.invoice = ev._id
       }
@@ -676,7 +679,6 @@
           // Output the result in an element with id="demo"
           self.timer = `${('00'+hours).slice(-2)}:${('00'+minutes).slice(-2)}:${('00'+seconds).slice(-2)}`
         }
-
         // Set the date we're counting down to
         if (ev.isStarted && ev.ended) {
           toTimeString(ev.ended, ev.started)

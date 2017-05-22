@@ -89,8 +89,7 @@ class AppointmentController {
     const title = 'Scanning Appointment'
 
     let distance = end - start
-    // let minutes = Math.floor(distance / (1000 * 60))
-    let minutes = Math.floor(distance)
+    let minutes = Math.floor(distance / (1000 * 60))
     let remaining = minutes < 120 ? 0 : (minutes - 120)
     let quarter = Math.ceil(remaining / 15)
     let items = [{
