@@ -1,21 +1,21 @@
 <template>
   <section>
     <nav class="level">
-      <div class="level-left">   
+      <div class="level-left">
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <input class="input" type="search" placeholder="Search by Name, Price, Description">
+              <input class="input" type="search" placeholder="Search by Name, Price, Description" v-model="search" @keyup.enter="searchSupplies">
             </p>
             <p class="control">
-              <button class="button">
+              <button class="button" @click="searchSupplies">
                 <i class="fa fa-search"></i>
               </button>
             </p>
           </div>
         </div>
       </div>
-      <div class="level-right">   
+      <div class="level-right">
         <div class="level-item">
           <nuxt-link href="javascript:" class="button is-info" title="Add New" to="/supplies/new"> <i class="fa fa-plus"></i> </nuxt-link>
         </div>
@@ -82,6 +82,7 @@ export default {
     let { data } = await axios.get('supplies')
     return {
       list: data,
+      search: '',
       confirmation: false
     }
   },
@@ -100,8 +101,12 @@ export default {
       this.list.splice(ind, 1)
       this.confirmation = false
     },
+    async searchSupplies () {
+      let { data } = await this.axios.get(`customer/supplies?key=${this.search}`)
+      this.list = data
+    }
   }
-  
-  
+
+
 }
 </script>

@@ -34,6 +34,9 @@
           <thead>
             <tr>
               <th>
+                Action
+              </th>
+              <th>
                 Sl#
               </th>
               <th>
@@ -52,7 +55,10 @@
           </thead>
           <tbody>
             <tr v-for="(item, i) in invoice.items">
-              <td><a class="button" @click="removeItem(i)">-</a>{{i + 1}} </td>
+              <td>
+              <a v-if="item.description !== '2 Hour Scanning' && item.description !== 'Scanning 1/4 Hour'" class="button" @click="removeItem(i)">-</a>
+              </td>
+              <td>{{i + 1}} </td>
               <td>{{item.description}}</td>
               <td>${{item.price}}</td>
               <td>{{item.quantity}}</td>
@@ -64,10 +70,13 @@
                 <a class="button" @click="addItem">+</a>
               </td>
               <td>
+
+              </td>
+              <td>
                 <p class="control">
                   <span class="select">
                     <select v-model="newItem" @change="changePrice">
-                      <option>Select any</option>
+                      <option value="" selected>Select item</option>
                       <option v-for="(item, ind) in products" v-bind:value="item">{{ item.name }}</option>
                     </select>
                   </span>
@@ -80,13 +89,14 @@
                 <input type="number" class="input" min="1"  v-model="quantity">
               </td>
               <td>
-                {{price*quantity}}
+                ${{price*quantity}}
               </td>
 
             </tr>
           </tbody>
           <tfoot>
             <tr>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -97,10 +107,12 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td><label class="label">Shipping</label></td>
               <td>${{shipping}}</td>
             </tr>
             <tr>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -210,17 +222,22 @@ export default {
   },
 watch: {
     shipping: function (newValue) {
-      if(newValue < 0){
+      if(newValue < 0 ){
         this.shipping = 0
         this.$toasted.show('Shipping can not be less than 0.', { duration: 4500 })
+      }else if(newValue== ''){
+        this.shipping = 0
       }
     },
     discount: function (newValue) {
       if(newValue < 0){
         this.discount = 0
         this.$toasted.show('Discount can not be less than 0.', { duration: 4500 })
+      }else if(newValue== ''){
+        this.discount = 0
       }
     },
+
   },
   computed: {
     total () {
@@ -241,7 +258,8 @@ watch: {
           this.invoice.items.push({
           description: this.newItem.name,
           price: this.newItem.price,
-          quantity: this.quantity
+          quantity: this.quantity,
+          commission: this.newItem.commission
       })
         await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
         }else{
@@ -257,7 +275,11 @@ watch: {
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
     },
     changePrice () {
-      this.price = this.newItem.price
+        this.price = 0
+        if(this.newItem.price){
+        this.price = this.newItem.price
+}
+
     }
 
   }
