@@ -163,7 +163,7 @@
         <div class="columns">
           <div class="column is-2"></div>
           <div class="column is-8 block has-text-centered">
-            <a class="button is-info is-large">Cash</a>
+            <a href="javascript:" class="button is-info is-large" @click="isPersonalOff=true">Cash</a>
             <a class="button is-info is-large">Check</a>
             <a class="button is-info is-large">Credit</a>
           </div>
@@ -172,11 +172,76 @@
       </div>
       <div class="column is-1"></div>
     </div>
+    <div v-bind:class="{ modal: true, 'is-active': isPersonalOff }">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          <h1 class="title">Cash</h1>
+          <div class="box">
+            <div class="columns invoice-label">
+              <div class="column is-1"></div>
+              <div class="column is-6">
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Total</span><br/>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span>$3243243</span><br/>
+                    </div>
+                  </div>
+                </nav>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Shipping</span><br/>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span>$32</span><br/>
+                    </div>
+                  </div>
+                </nav>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Discount</span><br/>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span>$32</span><br/>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+              <div class="column is-5"></div>
+            </div>
+          </div>
+          <div class="level">
+            <div class="level-left is-6">
+              <a class="button is-danger" @click="deletePersonalTask" v-show="isDeletePersonalOff">Delete</a>
+            </div>
+            <div class="level-right is-6 block">
+              <a class="button is-info">Submit</a>
+              <a class="button is-info" @click="isPersonalOff=false">Cancel</a>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" @click="isPersonalOff=false"></button>
+      </div>
+    </div>
   </section>
 </template>
 <style scoped>
   tbody tr td {
     padding: 5px;
+  }
+  .invoice-label .level:not(:last-child) {
+     margin-bottom: 0rem;
   }
   tfoot {
     margin-top: 10px;
@@ -212,7 +277,8 @@ export default {
       shipping: 0,
       newItem: '',
       price: 0,
-      quantity: 1
+      quantity: 1,
+      isPersonalOff: false,
     }
   },
   data () {
@@ -278,7 +344,7 @@ watch: {
         this.price = 0
         if(this.newItem.price){
         this.price = this.newItem.price
-}
+    }
 
     }
 
