@@ -271,24 +271,24 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Account Number</span>
+                      <span>Account Holder Name</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="number" placeholder="Enter Account Number"></span>
+                      <span><input class="input" type="text" placeholder="Account Holder Name"></span>
                     </div>
                   </div>
                 </nav><br>
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Amount</span>
+                      <span>Account Number</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="number" placeholder="Enter Amount"></span>
+                      <span><input class="input" type="number" placeholder="Account Number"></span>
                     </div>
                   </div>
                 </nav><br>
@@ -321,18 +321,6 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Name</span>
-                    </div>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input class="input" type="text" placeholder="Enter name"></span>
-                    </div>
-                  </div>
-                </nav><br>
-                <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
                       <span>Credit Card Number</span>
                     </div>
                   </div>
@@ -345,12 +333,12 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Amount</span>
+                      <span>Exp Date</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="Number" placeholder="Enter Amount"></span>
+                      <span><input style="width:60px" class="input" type="Number" placeholder="Day"> / <input style="width:60px" class="input" type="Number" placeholder="Month"> / <input style="width:60px" class="input" type="Number" placeholder="Year"></span>
                     </div>
                   </div>
                 </nav>
