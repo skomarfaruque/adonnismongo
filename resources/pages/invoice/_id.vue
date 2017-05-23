@@ -361,7 +361,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input style="width:48px" class="input" type="Number" placeholder="D"> / <input style="width:50px" class="input" type="Number" placeholder="M"> / <input style="width:48px" class="input" type="Number" placeholder="Y"></span>
+                      <span><input class="input" type="text" placeholder="Date"></span>
                     </div>
                   </div>
                 </nav><br>
@@ -380,7 +380,7 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Bill to</span>
+                      <span><b>Bill to</b></span>
                     </div>
                   </div>
                   <div class="level-right">
@@ -391,7 +391,7 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>FirstName</span><br>
+                      <span>First Name</span><br>
                     </div>
                   </div><br>
                   <div class="level-right">
@@ -403,7 +403,7 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>LastName</span><br>
+                      <span>Last Name</span><br>
                     </div>
                   </div><br>
                   <div class="level-right">
@@ -490,6 +490,18 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
+                      <span>Shipping</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span>${{parseInt(shipping)}}</span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
                       <span>Credit Card No</span>
                     </div>
                   </div>
@@ -502,31 +514,19 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Credit Card Code</span>
+                      <span>Card Code</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" v-model="card.card_code" type="text"></span>
+                      <span><input class="input" v-model="card.card_code" type="number" placeholder="Credit Card Code"></span>
                     </div>
                   </div>
                 </nav><br>
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Shipping</span><br>
-                    </div>
-                  </div><br>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
-                    </div>
-                  </div>
-                </nav><br>
-                <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Ship to</span>
+                      <span><b>Ship to</b></span>
                     </div>
                   </div>
                   <div class="level-right">
@@ -537,7 +537,7 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>FirstName</span><br>
+                      <span>First Name</span><br>
                     </div>
                   </div><br>
                   <div class="level-right">
@@ -549,7 +549,7 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>LastName</span><br>
+                      <span>Last Name</span><br>
                     </div>
                   </div><br>
                   <div class="level-right">
