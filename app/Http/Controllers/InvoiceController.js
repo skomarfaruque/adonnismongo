@@ -17,8 +17,8 @@ class InvoiceController {
     for (var i = 0; i < 4; i++) {
       var weekData = {}
       weekData.items = []
-      var date = moment().subtract(i, 'week').startOf('isoWeek').toDate()
-      var datePrevious = moment().subtract(i + 1, 'week').startOf('isoWeek').toDate()
+      var date = moment().subtract(i, 'week').startOf('week').toDate()
+      var datePrevious = moment().subtract(i + 1, 'week').startOf('week').toDate()
       weekData.date = date
       if (invoices.length) {
         invoices.forEach(function (invoiceVal, key) {
@@ -51,59 +51,54 @@ class InvoiceController {
     if (userId === 'me') {
       userId = req.currentUser._id
     }
-    const invoices = yield Appointment.find({invoice_settled: false, agent: userId, invoice_date: {$gte: lastYear, $lt: today}}).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
+    const invoices = yield Appointment.find({invoice_settled: false, agent: userId, invoice_date: {$gte: lastYear, $lt: today}}).exec()
     var weeks = []
-    var year = []
+    var year = {}
+    year.item = {}
+    year.totalPrice = 0
     if (invoices.length) {
       invoices.forEach(function (invoiceVal, key) {
         if (invoiceVal.items.length) {
           invoiceVal.items.forEach(function (supplyVal, newKey) {
-            var name = supplyVal.description
-            var price = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
-            year.push({name: name, price: price})
+            let price = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
+            year.totalPrice += price
+            if (!year.item[supplyVal.description]) {
+              year.item[supplyVal.description] = 0
+            }
+            year.item[supplyVal.description] += price
           })
         }
       })
     }
-    var grp = _.chain(year)
-    .groupBy("platformId")
-    .map(function(value, key) {
-        return [key, _.reduce(value, function(result, currentObject) {
-            return {
-                total: result.price + currentObject.price,
-            }
-        }, {
-            payout: 0,
-            numOfPeople: 0
-        })];
-    })
-    .object()
-    .value()
-    console.log(grp)
     for (var i = 0; i < 4; i++) {
       var weekData = {}
-      weekData.items = []
-      var date = moment().subtract(i, 'week').startOf('isoWeek').toDate()
-      var datePrevious = moment().subtract(i + 1, 'week').startOf('isoWeek').toDate()
-      weekData.date = date
+      weekData.item = {}
+      var date = moment().subtract(i, 'week').startOf('week').toDate()
+      var datePrevious = moment().subtract(i + 1, 'week').startOf('week').toDate()
+      weekData.date = moment(date).format('MMMM Do YYYY')
+      weekData.totalPrice = 0
       if (invoices.length) {
         invoices.forEach(function (invoiceVal, key) {
-          if (datePrevious <= invoiceVal.invoice_date && invoiceVal.invoice_date < date) {
+          // if (datePrevious <= invoiceVal.invoice_date && invoiceVal.invoice_date < date) {
+          if (datePrevious) {
             if (invoiceVal.items.length) {
               invoiceVal.items.forEach(function (supplyVal, newKey) {
-                var pushData = {}
-                pushData.name = supplyVal.description
-                pushData.price = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
-                weekData.items.push(pushData)
+                let price = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
+                weekData.totalPrice += price
+                if (!weekData.item[supplyVal.description]) {
+                  weekData.item[supplyVal.description] = 0
+                }
+                weekData.item[supplyVal.description] += price
               })
             }
           }
         })
       }
+      // console.log(year)
       weeks.push(weekData)
     }
-    console.log(year)
-    res.ok(invoices)
+    console.log(weeks)
+    res.send({year: year, weeks: weeks})
   }
   * addItem (req, res) {
     const items = req.input('items')

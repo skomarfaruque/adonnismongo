@@ -1,35 +1,23 @@
 <template>
   <section>
-
-    <div class="columns invoice-week">
+<span  v-for="(dataVal, i) in list.weeks">
+    <div  class="columns invoice-week">
       <div class="column is-12">
-        <label class="invoice-head">Week of April 21st, 2017</label>
+        <label class="invoice-head">Week of {{dataVal.date}}</label>
       </div>
     </div>
     <div class="columns invoice-label">
       <div class="column is-1"></div>
       <div class="column is-6">
-        <nav class="level">
+        <nav class="level" v-for="(itemVal, j) in dataVal.item">
           <div class="level-left">
             <div class="level-item">
-              <span>Scanning</span><br/>
+              <span>{{j}}</span><br/>
             </div>
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span>$12</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>demo name</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$12</span><br/>
+              <span>${{itemVal}}</span><br/>
             </div>
           </div>
         </nav>
@@ -43,265 +31,17 @@
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span class="invoice-head">$s</span>
+              <span class="invoice-head">${{dataVal.totalPrice}}</span>
             </div>
           </div>
         </nav>
       </div>
       <div class="column is-5"></div>
     </div>
+</span>
 
-    <div class="columns invoice-week">
-      <div class="column is-12">
-        <label class="invoice-head">Week of April 21st, 2017</label>
-      </div>
-    </div>
-    <div class="columns invoice-label">
-      <div class="column is-1"></div>
-      <div class="column is-6">
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>Scanning</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$1,650.00</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>VHS</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$224.00</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>Prints</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$250.00</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>...</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$25</span>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>...</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$75.50</span>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span class="invoice-head">Total</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span class="invoice-head">$2625.50</span>
-            </div>
-          </div>
-        </nav>
-      </div>
-      <div class="column is-5"></div>
-    </div>
 
-    <div class="columns invoice-week">
-      <div class="column is-12">
-        <label class="invoice-head">Week of April 21st, 2017</label>
-      </div>
-    </div>
-    <div class="columns invoice-label">
-      <div class="column is-1"></div>
-      <div class="column is-6">
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>Scanning</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$1,650.00</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>VHS</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$224.00</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>Prints</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$250.00</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>...</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$25</span>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>...</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$75.50</span>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span class="invoice-head">Total</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span class="invoice-head">$2625.50</span>
-            </div>
-          </div>
-        </nav>
-      </div>
-      <div class="column is-5"></div>
-    </div>
 
-    <div class="columns invoice-week">
-      <div class="column is-12">
-        <label class="invoice-head">Week of April 21st, 2017</label>
-      </div>
-    </div>
-    <div class="columns invoice-label">
-      <div class="column is-1"></div>
-      <div class="column is-6">
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>Scanning</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$1,650.00</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>VHS</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$224.00</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>Prints</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$250.00</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>...</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$25</span>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>...</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$75.50</span>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span class="invoice-head">Total</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span class="invoice-head">$2625.50</span>
-            </div>
-          </div>
-        </nav>
-      </div>
-      <div class="column is-5"></div>
-    </div>
     <hr>
     <div class="columns invoice-year">
       <div class="column is-1"></div>
@@ -312,66 +52,19 @@
     <div class="columns invoice-label">
       <div class="column is-2"></div>
       <div class="column is-5">
-        <nav class="level">
+        <nav class="level" v-for="(dataYearVal, k) in list.year.item">
           <div class="level-left">
             <div class="level-item">
-              <span>Scanning</span><br/>
+              <span>{{k}}</span><br/>
             </div>
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span>$1,650.00</span><br/>
+              <span>${{dataYearVal}}</span><br/>
             </div>
           </div>
         </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>VHS</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$224.00</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>Prints</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$250.00</span><br/>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>...</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$25</span>
-            </div>
-          </div>
-        </nav>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span>...</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>$75.50</span>
-            </div>
-          </div>
-        </nav>
+
         <nav class="level">
           <div class="level-left">
             <div class="level-item">
@@ -380,7 +73,7 @@
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span class="invoice-head">$2625.50</span>
+              <span class="invoice-head">${{list.year.totalPrice}}</span>
             </div>
           </div>
         </nav>
@@ -435,7 +128,16 @@ export default {
       axios: this.$root.$options.axios
     }
   },
-
+computed: {
+    total () {
+      let total = 0
+      this.invoice.items.forEach(item => {
+        item.total = item.quantity * item.price * item.commission / 100
+        total += item.quantity * item.price
+      })
+      return total
+    }
+  },
   methods: {
     remove (item, ind) {
 
