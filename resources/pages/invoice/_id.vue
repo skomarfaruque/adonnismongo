@@ -484,7 +484,7 @@
                     </div>
                   </div>
                 </nav><br>
-                
+
               </div>
               <div class="column is-6">
                 <nav class="level">
@@ -754,7 +754,8 @@ watch: {
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
     },
     async payment (type) {
-      await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type })
+      let paymentDescription = { 'demo': 1}
+      await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription })
     },
     changePrice () {
         this.price = 0

@@ -29,6 +29,8 @@ const scheduleSchema = mongoose.Schema({
   invoice_settled: {
     type: Boolean
   },
+  payment_method: String,
+  payment_method_desc: mongoose.Schema.Types.Mixed,
   shipping: Number,
   discount: Number,
   created: {
