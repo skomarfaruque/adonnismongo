@@ -179,8 +179,8 @@
           <h1 class="title">Cash</h1>
           <div class="box">
             <div class="columns invoice-label">
-              <div class="column is-1"></div>
-              <div class="column is-6">
+              <div class="column is-2"></div>
+              <div class="column is-8">
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
@@ -221,17 +221,17 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>You have to pay</span><br/>
+                      <span>Calculate Change</span><br/>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{total - parseInt(discount) + parseInt(shipping)}}</span><br/>
+                      <span>${{total - parseInt(discount) + parseInt(shipping)}}</span>(PAID)<br/>
                     </div>
                   </div>
                 </nav>
               </div>
-              <div class="column is-5"></div>
+              <div class="column is-2"></div>
             </div>
           </div>
           <div class="level">
@@ -254,29 +254,17 @@
           <h1 class="title">Check</h1>
           <div class="box">
             <div class="columns invoice-label">
-              <div class="column is-2"></div>
-              <div class="column is-8">
+              <div class="column is-1"></div>
+              <div class="column is-10">
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Bank Name</span>
+                      <span>Check Number</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text" placeholder="Enter bank name"></span>
-                    </div>
-                  </div>
-                </nav><br>
-                <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Account Holder Name</span>
-                    </div>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input class="input" type="text" placeholder="Account Holder Name"></span>
+                      <span><input class="input" type="number" placeholder="Enter Check Number"></span>
                     </div>
                   </div>
                 </nav><br>
@@ -292,8 +280,44 @@
                     </div>
                   </div>
                 </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Routing Number</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="number" placeholder="Routing Number"></span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Upload Front of Check</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input type="file"><br><img style="width:220px; height:100px" src="/_nuxt/img/logo.9fd5444.png" alt=""></span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Upload Back of Check</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input type="file"><br><img style="width:220px; height:100px" src="/_nuxt/img/logo.9fd5444.png" alt=""></span>
+                    </div>
+                  </div>
+                </nav><br>
               </div>
-              <div class="column is-2"></div>
+              <div class="column is-1"></div>
             </div>
           </div>
           <div class="level">
@@ -330,7 +354,7 @@
                     </div>
                   </div>
                 </nav><br>
-                <nav class="level">
+                <!--<nav class="level">
                   <div class="level-left">
                     <div class="level-item">
                       <span>Exp Date</span>
@@ -341,7 +365,7 @@
                       <span><input style="width:60px" class="input" type="Number" placeholder="Day"> / <input style="width:60px" class="input" type="Number" placeholder="Month"> / <input style="width:60px" class="input" type="Number" placeholder="Year"></span>
                     </div>
                   </div>
-                </nav>
+                </nav>-->
               </div>
               <div class="column is-2"></div>
             </div>
