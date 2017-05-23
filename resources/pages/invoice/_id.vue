@@ -344,12 +344,36 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Credit Card No</span>
+                      <span>Amount</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="Number" placeholder="Credit Card No"></span>
+                      <span>${{total - parseInt(discount) + parseInt(shipping)}}</span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Exp Date</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input style="width:48px" class="input" type="Number" placeholder="D"> / <input style="width:50px" class="input" type="Number" placeholder="M"> / <input style="width:48px" class="input" type="Number" placeholder="Y"></span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Tax</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -460,29 +484,42 @@
                     </div>
                   </div>
                 </nav><br>
-                <!--<nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Exp Date</span>
-                    </div>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input style="width:60px" class="input" type="Number" placeholder="Day"> / <input style="width:60px" class="input" type="Number" placeholder="Month"> / <input style="width:60px" class="input" type="Number" placeholder="Year"></span>
-                    </div>
-                  </div>
-                </nav>-->
+                
               </div>
               <div class="column is-6">
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Amount</span>
+                      <span>Credit Card No</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>$6546465</span>
+                      <span><input class="input" type="Number" placeholder="Credit Card No"></span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Credit Card Code</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Shipping</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
