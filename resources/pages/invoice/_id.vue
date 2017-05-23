@@ -163,20 +163,234 @@
         <div class="columns">
           <div class="column is-2"></div>
           <div class="column is-8 block has-text-centered">
-            <a class="button is-info is-large">Cash</a>
-            <a class="button is-info is-large">Check</a>
-            <a class="button is-info is-large">Credit</a>
+            <a href="javascript:" class="button is-info is-large" @click="isCashOff=true">Cash</a>
+            <a class="button is-info is-large" @click="isCheckOff=true">Check</a>
+            <a class="button is-info is-large" @click="isCreditOff=true">Credit</a>
           </div>
           <div class="column is-2"></div>
         </div>
       </div>
       <div class="column is-1"></div>
     </div>
+    <div v-bind:class="{ modal: true, 'is-active': isCashOff }">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          <h1 class="title">Cash</h1>
+          <div class="box">
+            <div class="columns invoice-label">
+              <div class="column is-2"></div>
+              <div class="column is-8">
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Total</span><br/>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span>${{total}}</span><br/>
+                    </div>
+                  </div>
+                </nav>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Shipping</span><br/>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span>${{parseInt(shipping)}}</span><br/>
+                    </div>
+                  </div>
+                </nav>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Discount</span><br/>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span>${{parseInt(discount)}}</span><br/>
+                    </div>
+                  </div>
+                </nav>
+                <hr>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Calculate Change</span><br/>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span>${{total - parseInt(discount) + parseInt(shipping)}}</span>(PAID)<br/>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+              <div class="column is-2"></div>
+            </div>
+          </div>
+          <div class="level">
+            <div class="level-left is-6">
+              
+            </div>
+            <div class="level-right is-6 block">
+              <a class="button is-info">Submit</a>
+              <a class="button is-info" @click="isCashOff=false">Cancel</a>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" @click="isCashOff=false"></button>
+      </div>
+    </div>
+    <div v-bind:class="{ modal: true, 'is-active': isCheckOff }">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          <h1 class="title">Check</h1>
+          <div class="box">
+            <div class="columns invoice-label">
+              <div class="column is-1"></div>
+              <div class="column is-10">
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Check Number</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="number" placeholder="Enter Check Number"></span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Account Number</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="number" placeholder="Account Number"></span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Routing Number</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="number" placeholder="Routing Number"></span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Upload Front of Check</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input type="file"><br><img style="width:220px; height:100px" src="/_nuxt/img/logo.9fd5444.png" alt=""></span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Upload Back of Check</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input type="file"><br><img style="width:220px; height:100px" src="/_nuxt/img/logo.9fd5444.png" alt=""></span>
+                    </div>
+                  </div>
+                </nav><br>
+              </div>
+              <div class="column is-1"></div>
+            </div>
+          </div>
+          <div class="level">
+            <div class="level-left is-6">
+              
+            </div>
+            <div class="level-right is-6 block">
+              <a class="button is-info">Submit</a>
+              <a class="button is-info" @click="isCheckOff=false">Cancel</a>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" @click="isCheckOff=false"></button>
+      </div>
+    </div>
+    <div v-bind:class="{ modal: true, 'is-active': isCreditOff }">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          <h1 class="title">Credit</h1>
+          <div class="box">
+            <div class="columns invoice-label">
+              <div class="column is-2"></div>
+              <div class="column is-8">
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Credit Card Number</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="Number" placeholder="Credit Card Number"></span>
+                    </div>
+                  </div>
+                </nav><br>
+                <!--<nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Exp Date</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input style="width:60px" class="input" type="Number" placeholder="Day"> / <input style="width:60px" class="input" type="Number" placeholder="Month"> / <input style="width:60px" class="input" type="Number" placeholder="Year"></span>
+                    </div>
+                  </div>
+                </nav>-->
+              </div>
+              <div class="column is-2"></div>
+            </div>
+          </div>
+          <div class="level">
+            <div class="level-left is-6">
+              
+            </div>
+            <div class="level-right is-6 block">
+              <a class="button is-info">Submit</a>
+              <a class="button is-info" @click="isCreditOff=false">Cancel</a>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" @click="isCreditOff=false"></button>
+      </div>
+    </div>
   </section>
 </template>
 <style scoped>
   tbody tr td {
     padding: 5px;
+  }
+  .invoice-label .level:not(:last-child) {
+     margin-bottom: 0rem;
   }
   tfoot {
     margin-top: 10px;
@@ -212,7 +426,10 @@ export default {
       shipping: 0,
       newItem: '',
       price: 0,
-      quantity: 1
+      quantity: 1,
+      isCashOff: false,
+      isCheckOff: false,
+      isCreditOff: false,
     }
   },
   data () {
@@ -276,7 +493,7 @@ watch: {
         this.price = 0
         if(this.newItem.price){
         this.price = this.newItem.price
-}
+    }
 
     }
 
