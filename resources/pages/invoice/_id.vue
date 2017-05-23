@@ -264,7 +264,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="number" placeholder="Enter Check Number"></span>
+                      <span><input class="input" type="number" v-model="check.check_no" placeholder="Enter Check Number"></span>
                     </div>
                   </div>
                 </nav><br>
@@ -276,7 +276,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="number" placeholder="Account Number"></span>
+                      <span><input class="input" type="number" v-model="check.account_no" placeholder="Account Number"></span>
                     </div>
                   </div>
                 </nav><br>
@@ -288,7 +288,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="number" placeholder="Routing Number"></span>
+                      <span><input class="input" type="number" v-model="check.routing_no" placeholder="Routing Number"></span>
                     </div>
                   </div>
                 </nav><br>
@@ -373,14 +373,14 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.tax" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>BillTO</span>
+                      <span>Bill to</span>
                     </div>
                   </div>
                   <div class="level-right">
@@ -396,7 +396,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input"  v-model="card.bill_first_name" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -408,7 +408,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.bill_last_name" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -420,7 +420,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.bill_company" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -432,7 +432,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.bill_address" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -444,7 +444,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.bill_city" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -456,7 +456,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.bill_state" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -468,7 +468,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.bill_zip" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -480,7 +480,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.bill_country" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -495,7 +495,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="Number" placeholder="Credit Card No"></span>
+                      <span><input class="input" type="Number" v-model="card.card_no" placeholder="Credit Card No"></span>
                     </div>
                   </div>
                 </nav><br>
@@ -507,7 +507,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span>
+                      <span><input class="input" v-model="card.card_code" type="text"></span>
                     </div>
                   </div>
                 </nav><br>
@@ -526,7 +526,7 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>ShipTO</span>
+                      <span>Ship to</span>
                     </div>
                   </div>
                   <div class="level-right">
@@ -542,7 +542,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.ship_first_name" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -554,7 +554,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.ship_last_name" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -566,7 +566,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.ship_company" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -578,7 +578,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.ship_address" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -590,7 +590,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.ship_city"  type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -602,7 +602,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.ship_state" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -614,7 +614,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.ship_zip" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -626,7 +626,7 @@
                   </div><br>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text"></span><br>
+                      <span><input class="input" v-model="card.ship_country" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -682,9 +682,34 @@ export default {
   async asyncData ({ store, axios, params }) {
     let { data } = await axios.get(`invoice/${params.id}`)
     let { data: products } = await axios.get('supplies')
-
     return {
       invoice: data,
+      card: {
+        card_no:'',
+        tax:'',
+        ship_first_name:'',
+        ship_last_name:'',
+        ship_company:'',
+        ship_address:'',
+        ship_city:'',
+        ship_state:'',
+        ship_zip:'',
+        ship_country:'',
+        card_code:'',
+        bill_first_name:'',
+        bill_last_name:'',
+        bill_company:'',
+        bill_address:'',
+        bill_city:'',
+        bill_state:'',
+        bill_zip:'',
+        bill_country:''
+      },
+      check: {
+        check_no:'',
+        account_no:'',
+        routing_no:''
+      },
       products,
       discount: 0,
       shipping: 0,
@@ -754,7 +779,14 @@ watch: {
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
     },
     async payment (type) {
-      let paymentDescription = { 'demo': 1}
+      var paymentDescription ={}
+      if (type === 'card') {
+        paymentDescription = this.card
+      } else if (type === 'check') {
+        paymentDescription = this.check
+      } else {
+        paymentDescription = {}
+      }
       await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription })
     },
     changePrice () {
