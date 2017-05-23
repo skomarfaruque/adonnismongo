@@ -236,10 +236,10 @@
           </div>
           <div class="level">
             <div class="level-left is-6">
-              
+
             </div>
             <div class="level-right is-6 block">
-              <a class="button is-info">Submit</a>
+              <a class="button is-info" @click="payment('cash')">Submit</a>
               <a class="button is-info" @click="isCashOff=false">Cancel</a>
             </div>
           </div>
@@ -322,10 +322,10 @@
           </div>
           <div class="level">
             <div class="level-left is-6">
-              
+
             </div>
             <div class="level-right is-6 block">
-              <a class="button is-info">Submit</a>
+              <a class="button is-info" @click="payment('check')">Submit</a>
               <a class="button is-info" @click="isCheckOff=false">Cancel</a>
             </div>
           </div>
@@ -599,10 +599,10 @@
           </div>
           <div class="level">
             <div class="level-left is-6">
-              
+
             </div>
             <div class="level-right is-6 block">
-              <a class="button is-info">Submit</a>
+              <a class="button is-info" @click="payment('card')">Submit</a>
               <a class="button is-info" @click="isCreditOff=false">Cancel</a>
             </div>
           </div>
@@ -710,11 +710,14 @@ watch: {
         quantity: this.quantity,
         commission: this.newItem.commission
       })
-      await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })        
+      await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
     },
     async removeItem (index) {
       this.invoice.items.splice(index, 1)
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
+    },
+    async payment (type) {
+      await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type })
     },
     changePrice () {
         this.price = 0

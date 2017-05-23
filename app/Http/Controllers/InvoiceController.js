@@ -105,6 +105,13 @@ class InvoiceController {
     const id = req.input('id')
     yield Appointment.update({ _id: id }, { items }).exec()
   }
+  * payment (req, res) {
+    const paymentType = req.input('paymentType')
+    const id = req.input('id')
+    yield Appointment.update({ _id: id }, { $set: { invoice_date: new Date() } }).exec()
+    console.log(paymentType)
+  }
+
 }
 
 module.exports = InvoiceController
