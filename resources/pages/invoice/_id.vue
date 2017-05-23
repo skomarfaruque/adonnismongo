@@ -340,17 +340,123 @@
           <h1 class="title">Credit</h1>
           <div class="box">
             <div class="columns invoice-label">
-              <div class="column is-2"></div>
-              <div class="column is-8">
+              <div class="column is-6">
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Credit Card Number</span>
+                      <span>Credit Card No</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="Number" placeholder="Credit Card Number"></span>
+                      <span><input class="input" type="Number" placeholder="Credit Card No"></span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>BillTO</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>FirstName</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>LastName</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Company</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Address</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>City</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>State</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Zip</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Country</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -367,7 +473,128 @@
                   </div>
                 </nav>-->
               </div>
-              <div class="column is-2"></div>
+              <div class="column is-6">
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Amount</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span>$6546465</span>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>ShipTO</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>FirstName</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>LastName</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Company</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Address</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>City</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>State</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Zip</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Country</span><br>
+                    </div>
+                  </div><br>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>
+
+              </div>
             </div>
           </div>
           <div class="level">
