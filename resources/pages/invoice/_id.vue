@@ -361,7 +361,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text" placeholder="Date"></span>
+                      <span><input class="input" v-model="card.exp_date" type="text" placeholder="Date"></span>
                     </div>
                   </div>
                 </nav><br>
@@ -687,6 +687,7 @@ export default {
       card: {
         card_no:'',
         tax:'',
+        exp_date:'',
         ship_first_name:'',
         ship_last_name:'',
         ship_company:'',
