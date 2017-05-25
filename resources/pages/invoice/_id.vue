@@ -304,7 +304,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input type="file" name="front_file"><br><img style="width:220px; height:100px" src="/_nuxt/img/logo.9fd5444.png" alt=""></span>
+                      <span><input type="file" name="front_file" id="frontFile" @change="onFileChange"><br><img style="width:220px; height:100px" :src="check.check_front" alt=""></span>
                     </div>
                   </div>
                 </nav><br>
@@ -316,7 +316,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input type="file" name="back_file" id="fileInput" ref="fileInput"><br><img style="width:220px; height:100px" src="/_nuxt/img/logo.9fd5444.png" alt=""></span>
+                      <span><input type="file" name="back_file" id="fileInput" ref="fileInput" @change="onFileChange"><br><img style="width:220px; height:100px" :src="check.check_back" alt=""></span>
                       <!-- <span><input type="file" @change="onFileChange"><br><img style="width:220px; height:100px" :src="check.check_back" alt=""><button @click="removeImage">Remove image</button></span> -->
                     </div>
                   </div>
@@ -826,21 +826,23 @@ watch: {
         }
     },
     onFileChange(e) {
+      var targetId = e.target.id
       var files = e.target.files || e.dataTransfer.files
       if (!files.length)
         return;
-      this.createImage(files[0]);
+      this.createImage(files[0], targetId);
     },
-    createImage(file) {
+    createImage(file, targetId) {
       this.check.check_back_file =file
       var image = new Image();
       var reader = new FileReader();
       var vm = this;
-
       reader.onload = (e) => {
+      if (targetId==='frontFile'){
+        vm.check.check_front = e.target.result
+      }else{
         vm.check.check_back = e.target.result
-
-
+      }
       };
       reader.readAsDataURL(file);
     },
