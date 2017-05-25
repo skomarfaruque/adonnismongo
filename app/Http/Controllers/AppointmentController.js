@@ -52,10 +52,10 @@ class AppointmentController {
     }
     let appointment
     if (id) {
-     yield Appointment.update({ _id: id }, { customer, agent, start_time: start, description, comment })
-     appointment = yield Appointment.findOne({ _id: id }).populate('customer').exec()
+      yield Appointment.update({ _id: id }, { customer, agent, start_time: start, description, comment })
+      appointment = yield Appointment.findOne({ _id: id }).populate('customer').exec()
     } else {
-     appointment = yield Appointment.create({ customer, agent, start_time: start, description, comment })
+      appointment = yield Appointment.create({ customer, agent, start_time: start, description, comment })
     }
 
     res.send(appointment)
