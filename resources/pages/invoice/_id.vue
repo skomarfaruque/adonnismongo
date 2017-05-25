@@ -250,6 +250,7 @@
     <div v-bind:class="{ modal: true, 'is-active': isCheckOff }">
       <div class="modal-background"></div>
       <div class="modal-content">
+      <form id="myForm" name="myForm">
         <div class="box">
           <h1 class="title">Pay Via Check</h1>
           <div class="box">
@@ -264,7 +265,10 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="number" v-model="check.check_no" placeholder="Enter Check Number"></span>
+                      <span><input class="input"  name="check_no" type="number" v-model="check.check_no" placeholder="Enter Check Number">
+                      <input class="input"  name="paymentType" type="hidden" value="check" placeholder="Enter Check Number">
+                      <input class="input"  name="id" type="hidden" v-bind:value="invoice._id" placeholder="Enter Check Number">
+                      </span>
                     </div>
                   </div>
                 </nav><br>
@@ -276,7 +280,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="number" v-model="check.account_no" placeholder="Account Number"></span>
+                      <span><input class="input" name="account_no" type="number" v-model="check.account_no" placeholder="Account Number"></span>
                     </div>
                   </div>
                 </nav><br>
@@ -288,7 +292,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="number" v-model="check.routing_no" placeholder="Routing Number"></span>
+                      <span><input class="input" id ="routing_no" name="routing_no" type="number" v-model="check.routing_no" placeholder="Routing Number"></span>
                     </div>
                   </div>
                 </nav><br>
@@ -300,7 +304,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input type="file"><br><img style="width:220px; height:100px" src="/_nuxt/img/logo.9fd5444.png" alt=""></span>
+                      <span><input type="file" name="front_file"><br><img style="width:220px; height:100px" src="/_nuxt/img/logo.9fd5444.png" alt=""></span>
                     </div>
                   </div>
                 </nav><br>
@@ -312,7 +316,8 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input type="file"><br><img style="width:220px; height:100px" src="/_nuxt/img/logo.9fd5444.png" alt=""></span>
+                      <span><input type="file" name="back_file" id="fileInput" ref="fileInput"><br><img style="width:220px; height:100px" src="/_nuxt/img/logo.9fd5444.png" alt=""></span>
+                      <!-- <span><input type="file" @change="onFileChange"><br><img style="width:220px; height:100px" :src="check.check_back" alt=""><button @click="removeImage">Remove image</button></span> -->
                     </div>
                   </div>
                 </nav><br>
@@ -330,6 +335,7 @@
             </div>
           </div>
         </div>
+</form>
         <button class="modal-close" @click="isCheckOff=false"></button>
       </div>
     </div>
@@ -709,6 +715,10 @@ export default {
       check: {
         check_no:'',
         account_no:'',
+        check_front:'/_nuxt/img/logo.9fd5444.png',
+        check_back:'/_nuxt/img/logo.9fd5444.png',
+        check_front_file:'',
+        check_back_file:'',
         routing_no:''
       },
       products,
@@ -784,18 +794,46 @@ watch: {
       if (type === 'card') {
         paymentDescription = this.card
       } else if (type === 'check') {
-        paymentDescription = this.check
+        var myForm = document.getElementById('myForm');
+        let formData = new FormData(myForm);
+        console.log(formData)
+        // let formData = new FormData();
+        // formData.append('file', this.$refs.fileInput.files[0]);
+        // paymentDescription = formData
+         await this.axios.post(`invoice/payment`, formData)
+         return;
       } else {
         paymentDescription = {}
       }
-      await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription })
+      await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, file: this.check.check_back_file })
     },
     changePrice () {
         this.price = 0
         if(this.newItem.price){
         this.price = this.newItem.price
-    }
+        }
+    },
+    onFileChange(e) {
+      var files = e.target.files || e.dataTransfer.files
+      if (!files.length)
+        return;
+      this.createImage(files[0]);
+    },
+    createImage(file) {
+      this.check.check_back_file =file
+      var image = new Image();
+      var reader = new FileReader();
+      var vm = this;
 
+      reader.onload = (e) => {
+        vm.check.check_back = e.target.result
+
+
+      };
+      reader.readAsDataURL(file);
+    },
+    removeImage: function (e) {
+      this.check.check_back = '';
     }
 
   }

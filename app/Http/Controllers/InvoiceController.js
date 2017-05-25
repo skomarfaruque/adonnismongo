@@ -1,6 +1,7 @@
 'use strict'
 const moment = require('moment')
 const _ = require('lodash')
+const Helpers = use('Helpers')
 const Appointment = use('App/Model/Appointment')
 use('App/Model/User')
 use('App/Model/Customer')
@@ -108,9 +109,28 @@ class InvoiceController {
   * payment (req, res) {
     const paymentType = req.input('paymentType')
     const id = req.input('id')
-    let paymentDescription = req.input('paymentDescription')
-    yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentType, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
+    let paymentDescription = {}
+    if (paymentType === 'check') {
+      let storagePath = 'check_doc'
+      const backFile = req.file('back_file', {
+        maxSize: '2mb',
+        allowedExtensions: ['jpg', 'png', 'jpeg']
+      })
+      const fileName = `${id}_back.${backFile.extension()}`
+      yield backFile.move(Helpers.storagePath(storagePath), fileName)
+      const frontFile = req.file('front_file', {
+        maxSize: '2mb',
+        allowedExtensions: ['jpg', 'png', 'jpeg']
+      })
+      const frontFileName = `${id}_front.${frontFile.extension()}`
+      yield frontFile.move(Helpers.storagePath(storagePath), frontFileName)
+      paymentDescription = {check_no: req.input('check_no'), account_no: req.input('account_no'), routing_no: req.input('routing_no'), back_file: backFile.uploadPath(), front_file: frontFile.uploadPath()}
+    } else {
+      paymentDescription = req.input('paymentDescription')
+    }
     console.log(paymentType)
+    yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentType, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
+    res.ok('ok')
   }
 
 }
