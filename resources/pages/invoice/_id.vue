@@ -160,7 +160,7 @@
 
           </div>
         </div>
-        <div class="columns">
+        <div class="columns" v-if="invoice.invoice_settled == false">
           <div class="column is-2"></div>
           <div class="column is-8 block has-text-centered">
             <a href="javascript:" class="button is-info is-large" @click="isCashOff=true">Cash</a>
@@ -168,6 +168,85 @@
             <a class="button is-info is-large" @click="isCreditOff=true">Credit</a>
           </div>
           <div class="column is-2"></div>
+        </div>
+        <div class="columns" v-if="invoice.payment_method == 'cash'">
+          <div class="column is-6 is-offset-3">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">
+                  Payment Method: Cash
+                </p>
+              </header>
+              <div class="card-content">
+                <div class="content">
+                    Total: <b>${{ total }}</b><br>
+                    Discount: <b>${{ parseInt(discount) }}</b><br>
+                    Shipping: <b>${{ parseInt(shipping) }}</b><hr>
+                    Amount: <b>${{total - parseInt(discount) + parseInt(shipping)}}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="columns" v-if="invoice.payment_method == 'check'">
+          <div class="column is-6 is-offset-3">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">
+                  Payment Method: Check 
+                </p>
+              </header>
+              <div class="card-content">
+                <div class="content">
+                  <b>Payment Method description</b><br>
+                  Check Number: <b>{{ check.check_no }}</b><br>
+                  Account Number: <b>{{ check.account_no }}</b><br>
+                  Routing Number: <b>{{ check.routing_no }}</b><br>
+                  Front Of Check:<br><img style="width:220px; height:100px" :src="check.check_front" alt=""><br>
+                  Back Of Check:<br><img style="width:220px; height:100px" :src="check.check_back" alt=""><br>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        <div class="columns" v-if="invoice.payment_method == 'card'">
+          <div class="column is-6 is-offset-3">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">
+                  Payment Method: Credit Card
+                </p>
+              </header>
+              <div class="card-content">
+                <div class="content">
+                  <b>Payment Method description</b><br>
+                  Amount: <b>${{total - parseInt(discount) + parseInt(shipping) }}</b><br>
+                  Shipping: <b>${{parseInt(shipping) }}</b><br>
+                  Exp Date: <b>{{ card.exp_date }}</b><br>
+                  Credit Card No: <b>{{ card.card_no }}</b><br>
+                  Credit Card Code: <b>{{ card.card_code }}</b><br> 
+                  Tax:  <b>{{ card.tax }}</b><br>
+                  <b>Bill to:</b><br>
+                  First Name: <b>{{ card.bill_first_name }}</b><br>
+                  Last Name: <b>{{ card.bill_last_name }}</b><br>
+                  Company: <b>{{ card.bill_company }}</b><br>
+                  Address: <b>{{ card.bill_address }}</b><br>
+                  City: <b>{{ card.bill_city }}</b><br>
+                  State: <b>{{ card.bill_state }}</b><br>
+                  Zip: <b>{{ card.bill_zip }}</b><br> 
+                  <b>Ship to:</b><br>
+                  First Name: <b>{{ card.ship_first_name }}</b><br>
+                  Last Name: <b>{{ card.ship_last_name }}</b><br>
+                  Company: <b>{{ card.ship_company }}</b><br>
+                  Address: <b>{{ card.ship_address }}</b><br>
+                  City: <b>{{ card.ship_city }}</b><br>
+                  State: <b>{{ card.ship_state }}</b><br>
+                  Zip: <b>{{ card.ship_zip }}</b><br>    
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="column is-1"></div>
@@ -250,92 +329,92 @@
     <div v-bind:class="{ modal: true, 'is-active': isCheckOff }">
       <div class="modal-background"></div>
       <div class="modal-content">
-      <form id="myForm" name="myForm">
-        <div class="box">
-          <h1 class="title">Pay Via Check</h1>
+        <form id="myForm" name="myForm">
           <div class="box">
-            <div class="columns invoice-label">
-              <div class="column is-1"></div>
-              <div class="column is-10">
-                <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Check Number</span>
+            <h1 class="title">Pay Via Check</h1>
+            <div class="box">
+              <div class="columns invoice-label">
+                <div class="column is-1"></div>
+                <div class="column is-10">
+                  <nav class="level">
+                    <div class="level-left">
+                      <div class="level-item">
+                        <span>Check Number</span>
+                      </div>
                     </div>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input class="input"  name="check_no" type="number" v-model="check.check_no" placeholder="Enter Check Number">
-                      <input class="input"  name="paymentType" type="hidden" value="check" placeholder="Enter Check Number">
-                      <input class="input"  name="id" type="hidden" v-bind:value="invoice._id" placeholder="Enter Check Number">
-                      </span>
+                    <div class="level-right">
+                      <div class="level-item">
+                        <span><input class="input"  name="check_no" type="number" v-model="check.check_no" placeholder="Enter Check Number">
+                        <input class="input"  name="paymentType" type="hidden" value="check" placeholder="Enter Check Number">
+                        <input class="input"  name="id" type="hidden" v-bind:value="invoice._id" placeholder="Enter Check Number">
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </nav><br>
-                <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Account Number</span>
+                  </nav><br>
+                  <nav class="level">
+                    <div class="level-left">
+                      <div class="level-item">
+                        <span>Account Number</span>
+                      </div>
                     </div>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input class="input" name="account_no" type="number" v-model="check.account_no" placeholder="Account Number"></span>
+                    <div class="level-right">
+                      <div class="level-item">
+                        <span><input class="input" name="account_no" type="number" v-model="check.account_no" placeholder="Account Number"></span>
+                      </div>
                     </div>
-                  </div>
-                </nav><br>
-                <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Routing Number</span>
+                  </nav><br>
+                  <nav class="level">
+                    <div class="level-left">
+                      <div class="level-item">
+                        <span>Routing Number</span>
+                      </div>
                     </div>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input class="input" id ="routing_no" name="routing_no" type="number" v-model="check.routing_no" placeholder="Routing Number"></span>
+                    <div class="level-right">
+                      <div class="level-item">
+                        <span><input class="input" id ="routing_no" name="routing_no" type="number" v-model="check.routing_no" placeholder="Routing Number"></span>
+                      </div>
                     </div>
-                  </div>
-                </nav><br>
-                <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Upload Front of Check</span>
+                  </nav><br>
+                  <nav class="level">
+                    <div class="level-left">
+                      <div class="level-item">
+                        <span>Upload Front of Check</span>
+                      </div>
                     </div>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input type="file" name="front_file" id="frontFile" @change="onFileChange"><br><img style="width:220px; height:100px" :src="check.check_front" alt=""></span>
+                    <div class="level-right">
+                      <div class="level-item">
+                        <span><input type="file" name="front_file" id="frontFile" @change="onFileChange"><br><img style="width:220px; height:100px" :src="check.check_front" alt=""></span>
+                      </div>
                     </div>
-                  </div>
-                </nav><br>
-                <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Upload Back of Check</span>
+                  </nav><br>
+                  <nav class="level">
+                    <div class="level-left">
+                      <div class="level-item">
+                        <span>Upload Back of Check</span>
+                      </div>
                     </div>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input type="file" name="back_file" id="fileInput" ref="fileInput" @change="onFileChange"><br><img style="width:220px; height:100px" :src="check.check_back" alt=""></span>
-                      <!-- <span><input type="file" @change="onFileChange"><br><img style="width:220px; height:100px" :src="check.check_back" alt=""><button @click="removeImage">Remove image</button></span> -->
+                    <div class="level-right">
+                      <div class="level-item">
+                        <span><input type="file" name="back_file" id="fileInput" ref="fileInput" @change="onFileChange"><br><img style="width:220px; height:100px" :src="check.check_back" alt=""></span>
+                        <!-- <span><input type="file" @change="onFileChange"><br><img style="width:220px; height:100px" :src="check.check_back" alt=""><button @click="removeImage">Remove image</button></span> -->
+                      </div>
                     </div>
-                  </div>
-                </nav><br>
+                  </nav><br>
+                </div>
+                <div class="column is-1"></div>
               </div>
-              <div class="column is-1"></div>
             </div>
-          </div>
-          <div class="level">
-            <div class="level-left is-6">
+            <div class="level">
+              <div class="level-left is-6">
 
-            </div>
-            <div class="level-right is-6 block">
-              <a class="button is-info" @click="payment('check')">Submit</a>
-              <a class="button is-info" @click="isCheckOff=false">Cancel</a>
+              </div>
+              <div class="level-right is-6 block">
+                <a class="button is-info" @click="payment('check')">Submit</a>
+                <a class="button is-info" @click="isCheckOff=false">Cancel</a>
+              </div>
             </div>
           </div>
-        </div>
-</form>
+        </form>
         <button class="modal-close" @click="isCheckOff=false"></button>
       </div>
     </div>
@@ -690,6 +769,8 @@ export default {
     let { data: products } = await axios.get('supplies')
     return {
       invoice: data,
+      invoice_settled:'',
+      payment_method:'',
       card: {
         card_no:'',
         tax:'',
