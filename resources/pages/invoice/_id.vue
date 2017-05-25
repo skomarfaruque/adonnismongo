@@ -790,7 +790,9 @@ watch: {
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
     },
     async payment (type) {
+      console.log(type)
       var paymentDescription ={}
+      var self = this
       if (type === 'card') {
         paymentDescription = this.card
       } else if (type === 'check') {
@@ -801,11 +803,21 @@ watch: {
         // formData.append('file', this.$refs.fileInput.files[0]);
         // paymentDescription = formData
          await this.axios.post(`invoice/payment`, formData)
+         self.isCheckOff = false
          return;
       } else {
         paymentDescription = {}
       }
-      await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, file: this.check.check_back_file })
+      let { result } = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, file: this.check.check_back_file })
+      if(type === 'cash'){
+        self.isCashOff = false
+      } else if (type === 'check'){
+        self.isCheckOff = false
+      } else {
+        self.isCreditOff = false
+      }
+
+
     },
     changePrice () {
         this.price = 0
