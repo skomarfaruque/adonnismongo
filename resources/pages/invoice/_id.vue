@@ -199,7 +199,7 @@
               <div class="card-content">
                 <div class="content">
                   <b>Payment Method description</b><br>
-                  Check Number: <b>{{ check.check_no }}</b><br>
+                  Check Number: <b>{{check.check_no}}</b><br>
                   Account Number: <b>{{ check.account_no }}</b><br>
                   Routing Number: <b>{{ check.routing_no }}</b><br>
                   Front Of Check:<br><img style="width:220px; height:100px" :src="check.check_front" alt=""><br>
@@ -885,6 +885,7 @@ watch: {
         // paymentDescription = formData
          await this.axios.post(`invoice/payment`, formData)
          self.isCheckOff = false
+         self.invoice.invoice_settled = true
          return;
       } else {
         paymentDescription = {}
@@ -892,10 +893,13 @@ watch: {
       let { result } = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, file: this.check.check_back_file })
       if(type === 'cash'){
         self.isCashOff = false
+        self.invoice.invoice_settled = true
       } else if (type === 'check'){
         self.isCheckOff = false
+        self.invoice.invoice_settled = true
       } else {
         self.isCreditOff = false
+        self.invoice.invoice_settled = true
       }
 
 
