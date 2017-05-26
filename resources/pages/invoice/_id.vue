@@ -193,7 +193,7 @@
             <div class="card">
               <header class="card-header">
                 <p class="card-header-title">
-                  Payment Method: Check 
+                  Payment Method: Check
                 </p>
               </header>
               <div class="card-content">
@@ -207,7 +207,7 @@
                 </div>
               </div>
             </div>
-            
+
           </div>
         </div>
         <div class="columns" v-if="invoice.payment_method == 'card'">
@@ -225,7 +225,7 @@
                   Shipping: <b>${{parseInt(shipping) }}</b><br>
                   Exp Date: <b>{{ card.exp_date }}</b><br>
                   Credit Card No: <b>{{ card.card_no }}</b><br>
-                  Credit Card Code: <b>{{ card.card_code }}</b><br> 
+                  Credit Card Code: <b>{{ card.card_code }}</b><br>
                   Tax:  <b>{{ card.tax }}</b><br>
                   <b>Bill to:</b><br>
                   First Name: <b>{{ card.bill_first_name }}</b><br>
@@ -234,7 +234,7 @@
                   Address: <b>{{ card.bill_address }}</b><br>
                   City: <b>{{ card.bill_city }}</b><br>
                   State: <b>{{ card.bill_state }}</b><br>
-                  Zip: <b>{{ card.bill_zip }}</b><br> 
+                  Zip: <b>{{ card.bill_zip }}</b><br>
                   <b>Ship to:</b><br>
                   First Name: <b>{{ card.ship_first_name }}</b><br>
                   Last Name: <b>{{ card.ship_last_name }}</b><br>
@@ -242,7 +242,7 @@
                   Address: <b>{{ card.ship_address }}</b><br>
                   City: <b>{{ card.ship_city }}</b><br>
                   State: <b>{{ card.ship_state }}</b><br>
-                  Zip: <b>{{ card.ship_zip }}</b><br>    
+                  Zip: <b>{{ card.ship_zip }}</b><br>
                 </div>
               </div>
             </div>
@@ -889,7 +889,7 @@ watch: {
       } else {
         paymentDescription = {}
       }
-      let { result } = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, file: this.check.check_back_file })
+      let { result } = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice })
       if(type === 'cash'){
         self.isCashOff = false
       } else if (type === 'check'){

@@ -25,6 +25,7 @@
     "adonis-mail-provider": "^2.0.2",
     "adonis-middleware": "^1.0.10",
     "adonis-websocket": "^1.0.2",
+    "authorizenet": "^1.0.3",
     "axios": "^0.15.3",
     "bulma": "^0.3.2",
     "cross-env": "^3.1.4",
