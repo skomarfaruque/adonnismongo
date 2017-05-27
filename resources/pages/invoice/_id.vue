@@ -888,26 +888,26 @@ watch: {
       var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice })
       if(type === 'cash'){
         if (result.data.error !=='no'){
-return this.$toasted.show(esult.data.error, { duration: 4500 })
+return this.$toasted.show(result.data.error, { duration: 4500 })
         return
         }
         self.isCashOff = false
-        self.invoice.invoice_settled = true
+        self.invoice.invoice_settled = false
       } else if (type === 'check'){
          if (result.data.error !=='no'){
            console.log(result.data.error)
-           return this.$toasted.show(esult.data.error, { duration: 4500 })
+           return this.$toasted.show(result.data.error, { duration: 4500 })
         return
         }
         self.isCheckOff = false
-        self.invoice.invoice_settled = true
+        self.invoice.invoice_settled = false
       } else {
          if (result.data.error !=='no'){
-           return this.$toasted.show(esult.data.error, { duration: 4500 })
-          return
+           console.log(result.data.error)
+           return this.$toasted.show(result.data.error, { duration: 4500 })
         }
         self.isCreditOff = false
-        self.invoice.invoice_settled = true
+        self.invoice.invoice_settled = false
       }
 
 

@@ -84,7 +84,169 @@ class InvoiceController {
     const id = req.input('id')
     yield Appointment.update({ _id: id }, { items }).exec()
   }
+  * newFunc (res, invoiceInfo, paymentDescription, paymentTypeApp){
+    var errorInfo = 'no'
+     var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
+      merchantAuthenticationType.setName('44ZAqX44dc')
+      merchantAuthenticationType.setTransactionKey('4G9CH39r9f2LgJ3V')
 
+      var creditCard = new ApiContracts.CreditCardType()
+      creditCard.setCardNumber('4242424242424242')
+      creditCard.setExpirationDate('0822')
+      creditCard.setCardCode('999')
+
+      var paymentType = new ApiContracts.PaymentType()
+      paymentType.setCreditCard(creditCard)
+
+      var orderDetails = new ApiContracts.OrderType()
+      orderDetails.setInvoiceNumber('demo id')
+      orderDetails.setDescription(invoiceInfo.description)
+
+    // var tax = new ApiContracts.ExtendedAmountType();
+    // tax.setAmount('4.26');
+    // tax.setName('level2 tax name');
+    // tax.setDescription('level2 tax');
+
+    // var duty = new ApiContracts.ExtendedAmountType();
+    // duty.setAmount('8.55');
+    // duty.setName('duty name');
+    // duty.setDescription('duty description');
+
+      var shipping = new ApiContracts.ExtendedAmountType()
+      shipping.setAmount('1')
+      shipping.setName('shipping name')
+      shipping.setDescription(invoiceInfo.description)
+
+      var billTo = new ApiContracts.CustomerAddressType()
+      billTo.setFirstName(paymentDescription.bill_first_name)
+      billTo.setLastName(paymentDescription.bill_last_name)
+      billTo.setCompany(paymentDescription.bill_company)
+      billTo.setAddress(paymentDescription.bill_address)
+      billTo.setCity(paymentDescription.bill_city)
+      billTo.setState(paymentDescription.bill_state)
+      billTo.setZip(paymentDescription.bill_zip)
+      billTo.setCountry(paymentDescription.bill_country)
+
+      var shipTo = new ApiContracts.CustomerAddressType()
+      shipTo.setFirstName(paymentDescription.ship_first_name)
+      shipTo.setLastName(paymentDescription.ship_last_name)
+      shipTo.setCompany(paymentDescription.ship_company)
+      shipTo.setAddress(paymentDescription.ship_address)
+      shipTo.setCity(paymentDescription.ship_city)
+      shipTo.setState(paymentDescription.ship_state)
+      shipTo.setZip(paymentDescription.ship_zip)
+      shipTo.setCountry(paymentDescription.ship_ountry)
+
+      var lineItemId1 = new ApiContracts.LineItemType()
+      lineItemId1.setItemId('1')
+      lineItemId1.setName('vase')
+      lineItemId1.setDescription('cannes logo')
+      lineItemId1.setQuantity('18')
+      lineItemId1.setUnitPrice(45.00)
+
+      var lineItemId2 = new ApiContracts.LineItemType();
+      lineItemId2.setItemId('2');
+      lineItemId2.setName('vase2');
+      lineItemId2.setDescription('cannes logo2');
+      lineItemId2.setQuantity('28');
+      lineItemId2.setUnitPrice('25.00');
+
+      var lineItemList = []
+      lineItemList.push(lineItemId1)
+      lineItemList.push(lineItemId2)
+
+      var lineItems = new ApiContracts.ArrayOfLineItem()
+      lineItems.setLineItem(lineItemList)
+
+      var userFieldA = new ApiContracts.UserField()
+      userFieldA.setName('A')
+      userFieldA.setValue('Aval')
+
+      var userFieldB = new ApiContracts.UserField()
+      userFieldB.setName('B')
+      userFieldB.setValue('Bval')
+
+      var userFieldList = []
+      userFieldList.push(userFieldA)
+      userFieldList.push(userFieldB)
+
+      var userFields = new ApiContracts.TransactionRequestType.UserFields()
+      userFields.setUserField(userFieldList)
+
+    // var transactionSetting1 = new ApiContracts.SettingType();
+    // transactionSetting1.setSettingName('testRequest');
+    // transactionSetting1.setSettingValue('s1val');
+
+    // var transactionSetting2 = new ApiContracts.SettingType();
+    // transactionSetting2.setSettingName('testRequest');
+    // transactionSetting2.setSettingValue('s2val');
+
+    // var transactionSettingList = [];
+    // transactionSettingList.push(transactionSetting1);
+    // transactionSettingList.push(transactionSetting2);
+
+    // var transactionSettings = new ApiContracts.ArrayOfSetting();
+    // transactionSettings.setSetting(transactionSettingList);
+
+      var transactionRequestType = new ApiContracts.TransactionRequestType()
+      transactionRequestType.setTransactionType(ApiContracts.TransactionTypeEnum.AUTHONLYTRANSACTION)
+      transactionRequestType.setPayment(paymentType)
+      transactionRequestType.setAmount(1)
+      transactionRequestType.setLineItems(lineItems)
+      transactionRequestType.setUserFields(userFields)
+      transactionRequestType.setOrder(orderDetails)
+    // transactionRequestType.setTax(tax);
+    // transactionRequestType.setDuty(duty);
+      transactionRequestType.setShipping(shipping)
+      transactionRequestType.setBillTo(billTo)
+      transactionRequestType.setShipTo(shipTo)
+    // transactionRequestType.setTransactionSettings(transactionSettings);
+
+      var createRequest = new ApiContracts.CreateTransactionRequest()
+      createRequest.setMerchantAuthentication(merchantAuthenticationType)
+      createRequest.setTransactionRequest(transactionRequestType)
+
+
+      var ctrl = new ApiControllers.CreateTransactionController(createRequest.getJSON())
+
+      ctrl.execute(function () {
+        var apiResponse = ctrl.getResponse()
+        var response = new ApiContracts.CreateTransactionResponse(apiResponse)
+        if (response != null) {
+          if (response.getMessages().getResultCode() === ApiContracts.MessageTypeEnum.OK) {
+            if (response.getTransactionResponse().getMessages() != null) {
+          //  console.log('success')
+let updatedInvoice = Appointment.update({ _id: invoiceInfo._id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
+      res.send({invoiceinfo: updatedInvoice, error: errorInfo})
+
+            }
+            else {
+            // console.log('Failed Transactionz.')
+              if (response.getTransactionResponse().getErrors() != null) {
+                errorInfo = response.getTransactionResponse().getErrors().getError()[0].getErrorText()
+              res.send({invoiceinfo: invoiceInfo, error: errorInfo})
+            }
+          }
+        }
+        else {
+          // console.log('Failed tran.')
+          if (response.getTransactionResponse() != null && response.getTransactionResponse().getErrors() != null) {
+            errorInfo = response.getTransactionResponse().getErrors().getError()[0].getErrorText()
+            res.send({invoiceinfo: invoiceInfo, error: errorInfo})
+          }
+          else {
+            errorInfo = response.getMessages().getMessage()[0].getText()
+            res.send({invoiceinfo: invoiceInfo, error: errorInfo})
+          }
+        }
+      }
+      else {
+        console.log('Null Response.')
+      }
+    })
+
+
+  }
   * payment (req, res) {
     const paymentTypeApp = req.input('paymentType')
     const invoiceInfo = req.input('invoice')
@@ -107,178 +269,21 @@ class InvoiceController {
       yield frontFile.move(Helpers.storagePath(storagePath), frontFileName)
       paymentDescription = {check_no: req.input('check_no'), account_no: req.input('account_no'), routing_no: req.input('routing_no'), back_file: backFile.uploadPath(), front_file: frontFile.uploadPath()}
     } else if (paymentTypeApp === 'card') {
-      paymentDescription = req.input('paymentDescription')
+      return yield this.newFunc(res, invoiceInfo, req.input('paymentDescription'), paymentTypeApp)
+
 // authorize start
-    var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
-    merchantAuthenticationType.setName('98')
-    merchantAuthenticationType.setTransactionKey('4G9CH39r9f2LgJ3V')
 
-    var creditCard = new ApiContracts.CreditCardType()
-    creditCard.setCardNumber('4242424242424242')
-    creditCard.setExpirationDate('0822')
-    creditCard.setCardCode('999')
-
-    var paymentType = new ApiContracts.PaymentType()
-    paymentType.setCreditCard(creditCard)
-
-    var orderDetails = new ApiContracts.OrderType()
-    orderDetails.setInvoiceNumber('demo id')
-    orderDetails.setDescription(invoiceInfo.description)
-
-    // var tax = new ApiContracts.ExtendedAmountType();
-    // tax.setAmount('4.26');
-    // tax.setName('level2 tax name');
-    // tax.setDescription('level2 tax');
-
-    // var duty = new ApiContracts.ExtendedAmountType();
-    // duty.setAmount('8.55');
-    // duty.setName('duty name');
-    // duty.setDescription('duty description');
-
-    var shipping = new ApiContracts.ExtendedAmountType()
-    shipping.setAmount('1')
-    shipping.setName('shipping name')
-    shipping.setDescription(invoiceInfo.description)
-
-    var billTo = new ApiContracts.CustomerAddressType()
-    billTo.setFirstName(paymentDescription.bill_first_name)
-    billTo.setLastName(paymentDescription.bill_last_name)
-    billTo.setCompany(paymentDescription.bill_company)
-    billTo.setAddress(paymentDescription.bill_address)
-    billTo.setCity(paymentDescription.bill_city)
-    billTo.setState(paymentDescription.bill_state)
-    billTo.setZip(paymentDescription.bill_zip)
-    billTo.setCountry(paymentDescription.bill_country)
-
-    var shipTo = new ApiContracts.CustomerAddressType()
-    shipTo.setFirstName(paymentDescription.ship_first_name)
-    shipTo.setLastName(paymentDescription.ship_last_name)
-    shipTo.setCompany(paymentDescription.ship_company)
-    shipTo.setAddress(paymentDescription.ship_address)
-    shipTo.setCity(paymentDescription.ship_city)
-    shipTo.setState(paymentDescription.ship_state)
-    shipTo.setZip(paymentDescription.ship_zip)
-    shipTo.setCountry(paymentDescription.ship_ountry)
-
-    var lineItemId1 = new ApiContracts.LineItemType()
-    lineItemId1.setItemId('1')
-    lineItemId1.setName('vase')
-    lineItemId1.setDescription('cannes logo')
-    lineItemId1.setQuantity('18')
-    lineItemId1.setUnitPrice(45.00)
-
-    var lineItemId2 = new ApiContracts.LineItemType();
-    lineItemId2.setItemId('2');
-    lineItemId2.setName('vase2');
-    lineItemId2.setDescription('cannes logo2');
-    lineItemId2.setQuantity('28');
-    lineItemId2.setUnitPrice('25.00');
-
-    var lineItemList = []
-    lineItemList.push(lineItemId1)
-    lineItemList.push(lineItemId2)
-
-    var lineItems = new ApiContracts.ArrayOfLineItem()
-    lineItems.setLineItem(lineItemList)
-
-    var userFieldA = new ApiContracts.UserField()
-    userFieldA.setName('A')
-    userFieldA.setValue('Aval')
-
-    var userFieldB = new ApiContracts.UserField()
-    userFieldB.setName('B')
-    userFieldB.setValue('Bval')
-
-    var userFieldList = []
-    userFieldList.push(userFieldA)
-    userFieldList.push(userFieldB)
-
-    var userFields = new ApiContracts.TransactionRequestType.UserFields()
-    userFields.setUserField(userFieldList)
-
-    // var transactionSetting1 = new ApiContracts.SettingType();
-    // transactionSetting1.setSettingName('testRequest');
-    // transactionSetting1.setSettingValue('s1val');
-
-    // var transactionSetting2 = new ApiContracts.SettingType();
-    // transactionSetting2.setSettingName('testRequest');
-    // transactionSetting2.setSettingValue('s2val');
-
-    // var transactionSettingList = [];
-    // transactionSettingList.push(transactionSetting1);
-    // transactionSettingList.push(transactionSetting2);
-
-    // var transactionSettings = new ApiContracts.ArrayOfSetting();
-    // transactionSettings.setSetting(transactionSettingList);
-
-    var transactionRequestType = new ApiContracts.TransactionRequestType()
-    transactionRequestType.setTransactionType(ApiContracts.TransactionTypeEnum.AUTHONLYTRANSACTION)
-    transactionRequestType.setPayment(paymentType)
-    transactionRequestType.setAmount(1)
-    transactionRequestType.setLineItems(lineItems)
-    transactionRequestType.setUserFields(userFields)
-    transactionRequestType.setOrder(orderDetails)
-    // transactionRequestType.setTax(tax);
-    // transactionRequestType.setDuty(duty);
-    transactionRequestType.setShipping(shipping)
-    transactionRequestType.setBillTo(billTo)
-    transactionRequestType.setShipTo(shipTo)
-    // transactionRequestType.setTransactionSettings(transactionSettings);
-
-    var createRequest = new ApiContracts.CreateTransactionRequest()
-    createRequest.setMerchantAuthentication(merchantAuthenticationType)
-    createRequest.setTransactionRequest(transactionRequestType)
-
-
-    var ctrl = new ApiControllers.CreateTransactionController(createRequest.getJSON())
-
-    ctrl.execute(function () {
-      var apiResponse = ctrl.getResponse()
-      var response = new ApiContracts.CreateTransactionResponse(apiResponse)
-      if (response != null) {
-        if (response.getMessages().getResultCode() === ApiContracts.MessageTypeEnum.OK) {
-          if (response.getTransactionResponse().getMessages() != null) {
-          //  console.log('success')
-            paymentDescription = req.input('paymentDescription')
-          }
-          else {
-            // console.log('Failed Transactionz.')
-            if (response.getTransactionResponse().getErrors() != null) {
-              errorInfo = response.getTransactionResponse().getErrors().getError()[0].getErrorText()
-              // res.send({invoiceinfo: invoiceInfo, error: errorInfo})
-            }
-          }
-        }
-        else {
-          // console.log('Failed tran.')
-          if (response.getTransactionResponse() != null && response.getTransactionResponse().getErrors() != null) {
-            errorInfo = response.getTransactionResponse().getErrors().getError()[0].getErrorText()
-          }
-          else {
-            errorInfo = response.getMessages().getMessage()[0].getText()
-            //  res.send({invoiceinfo: invoiceInfo, error: errorInfo})
-          }
-
-
-        }
-      }
-      else {
-        console.log('Null Response.')
-      }
-
-      // callback(response)
-    })
-console.log(errorInfo)
     } else {
       paymentDescription = req.input('paymentDescription')
     }
-if(errorInfo === 'no'){
-let updatedInvoice = yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
-res.send({invoiceinfo: updatedInvoice, error: errorInfo})
-} else {
-console.log(errorInfo)
-res.send({invoiceinfo: invoiceInfo, error: errorInfo})
-}
+    // console.log(errorInfo)
+    if (errorInfo === 'no') {
+      let updatedInvoice = yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
+      res.send({invoiceinfo: updatedInvoice, error: errorInfo})
+    } else {
+      // console.log(errorInfo)
+      res.send({invoiceinfo: invoiceInfo, error: errorInfo})
+    }
 
 
 
