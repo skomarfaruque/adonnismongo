@@ -223,26 +223,26 @@
                   <b>Payment Method description</b><br>
                   Amount: <b>${{total - parseInt(discount) + parseInt(shipping) }}</b><br>
                   Shipping: <b>${{parseInt(shipping) }}</b><br>
-                  Exp Date: <b>{{ card.exp_date }}</b><br>
-                  Credit Card No: <b>{{ card.card_no }}</b><br>
-                  Credit Card Code: <b>{{ card.card_code }}</b><br>
-                  Tax:  <b>{{ card.tax }}</b><br>
+                  Exp Date: <b>{{ invoice.payment_method_desc.exp_date }}</b><br>
+                  Credit Card No: <b>{{ invoice.payment_method_desc.card_no }}</b><br>
+                  Credit Card Code: <b>{{ invoice.payment_method_desc.card_code }}</b><br>
+                  Tax:  <b>{{ invoice.payment_method_desc.tax }}</b><br>
                   <b>Bill to:</b><br>
-                  First Name: <b>{{ card.bill_first_name }}</b><br>
-                  Last Name: <b>{{ card.bill_last_name }}</b><br>
-                  Company: <b>{{ card.bill_company }}</b><br>
-                  Address: <b>{{ card.bill_address }}</b><br>
-                  City: <b>{{ card.bill_city }}</b><br>
-                  State: <b>{{ card.bill_state }}</b><br>
-                  Zip: <b>{{ card.bill_zip }}</b><br>
+                  First Name: <b>{{ invoice.payment_method_desc.bill_first_name }}</b><br>
+                  Last Name: <b>{{ invoice.payment_method_desc.bill_last_name }}</b><br>
+                  Company: <b>{{ invoice.payment_method_desc.bill_company }}</b><br>
+                  Address: <b>{{ invoice.payment_method_desc.bill_address }}</b><br>
+                  City: <b>{{ invoice.payment_method_desc.bill_city }}</b><br>
+                  State: <b>{{ invoice.payment_method_desc.bill_state }}</b><br>
+                  Zip: <b>{{ invoice.payment_method_desc.bill_zip }}</b><br>
                   <b>Ship to:</b><br>
-                  First Name: <b>{{ card.ship_first_name }}</b><br>
-                  Last Name: <b>{{ card.ship_last_name }}</b><br>
-                  Company: <b>{{ card.ship_company }}</b><br>
-                  Address: <b>{{ card.ship_address }}</b><br>
-                  City: <b>{{ card.ship_city }}</b><br>
-                  State: <b>{{ card.ship_state }}</b><br>
-                  Zip: <b>{{ card.ship_zip }}</b><br>
+                  First Name: <b>{{ invoice.payment_method_desc.ship_first_name }}</b><br>
+                  Last Name: <b>{{ invoice.payment_method_desc.ship_last_name }}</b><br>
+                  Company: <b>{{ invoice.payment_method_desc.ship_company }}</b><br>
+                  Address: <b>{{ invoice.payment_method_desc.ship_address }}</b><br>
+                  City: <b>{{ invoice.payment_method_desc.ship_city }}</b><br>
+                  State: <b>{{ invoice.payment_method_desc.ship_state }}</b><br>
+                  Zip: <b>{{ invoice.payment_method_desc.ship_zip }}</b><br>
                 </div>
               </div>
             </div>
