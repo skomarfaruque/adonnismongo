@@ -160,7 +160,7 @@
 
           </div>
         </div>
-        <div class="columns" v-if="invoice.invoice_settled == false">
+        <div class="columns" v-if="invoice.invoice_settled === false">
           <div class="column is-2"></div>
           <div class="column is-8 block has-text-centered">
             <a href="javascript:" class="button is-info is-large" @click="isCashOff=true">Cash</a>
@@ -169,7 +169,7 @@
           </div>
           <div class="column is-2"></div>
         </div>
-        <div class="columns" v-if="invoice.payment_method == 'cash'">
+        <div class="columns" v-if="invoice.payment_method === 'cash'">
           <div class="column is-6 is-offset-3">
             <div class="card">
               <header class="card-header">
@@ -188,7 +188,7 @@
             </div>
           </div>
         </div>
-        <div class="columns" v-if="invoice.payment_method == 'check'">
+        <div class="columns" v-if="invoice.payment_method === 'check'">
           <div class="column is-6 is-offset-3">
             <div class="card">
               <header class="card-header">
@@ -887,27 +887,28 @@ watch: {
       }
       var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice })
       if(type === 'cash'){
+        console.log(result.data.invoiceinfo)
         if (result.data.error !=='no'){
-return this.$toasted.show(result.data.error, { duration: 4500 })
-        return
+        return this.$toasted.show(result.data.error, { duration: 4500 })
+        } else {
+          self.isCashOff = false
+          self.invoice = result.data.invoiceinfo
         }
-        self.isCashOff = false
-        self.invoice.invoice_settled = false
+
       } else if (type === 'check'){
          if (result.data.error !=='no'){
-           console.log(result.data.error)
            return this.$toasted.show(result.data.error, { duration: 4500 })
-        return
-        }
+        }else {
         self.isCheckOff = false
-        self.invoice.invoice_settled = false
+        self.invoice = result.data.invoiceinfo
+        }
       } else {
          if (result.data.error !=='no'){
-           console.log(result.data.error)
            return this.$toasted.show(result.data.error, { duration: 4500 })
+        }else {
+          self.isCreditOff = false
+          self.invoice = result.data.invoiceinfo
         }
-        self.isCreditOff = false
-        self.invoice.invoice_settled = false
       }
 
 

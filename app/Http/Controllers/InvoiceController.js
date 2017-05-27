@@ -216,7 +216,7 @@ class InvoiceController {
           if (response.getMessages().getResultCode() === ApiContracts.MessageTypeEnum.OK) {
             if (response.getTransactionResponse().getMessages() != null) {
           //  console.log('success')
-let updatedInvoice = Appointment.update({ _id: invoiceInfo._id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
+let updatedInvoice = Appointment.findOneAndUpdate({ _id: invoiceInfo._id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
       res.send({invoiceinfo: updatedInvoice, error: errorInfo})
 
             }
@@ -270,18 +270,14 @@ let updatedInvoice = Appointment.update({ _id: invoiceInfo._id }, { $set: { invo
       paymentDescription = {check_no: req.input('check_no'), account_no: req.input('account_no'), routing_no: req.input('routing_no'), back_file: backFile.uploadPath(), front_file: frontFile.uploadPath()}
     } else if (paymentTypeApp === 'card') {
       return yield this.newFunc(res, invoiceInfo, req.input('paymentDescription'), paymentTypeApp)
-
-// authorize start
-
     } else {
       paymentDescription = req.input('paymentDescription')
     }
-    // console.log(errorInfo)
     if (errorInfo === 'no') {
-      let updatedInvoice = yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
+      let updatedInvoice = yield Appointment.findOneAndUpdate({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
+      console.log(updatedInvoice)
       res.send({invoiceinfo: updatedInvoice, error: errorInfo})
     } else {
-      // console.log(errorInfo)
       res.send({invoiceinfo: invoiceInfo, error: errorInfo})
     }
 
