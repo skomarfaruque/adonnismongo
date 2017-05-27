@@ -86,21 +86,21 @@ class InvoiceController {
   }
   * newFunc (res, invoiceInfo, paymentDescription, paymentTypeApp){
     var errorInfo = 'no'
-     var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
-      merchantAuthenticationType.setName('44ZAqX44dc')
-      merchantAuthenticationType.setTransactionKey('4G9CH39r9f2LgJ3V')
+    var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
+    merchantAuthenticationType.setName('44ZAqX44dc')
+    merchantAuthenticationType.setTransactionKey('4G9CH39r9f2LgJ3V')
 
-      var creditCard = new ApiContracts.CreditCardType()
-      creditCard.setCardNumber('4242424242424242')
-      creditCard.setExpirationDate('0822')
-      creditCard.setCardCode('999')
+    var creditCard = new ApiContracts.CreditCardType()
+    creditCard.setCardNumber('4242424242424242')
+    creditCard.setExpirationDate('0822')
+    creditCard.setCardCode('999')
 
-      var paymentType = new ApiContracts.PaymentType()
-      paymentType.setCreditCard(creditCard)
+    var paymentType = new ApiContracts.PaymentType()
+    paymentType.setCreditCard(creditCard)
 
-      var orderDetails = new ApiContracts.OrderType()
-      orderDetails.setInvoiceNumber('demo id')
-      orderDetails.setDescription(invoiceInfo.description)
+    var orderDetails = new ApiContracts.OrderType()
+    orderDetails.setInvoiceNumber('demo id')
+    orderDetails.setDescription(invoiceInfo.description)
 
     // var tax = new ApiContracts.ExtendedAmountType();
     // tax.setAmount('4.26');
@@ -112,48 +112,48 @@ class InvoiceController {
     // duty.setName('duty name');
     // duty.setDescription('duty description');
 
-      var shipping = new ApiContracts.ExtendedAmountType()
-      shipping.setAmount('1')
-      shipping.setName('shipping name')
-      shipping.setDescription(invoiceInfo.description)
+    var shipping = new ApiContracts.ExtendedAmountType()
+    shipping.setAmount('1')
+    shipping.setName('shipping name')
+    shipping.setDescription(invoiceInfo.description)
 
-      var billTo = new ApiContracts.CustomerAddressType()
-      billTo.setFirstName(paymentDescription.bill_first_name)
-      billTo.setLastName(paymentDescription.bill_last_name)
-      billTo.setCompany(paymentDescription.bill_company)
-      billTo.setAddress(paymentDescription.bill_address)
-      billTo.setCity(paymentDescription.bill_city)
-      billTo.setState(paymentDescription.bill_state)
-      billTo.setZip(paymentDescription.bill_zip)
-      billTo.setCountry(paymentDescription.bill_country)
+    var billTo = new ApiContracts.CustomerAddressType()
+    billTo.setFirstName(paymentDescription.bill_first_name)
+    billTo.setLastName(paymentDescription.bill_last_name)
+    billTo.setCompany(paymentDescription.bill_company)
+    billTo.setAddress(paymentDescription.bill_address)
+    billTo.setCity(paymentDescription.bill_city)
+    billTo.setState(paymentDescription.bill_state)
+    billTo.setZip(paymentDescription.bill_zip)
+    billTo.setCountry(paymentDescription.bill_country)
 
-      var shipTo = new ApiContracts.CustomerAddressType()
-      shipTo.setFirstName(paymentDescription.ship_first_name)
-      shipTo.setLastName(paymentDescription.ship_last_name)
-      shipTo.setCompany(paymentDescription.ship_company)
-      shipTo.setAddress(paymentDescription.ship_address)
-      shipTo.setCity(paymentDescription.ship_city)
-      shipTo.setState(paymentDescription.ship_state)
-      shipTo.setZip(paymentDescription.ship_zip)
-      shipTo.setCountry(paymentDescription.ship_ountry)
+    var shipTo = new ApiContracts.CustomerAddressType()
+    shipTo.setFirstName(paymentDescription.ship_first_name)
+    shipTo.setLastName(paymentDescription.ship_last_name)
+    shipTo.setCompany(paymentDescription.ship_company)
+    shipTo.setAddress(paymentDescription.ship_address)
+    shipTo.setCity(paymentDescription.ship_city)
+    shipTo.setState(paymentDescription.ship_state)
+    shipTo.setZip(paymentDescription.ship_zip)
+    shipTo.setCountry(paymentDescription.ship_ountry)
 
-      var lineItemId1 = new ApiContracts.LineItemType()
-      lineItemId1.setItemId('1')
-      lineItemId1.setName('vase')
-      lineItemId1.setDescription('cannes logo')
-      lineItemId1.setQuantity('18')
-      lineItemId1.setUnitPrice(45.00)
+    var lineItemId1 = new ApiContracts.LineItemType()
+    lineItemId1.setItemId('1')
+    lineItemId1.setName('vase')
+    lineItemId1.setDescription('cannes logo')
+    lineItemId1.setQuantity('18')
+    lineItemId1.setUnitPrice(45.00)
 
-      var lineItemId2 = new ApiContracts.LineItemType();
-      lineItemId2.setItemId('2');
-      lineItemId2.setName('vase2');
-      lineItemId2.setDescription('cannes logo2');
-      lineItemId2.setQuantity('28');
-      lineItemId2.setUnitPrice('25.00');
+    var lineItemId2 = new ApiContracts.LineItemType();
+    lineItemId2.setItemId('2');
+    lineItemId2.setName('vase2');
+    lineItemId2.setDescription('cannes logo2');
+    lineItemId2.setQuantity('28');
+    lineItemId2.setUnitPrice('25.00');
 
-      var lineItemList = []
-      lineItemList.push(lineItemId1)
-      lineItemList.push(lineItemId2)
+    var lineItemList = []
+    lineItemList.push(lineItemId1)
+    lineItemList.push(lineItemId2)
 
       var lineItems = new ApiContracts.ArrayOfLineItem()
       lineItems.setLineItem(lineItemList)
@@ -260,14 +260,14 @@ class InvoiceController {
         allowedExtensions: ['jpg', 'png', 'jpeg']
       })
       const fileName = `${id}_back.${backFile.extension()}`
-      yield backFile.move(Helpers.storagePath(storagePath), fileName)
+      yield backFile.move(Helpers.publicPath(storagePath), fileName)
       const frontFile = req.file('front_file', {
         maxSize: '2mb',
         allowedExtensions: ['jpg', 'png', 'jpeg']
       })
       const frontFileName = `${id}_front.${frontFile.extension()}`
-      yield frontFile.move(Helpers.storagePath(storagePath), frontFileName)
-      paymentDescription = {check_no: req.input('check_no'), account_no: req.input('account_no'), routing_no: req.input('routing_no'), back_file: backFile.uploadPath(), front_file: frontFile.uploadPath()}
+      yield frontFile.move(Helpers.publicPath(storagePath), frontFileName)
+      paymentDescription = {check_no: req.input('check_no'), account_no: req.input('account_no'), routing_no: req.input('routing_no'), back_file: backFile.uploadName(), front_file: frontFile.uploadName()}
     } else if (paymentTypeApp === 'card') {
       return yield this.newFunc(res, invoiceInfo, req.input('paymentDescription'), paymentTypeApp)
     } else {

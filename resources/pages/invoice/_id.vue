@@ -202,8 +202,8 @@
                   Check Number: <b>{{invoice.payment_method_desc.check_no}}</b><br>
                   Account Number: <b>{{ invoice.payment_method_desc.account_no }}</b><br>
                   Routing Number: <b>{{ invoice.payment_method_desc.routing_no }}</b><br>
-                  Front Of Check:<br><img style="width:220px; height:100px" :src="invoice.payment_method_desc.front_file" alt=""><br>
-                  Back Of Check:<br><img style="width:220px; height:100px" :src="invoice.payment_method_desc.back_file" alt=""><br>
+                  Front Of Check:<br><img style="width:220px; height:100px" :src="`/check_doc/${invoice.payment_method_desc.front_file}`" alt=""><br>
+                  Back Of Check:<br><img style="width:220px; height:100px" :src="`/check_doc/${invoice.payment_method_desc.back_file}`" alt=""><br>
                 </div>
               </div>
             </div>
