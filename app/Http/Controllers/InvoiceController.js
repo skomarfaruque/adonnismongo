@@ -88,8 +88,8 @@ class InvoiceController {
   * payment (req, res) {
     const paymentTypeApp = req.input('paymentType')
     const invoiceInfo = req.input('invoice')
-    console.log(invoiceInfo)
     const id = req.input('id')
+    var errorInfo = 'no'
     let paymentDescription = {}
     if (paymentTypeApp === 'check') {
       let storagePath = 'check_doc'
@@ -106,13 +106,11 @@ class InvoiceController {
       const frontFileName = `${id}_front.${frontFile.extension()}`
       yield frontFile.move(Helpers.storagePath(storagePath), frontFileName)
       paymentDescription = {check_no: req.input('check_no'), account_no: req.input('account_no'), routing_no: req.input('routing_no'), back_file: backFile.uploadPath(), front_file: frontFile.uploadPath()}
-    } else {
+    } else if (paymentTypeApp === 'card') {
       paymentDescription = req.input('paymentDescription')
-    }
-    yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
-    // authorize start
+// authorize start
     var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
-    merchantAuthenticationType.setName('44ZAqX44dc')
+    merchantAuthenticationType.setName('98')
     merchantAuthenticationType.setTransactionKey('4G9CH39r9f2LgJ3V')
 
     var creditCard = new ApiContracts.CreditCardType()
@@ -231,44 +229,37 @@ class InvoiceController {
     createRequest.setMerchantAuthentication(merchantAuthenticationType)
     createRequest.setTransactionRequest(transactionRequestType)
 
-	//pretty print request
-    console.log(JSON.stringify(createRequest.getJSON(), null, 2))
 
     var ctrl = new ApiControllers.CreateTransactionController(createRequest.getJSON())
 
     ctrl.execute(function () {
       var apiResponse = ctrl.getResponse()
       var response = new ApiContracts.CreateTransactionResponse(apiResponse)
-		//pretty print response
-      console.log(JSON.stringify(response, null, 2))
-
       if (response != null) {
         if (response.getMessages().getResultCode() === ApiContracts.MessageTypeEnum.OK) {
           if (response.getTransactionResponse().getMessages() != null) {
-            console.log('Successfully created transaction with Transaction ID: ' + response.getTransactionResponse().getTransId())
-            console.log('Response Code: ' + response.getTransactionResponse().getResponseCode())
-            console.log('Message Code: ' + response.getTransactionResponse().getMessages().getMessage()[0].getCode())
-            console.log('Description: ' + response.getTransactionResponse().getMessages().getMessage()[0].getDescription())
+          //  console.log('success')
+            paymentDescription = req.input('paymentDescription')
           }
           else {
-            console.log('Failed Transaction.')
+            // console.log('Failed Transactionz.')
             if (response.getTransactionResponse().getErrors() != null) {
-              console.log('Error Code: ' + response.getTransactionResponse().getErrors().getError()[0].getErrorCode())
-              console.log('Error message: ' + response.getTransactionResponse().getErrors().getError()[0].getErrorText())
+              errorInfo = response.getTransactionResponse().getErrors().getError()[0].getErrorText()
+              // res.send({invoiceinfo: invoiceInfo, error: errorInfo})
             }
           }
         }
         else {
-          console.log('Failed Transaction.')
+          // console.log('Failed tran.')
           if (response.getTransactionResponse() != null && response.getTransactionResponse().getErrors() != null) {
-
-            console.log('Error Code: ' + response.getTransactionResponse().getErrors().getError()[0].getErrorCode())
-            console.log('Error message: ' + response.getTransactionResponse().getErrors().getError()[0].getErrorText())
+            errorInfo = response.getTransactionResponse().getErrors().getError()[0].getErrorText()
           }
           else {
-            console.log('Error Code: ' + response.getMessages().getMessage()[0].getCode())
-            console.log('Error message: ' + response.getMessages().getMessage()[0].getText())
+            errorInfo = response.getMessages().getMessage()[0].getText()
+            //  res.send({invoiceinfo: invoiceInfo, error: errorInfo})
           }
+
+
         }
       }
       else {
@@ -277,7 +268,20 @@ class InvoiceController {
 
       // callback(response)
     })
-    res.ok('ok')
+console.log(errorInfo)
+    } else {
+      paymentDescription = req.input('paymentDescription')
+    }
+if(errorInfo === 'no'){
+let updatedInvoice = yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
+res.send({invoiceinfo: updatedInvoice, error: errorInfo})
+} else {
+console.log(errorInfo)
+res.send({invoiceinfo: invoiceInfo, error: errorInfo})
+}
+
+
+
   }
 
 }

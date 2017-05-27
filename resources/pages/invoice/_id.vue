@@ -871,7 +871,6 @@ watch: {
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
     },
     async payment (type) {
-      console.log(type)
       var paymentDescription ={}
       var self = this
       if (type === 'card') {
@@ -879,22 +878,31 @@ watch: {
       } else if (type === 'check') {
         var myForm = document.getElementById('myForm');
         let formData = new FormData(myForm);
-        console.log(formData)
-        // let formData = new FormData();
-        // formData.append('file', this.$refs.fileInput.files[0]);
-        // paymentDescription = formData
          await this.axios.post(`invoice/payment`, formData)
          self.isCheckOff = false
          return;
       } else {
         paymentDescription = {}
       }
-      let { result } = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice })
+      var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice })
       if(type === 'cash'){
+        if (result.data.error !=='no'){
+return this.$toasted.show(esult.data.error, { duration: 4500 })
+        return
+        }
         self.isCashOff = false
       } else if (type === 'check'){
+         if (result.data.error !=='no'){
+           console.log(result.data.error)
+           return this.$toasted.show(esult.data.error, { duration: 4500 })
+        return
+        }
         self.isCheckOff = false
       } else {
+         if (result.data.error !=='no'){
+           return this.$toasted.show(esult.data.error, { duration: 4500 })
+          return
+        }
         self.isCreditOff = false
       }
 
