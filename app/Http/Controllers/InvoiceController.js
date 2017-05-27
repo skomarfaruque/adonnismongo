@@ -216,15 +216,15 @@ class InvoiceController {
           if (response.getMessages().getResultCode() === ApiContracts.MessageTypeEnum.OK) {
             if (response.getTransactionResponse().getMessages() != null) {
           //  console.log('success')
-let updatedInvoice = Appointment.findOneAndUpdate({ _id: invoiceInfo._id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
-      res.send({invoiceinfo: updatedInvoice, error: errorInfo})
-
+              Appointment.update({ _id: invoiceInfo._id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
+              let updatedInvoice = Appointment.findOne({ _id: invoiceInfo._id }).exec()
+              console.log(updatedInvoice)
+              res.send({invoiceinfo: updatedInvoice, error: errorInfo})
             }
             else {
-            // console.log('Failed Transactionz.')
               if (response.getTransactionResponse().getErrors() != null) {
                 errorInfo = response.getTransactionResponse().getErrors().getError()[0].getErrorText()
-              res.send({invoiceinfo: invoiceInfo, error: errorInfo})
+                res.send({invoiceinfo: invoiceInfo, error: errorInfo})
             }
           }
         }
@@ -274,8 +274,8 @@ let updatedInvoice = Appointment.findOneAndUpdate({ _id: invoiceInfo._id }, { $s
       paymentDescription = req.input('paymentDescription')
     }
     if (errorInfo === 'no') {
-      let updatedInvoice = yield Appointment.findOneAndUpdate({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
-      console.log(updatedInvoice)
+      yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
+      let updatedInvoice = yield Appointment.findOne({ _id: id }).exec()
       res.send({invoiceinfo: updatedInvoice, error: errorInfo})
     } else {
       res.send({invoiceinfo: invoiceInfo, error: errorInfo})

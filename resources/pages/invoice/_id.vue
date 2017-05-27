@@ -199,18 +199,18 @@
               <div class="card-content">
                 <div class="content">
                   <b>Payment Method description</b><br>
-                  Check Number: <b>{{check.check_no}}</b><br>
-                  Account Number: <b>{{ check.account_no }}</b><br>
-                  Routing Number: <b>{{ check.routing_no }}</b><br>
-                  Front Of Check:<br><img style="width:220px; height:100px" :src="check.check_front" alt=""><br>
-                  Back Of Check:<br><img style="width:220px; height:100px" :src="check.check_back" alt=""><br>
+                  Check Number: <b>{{invoice.payment_method_desc.check_no}}</b><br>
+                  Account Number: <b>{{ invoice.payment_method_desc.account_no }}</b><br>
+                  Routing Number: <b>{{ invoice.payment_method_desc.routing_no }}</b><br>
+                  Front Of Check:<br><img style="width:220px; height:100px" :src="invoice.payment_method_desc.front_file" alt=""><br>
+                  Back Of Check:<br><img style="width:220px; height:100px" :src="invoice.payment_method_desc.back_file" alt=""><br>
                 </div>
               </div>
             </div>
 
           </div>
         </div>
-        <div class="columns" v-if="invoice.payment_method == 'card'">
+        <div class="columns" v-if="invoice.payment_method === 'card'">
           <div class="column is-6 is-offset-3">
             <div class="card">
               <header class="card-header">
@@ -878,16 +878,18 @@ watch: {
       } else if (type === 'check') {
         var myForm = document.getElementById('myForm');
         let formData = new FormData(myForm);
-         await this.axios.post(`invoice/payment`, formData)
-         self.isCheckOff = false
-         self.invoice.invoice_settled = true
-         return;
+         let newinfo = await this.axios.post(`invoice/payment`, formData)
+         if (newinfo.data.error !=='no'){
+           return this.$toasted.show(newinfo.data.error, { duration: 4500 })
+        }else {
+        self.isCheckOff = false
+        self.invoice = newinfo.data.invoiceinfo
+        }
       } else {
         paymentDescription = {}
       }
       var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice })
       if(type === 'cash'){
-        console.log(result.data.invoiceinfo)
         if (result.data.error !=='no'){
         return this.$toasted.show(result.data.error, { duration: 4500 })
         } else {
@@ -896,6 +898,7 @@ watch: {
         }
 
       } else if (type === 'check'){
+console.log(invoiceinfo)
          if (result.data.error !=='no'){
            return this.$toasted.show(result.data.error, { duration: 4500 })
         }else {
@@ -907,7 +910,7 @@ watch: {
            return this.$toasted.show(result.data.error, { duration: 4500 })
         }else {
           self.isCreditOff = false
-          self.invoice = result.data.invoiceinfo
+          location.reload()
         }
       }
 
