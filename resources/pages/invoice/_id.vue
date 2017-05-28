@@ -117,7 +117,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Total</label></td>
-              <td>${{total - parseInt(discount) + parseInt(shipping)}} * {{totalTax / 100}}</td>
+              <td>${{total - parseInt(discount) + parseInt(shipping) * totalTax / 100}}</td>
             </tr>
           </tfoot>
         </table>
