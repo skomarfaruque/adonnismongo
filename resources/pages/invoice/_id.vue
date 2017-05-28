@@ -128,14 +128,14 @@
       <div class="column is-1"></div>
       <div class="column is-10">
         <div class="columns">
-          <div class="column is-6">
+          <div class="column is-4">
             <div class="columns">
 
-              <div class="column is-2">
+              <div class="column is-4">
                 <label class="label">Shipping</label>
 
               </div>
-              <div class="column is-5">
+              <div class="column is-8">
                 <input class="input" type="number" min="0" v-model="shipping">
               </div>
               <!--<div class="column is-2">
@@ -143,19 +143,30 @@
               </div>-->
             </div>
           </div>
-          <div class="column is-6">
+          <div class="column is-4">
             <div class="columns">
 
-              <div class="column is-3">
+              <div class="column is-4">
                 <label class="label">Discount</label>
 
               </div>
-              <div class="column is-5">
+              <div class="column is-8">
                 <input class="input" type="number" min="0" v-model="discount">
               </div>
               <!--<div class="column is-2">
                 <a class="button">Apply</a>
               </div>-->
+            </div>
+
+          </div>
+          <div class="column is-4">
+            <div class="columns">
+              <div class="column is-4">
+                <label class="label">Tax</label>
+              </div>
+              <div class="column is-8">
+                <input class="input" type="number" min="0">
+              </div>
             </div>
 
           </div>
