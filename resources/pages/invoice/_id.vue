@@ -165,7 +165,7 @@
           </div>
           <div class="column is-4">
             <div class="columns">
-              <div class="column is-2">
+              <div class="column is-3">
                 <label class="label">Tax</label>
               </div>
               <div class="column is-8">
@@ -175,7 +175,14 @@
                 %
               </div>
             </div>
-
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-2">
+            <label class="label">Add Comment</label>
+          </div>
+          <div class="column is-10">
+            <textarea class="textarea"></textarea>
           </div>
         </div>
         <div class="columns" v-if="invoice.invoice_settled === false">
