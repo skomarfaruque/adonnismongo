@@ -219,7 +219,7 @@ class InvoiceController {
         if (response.getMessages().getResultCode() === ApiContracts.MessageTypeEnum.OK) {
           if (response.getTransactionResponse().getMessages() != null) {
           //  console.log('success')
-            Appointment.update({ _id: invoiceInfo._id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
+            Appointment.update({ _id: invoiceInfo._id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date(), invoice_comment: invoiceInfo.invoice_comment } }).exec()
             let updatedInvoice = Appointment.findOne({ _id: invoiceInfo._id }).exec()
             res.send({invoiceinfo: updatedInvoice, error: errorInfo})
           } else {
@@ -246,6 +246,10 @@ class InvoiceController {
   * payment (req, res) {
     const paymentTypeApp = req.input('paymentType')
     const invoiceInfo = req.input('invoice')
+    let invoiceComment = ''
+    if (paymentTypeApp !== 'check') {
+      invoiceComment = invoiceInfo.invoice_comment
+    }
     const id = req.input('id')
     var errorInfo = 'no'
     let paymentDescription = {}
@@ -264,13 +268,14 @@ class InvoiceController {
       const frontFileName = `${id}_front.${frontFile.extension()}`
       yield frontFile.move(Helpers.publicPath(storagePath), frontFileName)
       paymentDescription = {check_no: req.input('check_no'), account_no: req.input('account_no'), routing_no: req.input('routing_no'), back_file: backFile.uploadName(), front_file: frontFile.uploadName()}
+      invoiceComment = req.input('invoiceComment')
     } else if (paymentTypeApp === 'card') {
       return yield this.newFunc(res, invoiceInfo, req.input('paymentDescription'), paymentTypeApp)
     } else {
       paymentDescription = req.input('paymentDescription')
     }
     if (errorInfo === 'no') {
-      yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date(), invoice_comment: req.input('invoice_comment') } }).exec()
+      yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date(), invoice_comment: invoiceComment } }).exec()
       let updatedInvoice = yield Appointment.findOne({ _id: id }).exec()
       res.send({invoiceinfo: updatedInvoice, error: errorInfo})
     } else {

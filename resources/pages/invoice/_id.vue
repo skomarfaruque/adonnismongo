@@ -179,10 +179,10 @@
         </div>
         <div class="columns">
           <div class="column is-2">
-            <label class="label">Add Comment</label>
+            <label class="label">Comment</label>
           </div>
           <div class="column is-10">
-            <textarea class="textarea"></textarea>
+            <textarea class="textarea" v-model="invoice.invoice_comment">{{ invoice.invoice_comment }}</textarea>
           </div>
         </div>
         <div class="columns" v-if="invoice.invoice_settled === false">
@@ -372,6 +372,7 @@
                         <span><input class="input"  name="check_no" type="number" v-model="check.check_no" placeholder="Enter Check Number">
                         <input class="input"  name="paymentType" type="hidden" value="check" placeholder="Enter Check Number">
                         <input class="input"  name="id" type="hidden" v-bind:value="invoice._id" placeholder="Enter Check Number">
+                        <input class="input"  name="invoiceComment" type="hidden" v-model="invoice.invoice_comment" placeholder="Enter Check Number">
                         </span>
                       </div>
                     </div>
@@ -797,12 +798,11 @@ export default {
     return {
       invoice: data,
       invoice_settled:'',
-      invoice_comment:'',
       payment_method:'',
       card: {
-        card_no:'',
+        card_no:'4242424242424242',
         tax:'',
-        exp_date:'',
+        exp_date:'0822',
         ship_first_name:'',
         ship_last_name:'',
         ship_company:'',
@@ -811,7 +811,7 @@ export default {
         ship_state:'',
         ship_zip:'',
         ship_country:'',
-        card_code:'',
+        card_code:'999',
         bill_first_name:'',
         bill_last_name:'',
         bill_company:'',
@@ -920,7 +920,7 @@ watch: {
       } else {
         paymentDescription = {}
       }
-      var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice, invoice_comment: this.invoice_comment })
+      var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice })
       if(type === 'cash'){
         if (result.data.error !=='no'){
         return this.$toasted.show(result.data.error, { duration: 4500 })

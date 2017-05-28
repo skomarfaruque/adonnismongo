@@ -30,6 +30,7 @@ const scheduleSchema = mongoose.Schema({
     type: Boolean
   },
   payment_method: String,
+  invoice_comment: String,
   payment_method_desc: mongoose.Schema.Types.Mixed,
   shipping: Number,
   discount: Number,
