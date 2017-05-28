@@ -1,10 +1,12 @@
+
 <template>
   <section>
     <div class="columns">
       <div class="column is-1"></div>
       <div class="column is-4">
-        <label class="label">Invoice: {{invoice.title}}</label>
-        <label class="label">Invoice for: {{invoice.agent.name}}</label>
+        <label class="label">Date: {{ invoice.invoice_date}}</label>
+        <label class="label">Invoice: {{invoice._id}}</label>
+        <label class="label">Phostorian name: {{invoice.agent.name}}</label>
       </div>
       <div class="column is-2">
 
