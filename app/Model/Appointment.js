@@ -34,6 +34,7 @@ const scheduleSchema = mongoose.Schema({
   payment_method_desc: mongoose.Schema.Types.Mixed,
   shipping: Number,
   discount: Number,
+  tax: Number,
   created: {
     type: Date,
     default: Date.now

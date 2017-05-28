@@ -21,7 +21,7 @@
                   <div class="column is-5">
                     <input id="personal-start" class="input" type="text" v-model="personal.start">
                   </div>
-                  <div class="column is-2 has-text-centered">to</div>  
+                  <div class="column is-2 has-text-centered">to</div>
                   <div class="column is-5">
                     <input id="personal-end" class="input" type="text" v-model="personal.end">
                   </div>
@@ -59,7 +59,7 @@
       </div>
       <div class='level-right'>
         <div class='level-item'>
-          <a href="javascript:" class="button is-info" @click="isPersonalOff=true"> 
+          <a href="javascript:" class="button is-info" @click="isPersonalOff=true">
             <i class="fa fa-plus"></i> &nbsp;
             Personal Task
           </a>
@@ -80,10 +80,10 @@
             <h2 style="font-size:28px;" v-show="isFinished">Job Finished <span @click="closeForm"> <nuxt-link class="phosto-blue" @click="closeForm" :to="`/invoice/${invoice}`" title="Edit"> View Invoice </nuxt-link></span></h2>
           </div>
         </div>
-        <div class="box" v-show="!isCustomer && isEdit"> 
+        <div class="box" v-show="!isCustomer && isEdit">
           <h1 class="title">Create Appointment for {{name}}</h1>
-          <div class="box">          
-           
+          <div class="box">
+
             <div class="columns">
               <div class="column is-2">
                 <label class="label">Title</label>
@@ -147,9 +147,10 @@
           <div class="level">
             <div class="level-left is-9">
               <div class="block">
-                <a class="button is-info" name="save" value="Save" id="" @click="save"> Save </a>          
+                <a class="button is-info" name="save" value="Save" id="" @click="save"> Save </a>
                 <a class="button is-info" name="close" value="Close" id="" @click="closeForm">Close</a>
-                <a class="button is-primary" @click="isEdit = false" v-if="invoice">Start Appointment</a>
+                <a class="button is-primary" @click="isEdit = false" v-if="invoice && (invoice_settled == null || invoice_settled === false) ">Start Appointment</a>
+                <a class="button is-primary"  v-if="invoice_settled"> <span @click="closeForm"> <nuxt-link class="phosto-blue" @click="closeForm" :to="`/invoice/paid/${invoice}`" title="Edit"> View invoice</nuxt-link></span></a>
               </div>
             </div>
             <div class="level-right is-3">
@@ -202,7 +203,7 @@
           </div>
           <div class="level">
             <div class="level-left is-6">
-              
+
             </div>
             <div class="level-right is-6 block">
               <a class="button is-info" @click="addCustomer">Save</a>
@@ -252,16 +253,16 @@
   }
   #custom_form .modal-content {
     overflow: visible !important;
-  }  
+  }
   #custom_form .modal-content .control:first-child {
     width: 100% !important;
-  }  
+  }
   #custom_form .block label {
     margin-right: 10px;
   }
 </style>
 <script>
-  
+
   import Calendar from '~components/Scheduler.vue'
   import MaskedInput from 'vue-text-mask'
   import helper from '~/plugins/helper'
@@ -316,7 +317,9 @@
         },
         isCustomer: false,
         invoice: null,
+        invoice_settled: false,
         isOpen: false,
+        isStarted: false,
         highlightedPosition: 0,
         isPersonalOff: false,
         isAdded: false,
@@ -344,7 +347,7 @@
       }
     },
     mounted () {
-      window.calendar = this 
+      window.calendar = this
       let self = this
       const flatpicker = require('flatpickr')
       var options = { allowInput: false, enableTime: true, noCalendar: true, dateFormat: 'h:i K' }
@@ -355,7 +358,7 @@
 
       let startOption = Object.assign({}, options)
       startOption.onChange = (date, datestr, instance) => {
-        
+
         if (!date[0]) return false
         let dt = new Date(date[0])
         dt.setHours(dt.getHours() + 2)
@@ -363,18 +366,19 @@
         endTime.setDate(dt)
       }
       let startTime = window.startTime = new flatpicker(document.getElementById('start-time'), startOption)
-  
+
       let endTime = new flatpicker(document.getElementById('end-time'), options)
       var custom_form = document.getElementById('custom_form')
       scheduler.templates.tooltip_text = function(start,end,ev){
-        if (!ev.customer) return 
-        return `<b>Event:</b> ${ev.text} <br/><b>Start date:</b> 
+        if (!ev.customer) return
+        return `<b>Event:</b> ${ev.text} <br/><b>Start date:</b>
         ${scheduler.templates.tooltip_date_format(start)} <br/><b>End date:</b> ${scheduler.templates.tooltip_date_format(end)}
         <br/><b>Customer:</b> ${ev.customer.name} <br/> <b>Address:</b> ${ev.customer.address1}, ${ev.customer.address2}
         <br/> <b>City:</b> ${ev.customer.city} <br/> <b>State:</b> ${ev.customer.state} <br/> <b>Zip Code:</b> ${ev.customer.zipCode}`
       }
       scheduler.showLightbox = function (id) {
         var ev = scheduler.getEvent(id)
+        console.log(ev)
         scheduler.startLightbox(id, document.getElementById('custom_form'))
         if (!ev.customer) {
           self.isEdit = true
@@ -382,7 +386,7 @@
         self.title = ev.text
         self.customer = ev.customer ? ev.customer.email : ''
         self.comment = ev.comment
-        
+
         startTime.setDate(ev.start_date)
         let endDate = new Date(ev.start_date)
         endDate.setHours(ev.start_date.getHours() + 2)
@@ -406,6 +410,8 @@
           self.isFinished = false
         }
         self.invoice = ev._id
+        self.invoice_settled = ev.invoice_settled
+        self.isStarted = ev.isStarted
       }
       var events = []
       this.events.forEach(m => {
@@ -420,6 +426,7 @@
           comment: m.comment,
           isStarted: m.isStarted,
           started: m.started,
+          invoice_settled: m.invoice_settled,
           ended: m.ended
         })
       })
@@ -451,7 +458,7 @@
         this.showPersonalTask(id)
       }
       this.blockDays.forEach((b) => {
-        
+
         const startMinute = helper.convertTimetoInt(b.start)
         const endMinute = helper.convertTimetoInt(b.end)
         let date = new Date(b.blockDate)
@@ -500,11 +507,13 @@
         const startMinute = helper.convertTimetoInt(this.block_time.work_start_time)
         ev.start_date.setHours(0, 0, 0)
         ev.start_date.setMinutes(startMinute)
-        const obj = { _id: ev._id, agent: this.email, description: this.title, customer: this.customer, start: ev.start_date, comment: this.comment }
+        const obj = { _id: ev._id, agent: this.email, description: this.title, customer: this.customer, start: ev.start_date, comment: this.comment}
         let { data } = await this.axios.post('appointment', obj)
+        console.log(data)
         ev.customer = data.customer
         ev.text = data.description
         ev.comment = data.comment
+        // ev.invoice_settled = false
         ev._id = data._id
         scheduler.endLightbox(true, document.getElementById('custom_form'))
         this.isCustomer = false
@@ -512,24 +521,24 @@
       async saveOff () {
           if (this.errors.any()) {
             return
-          }          
+          }
           if (this.personal._id) {
             for (var i = 0; i < this.blockDays.length; i++ ) {
               let off = this.blockDays[i]
-              
-              if (off._id && off._id === this.personal._id) {      
+
+              if (off._id && off._id === this.personal._id) {
                 this.blockDays.slice(i, 1)
-                break;         
+                break;
               }
             }
             for (var i = 0; i < this.allMarkedId.length; i++ ) {
               let off = this.allMarkedId[i]
-              
-              if (off._id && off._id === this.personal._id) {      
+
+              if (off._id && off._id === this.personal._id) {
                 scheduler.deleteMarkedTimespan(off)
                 scheduler.updateView()
                 this.allMarkedId.splice(i, 1)
-                break;         
+                break;
               }
             }
           }
@@ -568,7 +577,7 @@
             comment: '',
             isRepeat: false
           }
-          this.isPersonalOff = false    
+          this.isPersonalOff = false
       },
       async remove () {
         let id = scheduler.getState().lightbox_id
@@ -611,16 +620,16 @@
 
         for (var i = 0; i < this.blockDays.length; i++ ) {
           let off = this.blockDays[i]
-          
-          if (off._id && off._id === id) {      
+
+          if (off._id && off._id === id) {
             this.personal = off
             this.personal.blockDate = (new Date(this.personal.blockDate)).toLocaleDateString()
             this.personal.endDate = (new Date(this.personal.endDate)).toLocaleDateString()
-            break;         
+            break;
           }
         }
         this.isDeletePersonalOff = true
-        
+
       },
       async deletePersonalTask() {
         const id = this.personal._id
@@ -628,12 +637,12 @@
         await this.axios.delete(`agent/${this.id}/block-date/${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${d.getDate()}`)
         for (var i = 0; i < this.allMarkedId.length; i++ ) {
           let off = this.allMarkedId[i]
-          
-          if (off._id && off._id === id) {      
+
+          if (off._id && off._id === id) {
             scheduler.deleteMarkedTimespan(off)
             scheduler.updateView()
             this.allMarkedId.splice(i, 1)
-            break;         
+            break;
           }
         }
         this.personal = {
@@ -668,14 +677,14 @@
         let self = this
         this.isFinshed = false
         let id = scheduler.getState().lightbox_id
-        let ev = scheduler.getEvent(id) 
+        let ev = scheduler.getEvent(id)
         function toTimeString (now, countDownDate) {
           var distance =  now - countDownDate;
-          
+
           var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
           var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
           var seconds = Math.floor((distance % (1000 * 60)) / 1000)
-          
+
           // Output the result in an element with id="demo"
           self.timer = `${('00'+hours).slice(-2)}:${('00'+minutes).slice(-2)}:${('00'+seconds).slice(-2)}`
         }
@@ -684,7 +693,7 @@
           toTimeString(ev.ended, ev.started)
           this.isFinished = true
           return
-          
+
         } else if (ev.isStarted && !ev.ended) {
           var countDownDate = ev.started
         } else {
@@ -694,16 +703,16 @@
         }
         this.sw = setInterval(function() {
           var now = new Date().getTime()
-          toTimeString(now, countDownDate)      
+          toTimeString(now, countDownDate)
         }, 1000)
         this.stopButton = true
         // Update the count down every 1 second
-        
+
       },
       stopWatch () {
         clearInterval(this.sw)
         let id = scheduler.getState().lightbox_id
-        let ev = scheduler.getEvent(id) 
+        let ev = scheduler.getEvent(id)
         this.axios.post('appointment/stop', { _id: ev._id, start: ev.started, end: new Date().getTime() })
         this.stopButton = false
         this.isFinished = true
