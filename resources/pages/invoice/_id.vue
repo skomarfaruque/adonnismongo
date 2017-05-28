@@ -117,7 +117,8 @@
               <td></td>
               <td></td>
               <td><label class="label">Total</label></td>
-              <td>${{total - parseInt(discount) + parseInt(shipping) * totalTax / 100}}</td>
+              <!--<td>${{total - parseInt(discount) + parseInt(shipping) * totalTax / 100}}</td> -->
+              <td>${{(total - parseInt(discount) + parseInt(shipping)) + ((total - parseInt(discount) + parseInt(shipping))*totalTax/100) }}</td>
             </tr>
           </tfoot>
         </table>
@@ -397,7 +398,7 @@
                     </div>
                     <div class="level-right">
                       <div class="level-item">
-                        <span><input type="file" name="front_file" id="frontFile" @change="onFileChange"><br><img 
+                        <span><input type="file" name="front_file" id="frontFile" @change="onFileChange"><br><img
                          style="max-width: 300px;" :src="check.check_front" alt=""></span>
                       </div>
                     </div>
