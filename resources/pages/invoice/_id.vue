@@ -165,7 +165,7 @@
           </div>
           <div class="column is-4">
             <div class="columns">
-              <div class="column is-2">
+              <div class="column is-3">
                 <label class="label">Tax</label>
               </div>
               <div class="column is-8">
