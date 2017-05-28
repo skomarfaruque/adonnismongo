@@ -181,7 +181,7 @@
           <div class="column is-2">
             <label class="label">Add Comment</label>
           </div>
-          <div class="column is-8">
+          <div class="column is-10">
             <textarea class="textarea"></textarea>
           </div>
         </div>
