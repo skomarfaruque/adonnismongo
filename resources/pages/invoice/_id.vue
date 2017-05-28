@@ -4,7 +4,7 @@
     <div class="columns">
       <div class="column is-1"></div>
       <div class="column is-4">
-        <label class="label">Date: {{ invoice.invoice_date}}</label>
+        <label class="label">Date: {{ getHumanDate(invoice.invoice_date) }}</label>
         <label class="label">Invoice: {{invoice._id}}</label>
         <label class="label">Phostorian name: {{invoice.agent.name}}</label>
       </div>
@@ -19,6 +19,7 @@
         <span>State: {{invoice.customer.state}}, </span>
         <span>Zip Code: {{invoice.customer.zipCode}} </span>
         <label class="label">Phone: {{invoice.customer.phone}}</label>
+        <label class="label">Email: {{invoice.customer.email}}</label>
       </div>
       <div class="column is-1"></div>
     </div>
@@ -769,6 +770,7 @@
 </style>
 <script>
 import MaskedInput from 'vue-text-mask'
+import moment from 'moment'
 export default {
   middleware: 'auth',
   head () {
@@ -869,6 +871,9 @@ watch: {
   methods: {
     save () {
 
+    },
+    getHumanDate (date) {
+      return moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY');
     },
     async addItem () {
       if(!this.newItem.name) {
