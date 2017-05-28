@@ -202,8 +202,8 @@
                   Check Number: <b>{{invoice.payment_method_desc.check_no}}</b><br>
                   Account Number: <b>{{ invoice.payment_method_desc.account_no }}</b><br>
                   Routing Number: <b>{{ invoice.payment_method_desc.routing_no }}</b><br>
-                  Front Of Check:<br><img style="width:150px; height:150px" :src="`/check_doc/${invoice.payment_method_desc.front_file}`" alt=""><br>
-                  Back Of Check:<br><img style="width:150px; height:150px" :src="`/check_doc/${invoice.payment_method_desc.back_file}`" alt=""><br>
+                  Front Of Check:<br><img :src="`/check_doc/${invoice.payment_method_desc.front_file}`" alt=""><br>
+                  Back Of Check:<br><img :src="`/check_doc/${invoice.payment_method_desc.back_file}`" alt=""><br>
                 </div>
               </div>
             </div>
@@ -383,7 +383,8 @@
                     </div>
                     <div class="level-right">
                       <div class="level-item">
-                        <span><input type="file" name="front_file" id="frontFile" @change="onFileChange"><br><img style="width:150px; height:150px" :src="check.check_front" alt=""></span>
+                        <span><input type="file" name="front_file" id="frontFile" @change="onFileChange"><br><img 
+                         style="max-width: 300px;" :src="check.check_front" alt=""></span>
                       </div>
                     </div>
                   </nav><br>
@@ -395,8 +396,8 @@
                     </div>
                     <div class="level-right">
                       <div class="level-item">
-                        <span><input type="file" name="back_file" id="fileInput" ref="fileInput" @change="onFileChange"><br><img style="width:150px; height:150px" :src="check.check_back" alt=""></span>
-                        <!-- <span><input type="file" @change="onFileChange"><br><img style="width:220px; height:100px" :src="check.check_back" alt=""><button @click="removeImage">Remove image</button></span> -->
+                        <span><input type="file" name="back_file" id="fileInput" ref="fileInput" @change="onFileChange"><br><img style="max-width: 300px;" :src="check.check_back" alt=""></span>
+                        <!-- <span><input type="file" @change="onFileChange"><br><img :src="check.check_back" alt=""><button @click="removeImage">Remove image</button></span> -->
                       </div>
                     </div>
                   </nav><br>
