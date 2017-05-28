@@ -790,6 +790,7 @@ export default {
     return {
       invoice: data,
       invoice_settled:'',
+      invoice_comment:'',
       payment_method:'',
       card: {
         card_no:'',
@@ -912,7 +913,7 @@ watch: {
       } else {
         paymentDescription = {}
       }
-      var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice })
+      var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice, invoice_comment: this.invoice_comment })
       if(type === 'cash'){
         if (result.data.error !=='no'){
         return this.$toasted.show(result.data.error, { duration: 4500 })
@@ -922,8 +923,8 @@ watch: {
         }
 
       } else if (type === 'check'){
-console.log(invoiceinfo)
-         if (result.data.error !=='no'){
+        console.log(invoiceinfo)
+        if (result.data.error !=='no'){
            return this.$toasted.show(result.data.error, { duration: 4500 })
         }else {
         self.isCheckOff = false

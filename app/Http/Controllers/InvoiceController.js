@@ -270,15 +270,12 @@ class InvoiceController {
       paymentDescription = req.input('paymentDescription')
     }
     if (errorInfo === 'no') {
-      yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date() } }).exec()
+      yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date(), invoice_comment: req.input('invoice_comment') } }).exec()
       let updatedInvoice = yield Appointment.findOne({ _id: id }).exec()
       res.send({invoiceinfo: updatedInvoice, error: errorInfo})
     } else {
       res.send({invoiceinfo: invoiceInfo, error: errorInfo})
     }
-
-
-
   }
 
 }
