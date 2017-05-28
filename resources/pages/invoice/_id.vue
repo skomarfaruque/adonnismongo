@@ -117,7 +117,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Total</label></td>
-              <td>${{total - parseInt(discount) + parseInt(shipping)}}</td>
+              <td>${{total - parseInt(discount) + parseInt(shipping)}} * {{totalTax / 100}}</td>
             </tr>
           </tfoot>
         </table>
@@ -161,11 +161,14 @@
           </div>
           <div class="column is-4">
             <div class="columns">
-              <div class="column is-4">
+              <div class="column is-2">
                 <label class="label">Tax</label>
               </div>
               <div class="column is-8">
-                <input class="input" type="number" min="0">
+                <input class="input" type="number" min="0" v-model="totalTax">
+              </div>
+              <div class="column is-1">
+                %
               </div>
             </div>
 
@@ -817,6 +820,7 @@ export default {
       products,
       discount: 0,
       shipping: 0,
+      totalTax: '',
       newItem: '',
       price: 0,
       quantity: 1,
