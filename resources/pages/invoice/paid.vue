@@ -71,7 +71,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Discount Saving</label></td>
-              <td>${{discount}}</td>
+              <td>${{invoice.discount}}</td>
             </tr>
             <tr>
               <td></td>
@@ -79,7 +79,15 @@
               <td></td>
               <td></td>
               <td><label class="label">Shipping</label></td>
-              <td>${{shipping}}</td>
+              <td>${{invoice.shipping}}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><label class="label">Tax</label></td>
+              <td>{{invoice.tax}} %</td>
             </tr>
             <tr>
               <td></td>
@@ -102,47 +110,11 @@
           <div class="column is-4">
             <div class="columns">
 
-              <div class="column is-4">
-                <label class="label">Shipping</label>
 
-              </div>
-              <div class="column is-8">
-                <input class="input" type="number" min="0" v-model="shipping">
-              </div>
-              <!--<div class="column is-2">
-                <a class="button">Apply</a>
-              </div>-->
             </div>
           </div>
-          <div class="column is-4">
-            <div class="columns">
 
-              <div class="column is-4">
-                <label class="label">Discount</label>
 
-              </div>
-              <div class="column is-8">
-                <input class="input" type="number" min="0" v-model="discount">
-              </div>
-              <!--<div class="column is-2">
-                <a class="button">Apply</a>
-              </div>-->
-            </div>
-
-          </div>
-          <div class="column is-4">
-            <div class="columns">
-              <div class="column is-3">
-                <label class="label">Tax</label>
-              </div>
-              <div class="column is-8">
-                <input class="input" type="number" min="0" v-model="totalTax">
-              </div>
-              <div class="column is-1">
-                %
-              </div>
-            </div>
-          </div>
         </div>
         <div class="columns">
           <div class="column is-2">
@@ -152,15 +124,7 @@
             <textarea class="textarea" v-model="invoice.invoice_comment">{{ invoice.invoice_comment }}</textarea>
           </div>
         </div>
-        <div class="columns" v-if="invoice.invoice_settled === false">
-          <div class="column is-2"></div>
-          <div class="column is-8 block has-text-centered">
-            <a href="javascript:" class="button is-info is-large" @click="isCashOff=true">Cash</a>
-            <a class="button is-info is-large" @click="isCheckOff=true">Check</a>
-            <a class="button is-info is-large" @click="isCreditOff=true">Credit</a>
-          </div>
-          <div class="column is-2"></div>
-        </div>
+
         <div class="columns" v-if="invoice.payment_method === 'cash'">
           <div class="column is-6 is-offset-3">
             <div class="card">
@@ -750,11 +714,11 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `Invoice Page`
+      title: `Invoice paid Page`
     }
   },
   fetch ({ store }) {
-    store.commit('SET_HEAD', ['Invoice Edit', 'Edit Invoice information.'])
+    store.commit('SET_HEAD', ['', ''])
   },
   components: {
     MaskedInput

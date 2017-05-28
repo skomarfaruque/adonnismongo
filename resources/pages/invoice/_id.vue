@@ -372,7 +372,10 @@
                         <span><input class="input"  name="check_no" type="number" v-model="check.check_no" placeholder="Enter Check Number">
                         <input class="input"  name="paymentType" type="hidden" value="check" placeholder="Enter Check Number">
                         <input class="input"  name="id" type="hidden" v-bind:value="invoice._id" placeholder="Enter Check Number">
-                        <input class="input"  name="invoiceComment" type="hidden" v-model="invoice.invoice_comment" placeholder="Enter Check Number">
+                        <input class="input"  name="invoiceComment" type="hidden" v-model="invoice.invoice_comment" placeholder="">
+                        <input class="input"  name="discount" type="hidden" v-model="discount" placeholder="">
+                        <input class="input"  name="shipping" type="hidden" v-model="shipping" placeholder="">
+                        <input class="input"  name="tax" type="hidden" v-model="totalTax" placeholder="">
                         </span>
                       </div>
                     </div>
@@ -833,7 +836,7 @@ export default {
       products,
       discount: 0,
       shipping: 0,
-      totalTax: '',
+      totalTax: 0,
       newItem: '',
       price: 0,
       quantity: 1,
@@ -907,7 +910,7 @@ watch: {
       var self = this
       if (type === 'card') {
         paymentDescription = this.card
-      } else if (type === 'check') {
+      } else if (type === 'check') { // for check
         var myForm = document.getElementById('myForm');
         let formData = new FormData(myForm);
          let newinfo = await this.axios.post(`invoice/payment`, formData)
@@ -920,7 +923,7 @@ watch: {
       } else {
         paymentDescription = {}
       }
-      var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice })
+      var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice, discount: this.discount, shipping: this.shipping, tax: this.totalTax })
       if(type === 'cash'){
         if (result.data.error !=='no'){
         return this.$toasted.show(result.data.error, { duration: 4500 })

@@ -84,7 +84,7 @@ class InvoiceController {
     const id = req.input('id')
     yield Appointment.update({ _id: id }, { items }).exec()
   }
-  * newFunc (res, invoiceInfo, paymentDescription, paymentTypeApp){
+  * newFunc (res, invoiceInfo, paymentDescription, paymentTypeApp, discount, shipping, tax) {
     var errorInfo = 'no'
     var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
     merchantAuthenticationType.setName('44ZAqX44dc')
@@ -219,7 +219,7 @@ class InvoiceController {
         if (response.getMessages().getResultCode() === ApiContracts.MessageTypeEnum.OK) {
           if (response.getTransactionResponse().getMessages() != null) {
           //  console.log('success')
-            Appointment.update({ _id: invoiceInfo._id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date(), invoice_comment: invoiceInfo.invoice_comment } }).exec()
+            Appointment.update({ _id: invoiceInfo._id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date(), invoice_comment: invoiceInfo.invoice_comment, discount: discount, shipping: shipping, tax: tax } }).exec()
             let updatedInvoice = Appointment.findOne({ _id: invoiceInfo._id }).exec()
             res.send({invoiceinfo: updatedInvoice, error: errorInfo})
           } else {
@@ -245,6 +245,9 @@ class InvoiceController {
   }
   * payment (req, res) {
     const paymentTypeApp = req.input('paymentType')
+    const discount = req.input('discount')
+    const shipping = req.input('shipping')
+    const tax = req.input('tax')
     const invoiceInfo = req.input('invoice')
     let invoiceComment = ''
     if (paymentTypeApp !== 'check') {
@@ -253,7 +256,7 @@ class InvoiceController {
     const id = req.input('id')
     var errorInfo = 'no'
     let paymentDescription = {}
-    if (paymentTypeApp === 'check') {
+    if (paymentTypeApp === 'check') { // for check
       let storagePath = 'check_doc'
       const backFile = req.file('back_file', {
         maxSize: '2mb',
@@ -269,13 +272,13 @@ class InvoiceController {
       yield frontFile.move(Helpers.publicPath(storagePath), frontFileName)
       paymentDescription = {check_no: req.input('check_no'), account_no: req.input('account_no'), routing_no: req.input('routing_no'), back_file: backFile.uploadName(), front_file: frontFile.uploadName()}
       invoiceComment = req.input('invoiceComment')
-    } else if (paymentTypeApp === 'card') {
-      return yield this.newFunc(res, invoiceInfo, req.input('paymentDescription'), paymentTypeApp)
-    } else {
+    } else if (paymentTypeApp === 'card') { // for card
+      return yield this.newFunc(res, invoiceInfo, req.input('paymentDescription'), paymentTypeApp, discount, shipping, tax)
+    } else { // for cash
       paymentDescription = req.input('paymentDescription')
     }
     if (errorInfo === 'no') {
-      yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date(), invoice_comment: invoiceComment } }).exec()
+      yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date(), invoice_comment: invoiceComment, discount: discount, shipping: shipping, tax: tax } }).exec()
       let updatedInvoice = yield Appointment.findOne({ _id: id }).exec()
       res.send({invoiceinfo: updatedInvoice, error: errorInfo})
     } else {
