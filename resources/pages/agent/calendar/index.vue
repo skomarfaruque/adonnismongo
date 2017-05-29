@@ -378,7 +378,6 @@
       }
       scheduler.showLightbox = function (id) {
         var ev = scheduler.getEvent(id)
-        console.log(ev)
         scheduler.startLightbox(id, document.getElementById('custom_form'))
         if (!ev.customer) {
           self.isEdit = true
@@ -509,7 +508,6 @@
         ev.start_date.setMinutes(startMinute)
         const obj = { _id: ev._id, agent: this.email, description: this.title, customer: this.customer, start: ev.start_date, comment: this.comment}
         let { data } = await this.axios.post('appointment', obj)
-        console.log(data)
         ev.customer = data.customer
         ev.text = data.description
         ev.comment = data.comment
