@@ -108,7 +108,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Tax({{invoice.tax}}%)</label></td>
-              <td>{{invoice.tax/100}}</td>
+              <td>{{(total - parseInt(discount) + parseInt(shipping))*totalTax/100}}</td>
             </tr>
             <tr>
               <td><hr></td>
