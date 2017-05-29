@@ -58,7 +58,7 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="paid-tbody">
             <tr v-for="(item, i) in invoice.items">
               <td>{{i + 1}} </td>
               <td>{{item.description}}</td>
@@ -678,6 +678,9 @@
   }
   .block a.button {
     margin: 10px;
+  }
+  .paid-tbody tr td {
+    padding: 5px 0px 5px 0px;
   }
   .print-class a {
     float: right;
