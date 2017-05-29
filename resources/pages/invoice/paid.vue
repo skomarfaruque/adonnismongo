@@ -9,7 +9,7 @@
     <div class="columns">
       <div class="column is-1"></div>
       <div class="column is-4">
-        <label class="label">Date: {{ getHumanDate(invoice.invoice_date) }}</label>
+        <label class="label">Date: {{ dateFormated(invoice.invoice_date) }}</label>
         <label class="label">Invoice: {{invoice._id}}</label>
         <label class="label">Phostorian name: {{invoice.agent.name}}</label>
       </div>
@@ -101,14 +101,14 @@
               <td></td>
               <td></td>
               <td><label class="label">Total</label></td>
-              <td>${{total - parseInt(discount) + parseInt(shipping)}}</td>
+              <td>${{total - parseInt(invoice.discount) + parseInt(invoice.shipping)}}</td>
             </tr>
             <tr>
               <td></td>
               <td></td>
               <td></td>
               <td><label class="label">Tax({{invoice.tax}}%)</label></td>
-              <td>{{(total - parseInt(discount) + parseInt(shipping))*totalTax/100}}</td>
+              <td>${{twoDigitFormat ((total - parseInt(invoice.discount) + parseInt(invoice.shipping))*invoice.tax/100)}}</td>
             </tr>
             <tr>
               <td><hr></td>
@@ -123,7 +123,7 @@
               <td></td>
               <td><label class="label">Grand Total</label></td>
               <!--<td>${{total - parseInt(discount) + parseInt(shipping) * totalTax / 100}}</td> -->
-              <td>${{(total - parseInt(discount) + parseInt(shipping)) + ((total - parseInt(discount) + parseInt(shipping))*totalTax/100) }}</td>
+              <td>${{ twoDigitFormat((total - parseInt(invoice.discount) + parseInt(invoice.shipping)) + ((total - parseInt(invoice.discount) + parseInt(invoice.shipping))*invoice.tax/100)) }}</td>
             </tr>
           </tfoot>
         </table>
@@ -814,8 +814,11 @@ watch: {
     save () {
 
     },
-    getHumanDate (date) {
+    dateFormated (date) {
       return moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY');
+    },
+    twoDigitFormat (value) {
+      return value.toFixed(2);
     },
     async addItem () {
       if(!this.newItem.name) {
