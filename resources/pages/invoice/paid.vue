@@ -3,6 +3,11 @@
   <section>
     <div class="columns">
       <div class="column is-1"></div>
+      <div class="column is-10 print-class"><a title="print invoice" class="button is-primary"><i class="fa fa-print" aria-hidden="true"></i></a></div>
+      <div class="column is-1"></div>
+    </div>
+    <div class="columns">
+      <div class="column is-1"></div>
       <div class="column is-4">
         <label class="label">Date: {{ getHumanDate(invoice.invoice_date) }}</label>
         <label class="label">Invoice: {{invoice._id}}</label>
@@ -60,13 +65,17 @@
               <td>${{item.price}}</td>
               <td>{{item.quantity}}</td>
               <td>${{item.price * item.quantity}}</td>
-
             </tr>
-
           </tbody>
           <tfoot>
             <tr>
               <td></td>
+              <td></td>
+              <td></td>
+              <td><label class="label">Total</label></td>
+              <td>${{total}}</td>
+            </tr>
+            <tr>
               <td></td>
               <td></td>
               <td></td>
@@ -77,12 +86,24 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td><label class="label">Shipping</label></td>
               <td>${{invoice.shipping}}</td>
             </tr>
             <tr>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+            </tr>
+            <tr>
               <td></td>
+              <td></td>
+              <td></td>
+              <td><label class="label">Total</label></td>
+              <td>${{total - parseInt(discount) + parseInt(shipping)}}</td>
+            </tr>
+            <tr>
               <td></td>
               <td></td>
               <td></td>
@@ -90,11 +111,17 @@
               <td>{{invoice.tax}} %</td>
             </tr>
             <tr>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+            </tr>
+            <tr>
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td><label class="label">Total</label></td>
+              <td><label class="label">Grand Total</label></td>
               <!--<td>${{total - parseInt(discount) + parseInt(shipping) * totalTax / 100}}</td> -->
               <td>${{(total - parseInt(discount) + parseInt(shipping)) + ((total - parseInt(discount) + parseInt(shipping))*totalTax/100) }}</td>
             </tr>
@@ -105,106 +132,83 @@
     </div>
     <div class="columns">
       <div class="column is-1"></div>
-      <div class="column is-10">
-        <div class="columns">
-          <div class="column is-4">
-            <div class="columns">
-
-
+        <div class="column is-10">
+          <div class="columns" v-if="invoice.payment_method === 'cash'">
+            <div class="column is-12">
+              <div class="card">
+                <div class="card-content">
+                  <div class="content">
+                    Comment: <b>{{ invoice.invoice_comment }}</b><br>
+                    Payment Method: <b>Cash</b><br>
+                    Total Amount: <b>${{(total - parseInt(discount) + parseInt(shipping)) + ((total - parseInt(discount) + parseInt(shipping))*totalTax/100) }}</b><br>
+                    Payment Status: <b>PAID</b><br>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
+          <div class="columns" v-if="invoice.payment_method === 'check'">
+            <div class="column is-6 is-offset-3">
+              <div class="card">
+                <header class="card-header">
+                  <p class="card-header-title">
+                    Payment Method: Check
+                  </p>
+                </header>
+                <div class="card-content">
+                  <div class="content">
+                    <b>Payment Method description</b><br>
+                    Check Number: <b>{{invoice.payment_method_desc.check_no}}</b><br>
+                    Account Number: <b>{{ invoice.payment_method_desc.account_no }}</b><br>
+                    Routing Number: <b>{{ invoice.payment_method_desc.routing_no }}</b><br>
+                    Front Of Check:<br><img :src="`/check_doc/${invoice.payment_method_desc.front_file}`" alt=""><br>
+                    Back Of Check:<br><img :src="`/check_doc/${invoice.payment_method_desc.back_file}`" alt=""><br>
+                  </div>
+                </div>
+              </div>
 
-        </div>
-        <div class="columns">
-          <div class="column is-2">
-            <label class="label">Comment</label>
+            </div>
           </div>
-          <div class="column is-10">
-            <textarea class="textarea" v-model="invoice.invoice_comment">{{ invoice.invoice_comment }}</textarea>
-          </div>
-        </div>
-
-        <div class="columns" v-if="invoice.payment_method === 'cash'">
-          <div class="column is-6 is-offset-3">
-            <div class="card">
-              <header class="card-header">
-                <p class="card-header-title">
-                  Payment Method: Cash
-                </p>
-              </header>
-              <div class="card-content">
-                <div class="content">
-                    Total: <b>${{ total }}</b><br>
-                    Discount: <b>${{ parseInt(discount) }}</b><br>
-                    Shipping: <b>${{ parseInt(shipping) }}</b><hr>
-                    Amount: <b>${{total - parseInt(discount) + parseInt(shipping)}}</b>
+          <div class="columns" v-if="invoice.payment_method === 'card'">
+            <div class="column is-6 is-offset-3">
+              <div class="card">
+                <header class="card-header">
+                  <p class="card-header-title">
+                    Payment Method: Credit Card
+                  </p>
+                </header>
+                <div class="card-content">
+                  <div class="content">
+                    <b>Payment Method description</b><br>
+                    Amount: <b>${{total - parseInt(discount) + parseInt(shipping) }}</b><br>
+                    Shipping: <b>${{parseInt(shipping) }}</b><br>
+                    Exp Date: <b>{{ invoice.payment_method_desc.exp_date }}</b><br>
+                    Credit Card No: <b>{{ invoice.payment_method_desc.card_no }}</b><br>
+                    Credit Card Code: <b>{{ invoice.payment_method_desc.card_code }}</b><br>
+                    Tax:  <b>{{ invoice.payment_method_desc.tax }}</b><br>
+                    <b>Bill to:</b><br>
+                    First Name: <b>{{ invoice.payment_method_desc.bill_first_name }}</b><br>
+                    Last Name: <b>{{ invoice.payment_method_desc.bill_last_name }}</b><br>
+                    Company: <b>{{ invoice.payment_method_desc.bill_company }}</b><br>
+                    Address: <b>{{ invoice.payment_method_desc.bill_address }}</b><br>
+                    City: <b>{{ invoice.payment_method_desc.bill_city }}</b><br>
+                    State: <b>{{ invoice.payment_method_desc.bill_state }}</b><br>
+                    Zip: <b>{{ invoice.payment_method_desc.bill_zip }}</b><br>
+                    <b>Ship to:</b><br>
+                    First Name: <b>{{ invoice.payment_method_desc.ship_first_name }}</b><br>
+                    Last Name: <b>{{ invoice.payment_method_desc.ship_last_name }}</b><br>
+                    Company: <b>{{ invoice.payment_method_desc.ship_company }}</b><br>
+                    Address: <b>{{ invoice.payment_method_desc.ship_address }}</b><br>
+                    City: <b>{{ invoice.payment_method_desc.ship_city }}</b><br>
+                    State: <b>{{ invoice.payment_method_desc.ship_state }}</b><br>
+                    Zip: <b>{{ invoice.payment_method_desc.ship_zip }}</b><br>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="columns" v-if="invoice.payment_method === 'check'">
-          <div class="column is-6 is-offset-3">
-            <div class="card">
-              <header class="card-header">
-                <p class="card-header-title">
-                  Payment Method: Check
-                </p>
-              </header>
-              <div class="card-content">
-                <div class="content">
-                  <b>Payment Method description</b><br>
-                  Check Number: <b>{{invoice.payment_method_desc.check_no}}</b><br>
-                  Account Number: <b>{{ invoice.payment_method_desc.account_no }}</b><br>
-                  Routing Number: <b>{{ invoice.payment_method_desc.routing_no }}</b><br>
-                  Front Of Check:<br><img :src="`/check_doc/${invoice.payment_method_desc.front_file}`" alt=""><br>
-                  Back Of Check:<br><img :src="`/check_doc/${invoice.payment_method_desc.back_file}`" alt=""><br>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-        <div class="columns" v-if="invoice.payment_method === 'card'">
-          <div class="column is-6 is-offset-3">
-            <div class="card">
-              <header class="card-header">
-                <p class="card-header-title">
-                  Payment Method: Credit Card
-                </p>
-              </header>
-              <div class="card-content">
-                <div class="content">
-                  <b>Payment Method description</b><br>
-                  Amount: <b>${{total - parseInt(discount) + parseInt(shipping) }}</b><br>
-                  Shipping: <b>${{parseInt(shipping) }}</b><br>
-                  Exp Date: <b>{{ invoice.payment_method_desc.exp_date }}</b><br>
-                  Credit Card No: <b>{{ invoice.payment_method_desc.card_no }}</b><br>
-                  Credit Card Code: <b>{{ invoice.payment_method_desc.card_code }}</b><br>
-                  Tax:  <b>{{ invoice.payment_method_desc.tax }}</b><br>
-                  <b>Bill to:</b><br>
-                  First Name: <b>{{ invoice.payment_method_desc.bill_first_name }}</b><br>
-                  Last Name: <b>{{ invoice.payment_method_desc.bill_last_name }}</b><br>
-                  Company: <b>{{ invoice.payment_method_desc.bill_company }}</b><br>
-                  Address: <b>{{ invoice.payment_method_desc.bill_address }}</b><br>
-                  City: <b>{{ invoice.payment_method_desc.bill_city }}</b><br>
-                  State: <b>{{ invoice.payment_method_desc.bill_state }}</b><br>
-                  Zip: <b>{{ invoice.payment_method_desc.bill_zip }}</b><br>
-                  <b>Ship to:</b><br>
-                  First Name: <b>{{ invoice.payment_method_desc.ship_first_name }}</b><br>
-                  Last Name: <b>{{ invoice.payment_method_desc.ship_last_name }}</b><br>
-                  Company: <b>{{ invoice.payment_method_desc.ship_company }}</b><br>
-                  Address: <b>{{ invoice.payment_method_desc.ship_address }}</b><br>
-                  City: <b>{{ invoice.payment_method_desc.ship_city }}</b><br>
-                  State: <b>{{ invoice.payment_method_desc.ship_state }}</b><br>
-                  Zip: <b>{{ invoice.payment_method_desc.ship_zip }}</b><br>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="column is-1"></div>
     </div>
     <div v-bind:class="{ modal: true, 'is-active': isCashOff }">
@@ -705,6 +709,9 @@
   }
   .block a.button {
     margin: 10px;
+  }
+  .print-class a {
+    float: right;
   }
 </style>
 <script>
