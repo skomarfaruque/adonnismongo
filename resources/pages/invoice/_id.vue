@@ -357,7 +357,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{(total - parseInt(discount) + parseInt(shipping))*totalTax/100)}}</span><br/>
+                      <span>${{(total - parseInt(discount) + parseInt(shipping))*totalTax/100}}</span><br/>
                     </div>
                   </div>
                 </nav>
