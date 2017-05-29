@@ -17,7 +17,7 @@
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span>${{itemVal}}</span><br/>
+              <span>${{twoDigitFormat(itemVal)}}</span><br/>
             </div>
           </div>
         </nav>
@@ -31,7 +31,7 @@
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span class="invoice-head">${{dataVal.totalPrice}}</span>
+              <span class="invoice-head">${{twoDigitFormat(dataVal.totalPrice)}}</span>
             </div>
           </div>
         </nav>
@@ -141,7 +141,10 @@ computed: {
   methods: {
     remove (item, ind) {
 
-    }
+    },
+    twoDigitFormat (value) {
+      return value.toFixed(2);
+    },
   }
 }
 </script>
