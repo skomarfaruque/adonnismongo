@@ -84,7 +84,7 @@ class InvoiceController {
     const id = req.input('id')
     yield Appointment.update({ _id: id }, { items }).exec()
   }
-  * newFunc (res, invoiceInfo, paymentDescription, paymentTypeApp, discount, shipping, tax) {
+  * newFunc (res, invoiceInfo, paymentDescription, paymentTypeApp, discount, shippingAmount, tax) {
     var errorInfo = 'no'
     var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
     merchantAuthenticationType.setName('44ZAqX44dc')
@@ -219,7 +219,7 @@ class InvoiceController {
         if (response.getMessages().getResultCode() === ApiContracts.MessageTypeEnum.OK) {
           if (response.getTransactionResponse().getMessages() != null) {
           //  console.log('success')
-            Appointment.update({ _id: invoiceInfo._id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date(), invoice_comment: invoiceInfo.invoice_comment, discount: discount, shipping: shipping, tax: tax } }).exec()
+            Appointment.update({ _id: invoiceInfo._id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date(), invoice_comment: invoiceInfo.invoice_comment, discount: discount, shipping: shippingAmount, tax: tax } }).exec()
             let updatedInvoice = Appointment.findOne({ _id: invoiceInfo._id }).exec()
             res.send({invoiceinfo: updatedInvoice, error: errorInfo})
           } else {
