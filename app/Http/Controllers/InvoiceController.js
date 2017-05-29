@@ -25,13 +25,13 @@ class InvoiceController {
   }
 
   * getByAgent (req, res) {
-    var lastYear = moment().subtract(1,'year').toDate()
+    var lastYear = moment().subtract(1, 'year').toDate()
     var today = moment().toDate()
     let userId = req.param('id')
     if (userId === 'me') {
       userId = req.currentUser._id
     }
-    const invoices = yield Appointment.find({invoice_settled: false, agent: userId, invoice_date: {$gte: lastYear, $lt: today}}).exec()
+    const invoices = yield Appointment.find({invoice_settled: true, agent: userId, invoice_date: {$gte: lastYear, $lt: today}}).exec()
     var weeks = []
     var year = {}
     year.item = {}
@@ -76,6 +76,7 @@ class InvoiceController {
       }
       weeks.push(weekData)
     }
+    console.log(year)
     res.send({year: year, weeks: weeks})
   }
 
