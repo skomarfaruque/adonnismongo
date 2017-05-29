@@ -59,8 +59,8 @@ class InvoiceController {
       weekData.totalPrice = 0
       if (invoices.length) {
         invoices.forEach(function (invoiceVal, key) {
-          // if (datePrevious <= invoiceVal.invoice_date && invoiceVal.invoice_date < date) {
-          if (datePrevious) {
+          if (datePrevious <= invoiceVal.invoice_date && invoiceVal.invoice_date < date) {
+          // if (datePrevious) {
             if (invoiceVal.items.length) {
               invoiceVal.items.forEach(function (supplyVal, newKey) {
                 let price = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
