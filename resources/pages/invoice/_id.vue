@@ -4,7 +4,7 @@
     <div class="columns">
       <div class="column is-1"></div>
       <div class="column is-4">
-        <label><b>Date:</b> {{ getHumanDate(invoice.invoice_date) }}</label><br>
+        <label><b>Date:</b> {{ dateFormated(invoice.invoice_date) }}</label><br>
         <label><b>Invoice:</b> {{invoice._id}}</label><br>
         <label><b>Phostorian name:</b> {{invoice.agent.name}}</label>
       </div>
@@ -144,7 +144,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Tax({{totalTax}}%)</label></td>
-              <td>${{(total - parseInt(discount) + parseInt(shipping))*totalTax/100}}</td>
+              <td>${{twoDigitFormat((total - parseInt(discount) + parseInt(shipping))*totalTax/100)}}</td>
             </tr>
             <tr>
               <td><hr></td>
@@ -161,7 +161,7 @@
               <td></td>
               <td><label class="label">Grand Total</label></td>
               <!--<td>${{total - parseInt(discount) + parseInt(shipping) * totalTax / 100}}</td> -->
-              <td>${{(total - parseInt(discount) + parseInt(shipping)) + ((total - parseInt(discount) + parseInt(shipping))*totalTax/100) }}</td>
+              <td>${{twoDigitFormat((total - parseInt(discount) + parseInt(shipping)) + ((total - parseInt(discount) + parseInt(shipping))*totalTax/100)) }}</td>
             </tr>
           </tfoot>
         </table>
@@ -923,8 +923,11 @@ watch: {
     save () {
 
     },
-    getHumanDate (date) {
+    dateFormated (date) {
       return moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY');
+    },
+    twoDigitFormat (value) {
+      return value.toFixed(2);
     },
     async addItem () {
       if(!this.newItem.name) {
