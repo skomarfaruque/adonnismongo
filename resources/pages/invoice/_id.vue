@@ -4,22 +4,22 @@
     <div class="columns">
       <div class="column is-1"></div>
       <div class="column is-4">
-        <label class="label">Date: {{ getHumanDate(invoice.invoice_date) }}</label>
-        <label class="label">Invoice: {{invoice._id}}</label>
-        <label class="label">Phostorian name: {{invoice.agent.name}}</label>
+        <label><b>Date:</b> {{ getHumanDate(invoice.invoice_date) }}</label><br>
+        <label><b>Invoice:</b> {{invoice._id}}</label><br>
+        <label><b>Phostorian name:</b> {{invoice.agent.name}}</label>
       </div>
       <div class="column is-2">
 
       </div>
       <div class="column is-4">
-        <label class="label">Customer: {{invoice.customer.name}}</label>
+        <label><b>Customer:</b> {{invoice.customer.name}}</label><br>
         <label class="label">Address:</label>
         <span> {{invoice.customer.address1}}, {{invoice.customer.address2}}</span><br/>
         <span>City: {{invoice.customer.city}}, </span>
         <span>State: {{invoice.customer.state}}, </span>
-        <span>Zip Code: {{invoice.customer.zipCode}} </span>
-        <label class="label">Phone: {{invoice.customer.phone}}</label>
-        <label class="label">Email: {{invoice.customer.email}}</label>
+        <span>Zip Code: {{invoice.customer.zipCode}} </span><br>
+        <label><b>Phone:</b> {{invoice.customer.phone}}</label><br>
+        <label><b>Email:</b> {{invoice.customer.email}}</label>
       </div>
       <div class="column is-1"></div>
     </div>
@@ -103,6 +103,14 @@
               <td></td>
               <td></td>
               <td></td>
+              <td><label class="label">Total</label></td>
+              <td>${{total}}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td><label class="label">Discount Saving</label></td>
               <td>${{discount}}</td>
             </tr>
@@ -115,11 +123,43 @@
               <td>${{shipping}}</td>
             </tr>
             <tr>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+            </tr>
+            <tr>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
               <td><label class="label">Total</label></td>
+              <td>${{total - parseInt(discount) + parseInt(shipping) }}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><label class="label">Tax({{totalTax}}%)</label></td>
+              <td>${{(total - parseInt(discount) + parseInt(shipping))*totalTax/100}}</td>
+            </tr>
+            <tr>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+              <td><hr></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><label class="label">Grand Total</label></td>
               <!--<td>${{total - parseInt(discount) + parseInt(shipping) * totalTax / 100}}</td> -->
               <td>${{(total - parseInt(discount) + parseInt(shipping)) + ((total - parseInt(discount) + parseInt(shipping))*totalTax/100) }}</td>
             </tr>
