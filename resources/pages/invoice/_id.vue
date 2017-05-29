@@ -328,18 +328,6 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Total</span><br/>
-                    </div>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span>${{total}}</span><br/>
-                    </div>
-                  </div>
-                </nav>
-                <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
                       <span>Shipping</span><br/>
                     </div>
                   </div>
@@ -361,16 +349,28 @@
                     </div>
                   </div>
                 </nav>
-                <hr>
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Calculate Change</span><br/>
+                      <span>Tax({{totalTax}}%)</span><br/>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{total - parseInt(discount) + parseInt(shipping)}}</span>(PAID)<br/>
+                      <span>${{(total - parseInt(discount) + parseInt(shipping))*totalTax/100)}}</span><br/>
+                    </div>
+                  </div>
+                </nav>
+                <hr>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Total Amount</span><br/>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span>${{twoDigitFormat((total - parseInt(discount) + parseInt(shipping)) + ((total - parseInt(discount) + parseInt(shipping))*totalTax/100)) }}</span><br/>
                     </div>
                   </div>
                 </nav>
