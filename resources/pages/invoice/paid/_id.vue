@@ -142,7 +142,6 @@
           <div v-if="invoice.payment_method === 'check'">
             <b>Comment: </b>{{ invoice.invoice_comment }}<br>
             <b>Payment Method: </b>Check<br>
-            <b>Payment Method description</b><br>
             <b>Check Number: </b>{{invoice.payment_method_desc.check_no}}<br>
             <b>Account Number: </b>{{ invoice.payment_method_desc.account_no }}<br>
             <b>Routing Number: </b>{{ invoice.payment_method_desc.routing_no }}<br>
@@ -153,7 +152,6 @@
           <div v-if="invoice.payment_method === 'card'">
             <b>Comment: </b>{{ invoice.invoice_comment }}<br>
             <b>Payment Method: </b>Credit Card<br>
-            <b>Payment Method description</b><br>
             <b>Amount: </b>${{total - parseInt(discount) + parseInt(shipping) }}<br>
             <b>Shipping: </b>${{parseInt(shipping) }}<br>
             <b>Exp Date: </b>{{ invoice.payment_method_desc.exp_date }}<br>
@@ -668,9 +666,6 @@
   </section>
 </template>
 <style scoped>
-  tbody tr td {
-    padding: 5px;
-  }
   .invoice-label .level:not(:last-child) {
      margin-bottom: 0rem;
   }

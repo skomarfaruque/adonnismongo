@@ -818,7 +818,7 @@
 </template>
 <style scoped>
   tbody tr td {
-    padding: 5px;
+    padding: 5px 0px 5px 0px;
   }
   .invoice-label .level:not(:last-child) {
      margin-bottom: 0rem;
