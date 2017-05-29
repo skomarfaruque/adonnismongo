@@ -917,8 +917,7 @@ watch: {
          if (newinfo.data.error !=='no'){
            return this.$toasted.show(newinfo.data.error, { duration: 4500 })
         }else {
-        self.isCheckOff = false
-        self.invoice = newinfo.data.invoiceinfo
+       this.$router.push(`/invoice/paid/${this.invoice._id}`)
         }
       } else {
         paymentDescription = {}
@@ -928,24 +927,20 @@ watch: {
         if (result.data.error !=='no'){
         return this.$toasted.show(result.data.error, { duration: 4500 })
         } else {
-          self.isCashOff = false
-          self.invoice = result.data.invoiceinfo
+          this.$router.push(`/invoice/paid/${this.invoice._id}`)
         }
 
       } else if (type === 'check'){
-        console.log(invoiceinfo)
         if (result.data.error !=='no'){
            return this.$toasted.show(result.data.error, { duration: 4500 })
         }else {
-        self.isCheckOff = false
-        self.invoice = result.data.invoiceinfo
+        this.$router.push(`/invoice/paid/${this.invoice._id}`)
         }
       } else {
          if (result.data.error !=='no'){
            return this.$toasted.show(result.data.error, { duration: 4500 })
         }else {
-          self.isCreditOff = false
-          location.reload()
+          this.$router.push(`/invoice/paid/${this.invoice._id}`)
         }
       }
 
