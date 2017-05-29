@@ -104,7 +104,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Total</label></td>
-              <td>${{total}}</td>
+              <td>${{twoDigitFormat(total)}}</td>
             </tr>
             <tr>
               <td></td>
@@ -136,7 +136,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Total</label></td>
-              <td>${{total - parseInt(discount) + parseInt(shipping) }}</td>
+              <td>${{twoDigitFormat(total - parseInt(discount) + parseInt(shipping)) }}</td>
             </tr>
             <tr>
               <td></td>
