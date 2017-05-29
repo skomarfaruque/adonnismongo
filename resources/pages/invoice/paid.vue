@@ -9,22 +9,22 @@
     <div class="columns">
       <div class="column is-1"></div>
       <div class="column is-4">
-        <label class="label">Date: {{ dateFormated(invoice.invoice_date) }}</label>
-        <label class="label">Invoice: {{invoice._id}}</label>
-        <label class="label">Phostorian name: {{invoice.agent.name}}</label>
+        <label><b>Date:</b> {{ getHumanDate(invoice.invoice_date) }}</label><br>
+        <label><b>Invoice:</b> {{invoice._id}}</label><br>
+        <label><b>Phostorian name:</b> {{invoice.agent.name}}</label>
       </div>
       <div class="column is-2">
 
       </div>
       <div class="column is-4">
-        <label class="label">Customer: {{invoice.customer.name}}</label>
+        <label><b>Customer:</b> {{invoice.customer.name}}</label><br>
         <label class="label">Address:</label>
         <span> {{invoice.customer.address1}}, {{invoice.customer.address2}}</span><br/>
         <span>City: {{invoice.customer.city}}, </span>
         <span>State: {{invoice.customer.state}}, </span>
-        <span>Zip Code: {{invoice.customer.zipCode}} </span>
-        <label class="label">Phone: {{invoice.customer.phone}}</label>
-        <label class="label">Email: {{invoice.customer.email}}</label>
+        <span>Zip Code: {{invoice.customer.zipCode}} </span><br>
+        <label><b>Phone:</b> {{invoice.customer.phone}}</label><br>
+        <label><b>Email:</b> {{invoice.customer.email}}</label>
       </div>
       <div class="column is-1"></div>
     </div>
@@ -132,77 +132,50 @@
     </div>
     <div class="columns">
       <div class="column is-1"></div>
-        <div class="column is-10">
-          <div class="columns" v-if="invoice.payment_method === 'cash'">
-            <div class="column is-12">
-              <div class="card">
-                <div class="card-content">
-                  <div class="content">
-                    Comment: <b>{{ invoice.invoice_comment }}</b><br>
-                    Payment Method: <b>Cash</b><br>
-                    Total Amount: <b>${{(total - parseInt(discount) + parseInt(shipping)) + ((total - parseInt(discount) + parseInt(shipping))*totalTax/100) }}</b><br>
-                    Payment Status: <b>PAID</b><br>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div class="column is-10 box">
+          <div v-if="invoice.payment_method === 'cash'">
+            <b>Comment: </b>{{ invoice.invoice_comment }}<br>
+            <b>Payment Method: </b>Cash<br>
+            <b>Payment Status: </b>PAID<br>
           </div>
-
-          <div class="columns" v-if="invoice.payment_method === 'check'">
-            <div class="column is-12">
-              <div class="card">
-                <div class="card-content">
-                  <div class="content">
-                    Comment: <b>{{ invoice.invoice_comment }}</b><br>
-                    Payment Method: <b>Check</b><br>
-                    <b>Payment Method description</b><br>
-                    Check Number: <b>{{invoice.payment_method_desc.check_no}}</b><br>
-                    Account Number: <b>{{ invoice.payment_method_desc.account_no }}</b><br>
-                    Routing Number: <b>{{ invoice.payment_method_desc.routing_no }}</b><br>
-                    Front Of Check:<br><img :src="`/check_doc/${invoice.payment_method_desc.front_file}`" alt=""><br>
-                    Back Of Check:<br><img :src="`/check_doc/${invoice.payment_method_desc.back_file}`" alt=""><br>
-                    Payment Status: <b>PAID</b>
-                  </div>
-                </div>
-              </div>
-
-            </div>
+          <div v-if="invoice.payment_method === 'check'">
+            <b>Comment: </b>{{ invoice.invoice_comment }}<br>
+            <b>Payment Method: </b>Check<br>
+            <b>Payment Method description</b><br>
+            <b>Check Number: </b>{{invoice.payment_method_desc.check_no}}<br>
+            <b>Account Number: </b>{{ invoice.payment_method_desc.account_no }}<br>
+            <b>Routing Number: </b>{{ invoice.payment_method_desc.routing_no }}<br>
+            <b>Front Of Check: </b><br><img :src="`/check_doc/${invoice.payment_method_desc.front_file}`" alt=""><br>
+            <b>Back Of Check: </b><br><img :src="`/check_doc/${invoice.payment_method_desc.back_file}`" alt=""><br>
+            <b>Payment Status: </b>PAID
           </div>
-          <div class="columns" v-if="invoice.payment_method === 'card'">
-            <div class="column is-12">
-              <div class="card">
-                <div class="card-content">
-                  <div class="content">
-                    Comment: <b>{{ invoice.invoice_comment }}</b><br>
-                    Payment Method: <b>Credit Card</b><br>
-                    <b>Payment Method description</b><br>
-                    Amount: <b>${{total - parseInt(discount) + parseInt(shipping) }}</b><br>
-                    Shipping: <b>${{parseInt(shipping) }}</b><br>
-                    Exp Date: <b>{{ invoice.payment_method_desc.exp_date }}</b><br>
-                    Credit Card No: <b>{{ invoice.payment_method_desc.card_no }}</b><br>
-                    Credit Card Code: <b>{{ invoice.payment_method_desc.card_code }}</b><br>
-                    Tax:  <b>{{ invoice.payment_method_desc.tax }}</b><br>
-                    <b>Bill to:</b><br>
-                    First Name: <b>{{ invoice.payment_method_desc.bill_first_name }}</b><br>
-                    Last Name: <b>{{ invoice.payment_method_desc.bill_last_name }}</b><br>
-                    Company: <b>{{ invoice.payment_method_desc.bill_company }}</b><br>
-                    Address: <b>{{ invoice.payment_method_desc.bill_address }}</b><br>
-                    City: <b>{{ invoice.payment_method_desc.bill_city }}</b><br>
-                    State: <b>{{ invoice.payment_method_desc.bill_state }}</b><br>
-                    Zip: <b>{{ invoice.payment_method_desc.bill_zip }}</b><br>
-                    <b>Ship to:</b><br>
-                    First Name: <b>{{ invoice.payment_method_desc.ship_first_name }}</b><br>
-                    Last Name: <b>{{ invoice.payment_method_desc.ship_last_name }}</b><br>
-                    Company: <b>{{ invoice.payment_method_desc.ship_company }}</b><br>
-                    Address: <b>{{ invoice.payment_method_desc.ship_address }}</b><br>
-                    City: <b>{{ invoice.payment_method_desc.ship_city }}</b><br>
-                    State: <b>{{ invoice.payment_method_desc.ship_state }}</b><br>
-                    Zip: <b>{{ invoice.payment_method_desc.ship_zip }}</b><br>
-                    Payment Status: <b>PAID</b>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div v-if="invoice.payment_method === 'card'">
+            <b>Comment: </b>{{ invoice.invoice_comment }}<br>
+            <b>Payment Method: </b>Credit Card<br>
+            <b>Payment Method description</b><br>
+            <b>Amount: </b>${{total - parseInt(discount) + parseInt(shipping) }}<br>
+            <b>Shipping: </b>${{parseInt(shipping) }}<br>
+            <b>Exp Date: </b>{{ invoice.payment_method_desc.exp_date }}<br>
+            <b>Credit Card No: </b>{{ invoice.payment_method_desc.card_no }}<br>
+            <b>Credit Card Code: </b>{{ invoice.payment_method_desc.card_code }}<br>
+            <b>Tax:  </b>{{ invoice.payment_method_desc.tax }}<br>
+            <b>Bill to:</b><br>
+            <b>First Name: </b>{{ invoice.payment_method_desc.bill_first_name }}<br>
+            <b>Last Name: </b>{{ invoice.payment_method_desc.bill_last_name }}<br>
+            <b>Company: </b>{{ invoice.payment_method_desc.bill_company }}<br>
+            <b>Address: </b>{{ invoice.payment_method_desc.bill_address }}<br>
+            <b>City: </b>{{ invoice.payment_method_desc.bill_city }}<br>
+            <b>State: </b>{{ invoice.payment_method_desc.bill_state }}<br>
+            <b>Zip: </b>{{ invoice.payment_method_desc.bill_zip }}<br>
+            <b>Ship to:</b><br>
+            <b>First Name: </b>{{ invoice.payment_method_desc.ship_first_name }}<br>
+            <b>Last Name: </b>{{ invoice.payment_method_desc.ship_last_name }}<br>
+            <b>Company: </b>{{ invoice.payment_method_desc.ship_company }}<br>
+            <b>Address: </b>{{ invoice.payment_method_desc.ship_address }}<br>
+            <b>City: </b>{{ invoice.payment_method_desc.ship_city }}<br>
+            <b>State: </b>{{ invoice.payment_method_desc.ship_state }}<br>
+            <b>Zip: </b>{{ invoice.payment_method_desc.ship_zip }}<br>
+            <b>Payment Status: </b>PAID</b>
           </div>
         </div>
       <div class="column is-1"></div>
@@ -813,6 +786,9 @@ watch: {
   methods: {
     save () {
 
+    },
+    getHumanDate (date) {
+      return moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY');
     },
     dateFormated (date) {
       return moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY');
