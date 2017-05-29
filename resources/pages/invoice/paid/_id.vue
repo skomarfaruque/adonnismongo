@@ -3,12 +3,13 @@
   <section>
     <div class="columns">
       <div class="column is-1"></div>
-      <div class="column is-10 print-class"><a title="print invoice" class="button is-primary"><i class="fa fa-print" aria-hidden="true"></i></a></div>
+      <div class="column is-10 print-class"><a title="print invoice" @click="printPage" class="button is-primary"><i class="fa fa-print" aria-hidden="true"></i></a></div>
       <div class="column is-1"></div>
     </div>
+    <span id="print">
     <div class="columns">
       <div class="column is-1"></div>
-      <div class="column is-4">
+      <div class="column is-4" >
         <label><b>Date:</b> {{ getHumanDate(invoice.invoice_date) }}</label><br>
         <label><b>Invoice:</b> {{invoice._id}}</label><br>
         <label><b>Phostorian name:</b> {{invoice.agent.name}}</label>
@@ -663,6 +664,7 @@
         <button class="modal-close" @click="isCreditOff=false"></button>
       </div>
     </div>
+    </span>
   </section>
 </template>
 <style scoped>
@@ -869,6 +871,13 @@ watch: {
         if(this.newItem.price){
         this.price = this.newItem.price
         }
+    },
+    printPage () {
+      var printContents = document.getElementById('print').innerHTML;
+       var originalContents = document.body.innerHTML;
+       document.body.innerHTML = "<html><head><title></title></head><body>" + printContents + "</body>";
+       window.print();
+       document.body.innerHTML = originalContents;
     },
     onFileChange(e) {
       var targetId = e.target.id
