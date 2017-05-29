@@ -150,7 +150,7 @@
                 <a class="button is-info" name="save" value="Save" id="" @click="save"> Save </a>
                 <a class="button is-info" name="close" value="Close" id="" @click="closeForm">Close</a>
                 <a class="button is-primary" @click="isEdit = false" v-if="invoice && (invoice_settled == null || invoice_settled === false) ">Start Appointment</a>
-                <a class="button is-primary"  v-if="invoice_settled"> <span @click="closeForm"> <nuxt-link class="phosto-blue" @click="closeForm" :to="`/invoice/paid/${invoice}`" title="Edit"> View invoice</nuxt-link></span></a>
+                <a class=""  v-if="invoice_settled"> <span @click="closeForm"> <nuxt-link class="phosto-blue button is-primary" @click="closeForm" :to="`/invoice/paid/${invoice}`" title="Edit"> View invoice</nuxt-link></span></a>
               </div>
             </div>
             <div class="level-right is-3">
