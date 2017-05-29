@@ -107,8 +107,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td><label class="label">Tax</label></td>
-              <td>{{invoice.tax}} %</td>
+              <td><label class="label">Tax({{invoice.tax}}%)</label></td>
+              <td>{{invoice.tax/100}}</td>
             </tr>
             <tr>
               <td><hr></td>
@@ -149,21 +149,19 @@
           </div>
 
           <div class="columns" v-if="invoice.payment_method === 'check'">
-            <div class="column is-6 is-offset-3">
+            <div class="column is-12">
               <div class="card">
-                <header class="card-header">
-                  <p class="card-header-title">
-                    Payment Method: Check
-                  </p>
-                </header>
                 <div class="card-content">
                   <div class="content">
+                    Comment: <b>{{ invoice.invoice_comment }}</b><br>
+                    Payment Method: <b>Check</b><br>
                     <b>Payment Method description</b><br>
                     Check Number: <b>{{invoice.payment_method_desc.check_no}}</b><br>
                     Account Number: <b>{{ invoice.payment_method_desc.account_no }}</b><br>
                     Routing Number: <b>{{ invoice.payment_method_desc.routing_no }}</b><br>
                     Front Of Check:<br><img :src="`/check_doc/${invoice.payment_method_desc.front_file}`" alt=""><br>
                     Back Of Check:<br><img :src="`/check_doc/${invoice.payment_method_desc.back_file}`" alt=""><br>
+                    Payment Status: <b>PAID</b>
                   </div>
                 </div>
               </div>
@@ -171,15 +169,12 @@
             </div>
           </div>
           <div class="columns" v-if="invoice.payment_method === 'card'">
-            <div class="column is-6 is-offset-3">
+            <div class="column is-12">
               <div class="card">
-                <header class="card-header">
-                  <p class="card-header-title">
-                    Payment Method: Credit Card
-                  </p>
-                </header>
                 <div class="card-content">
                   <div class="content">
+                    Comment: <b>{{ invoice.invoice_comment }}</b><br>
+                    Payment Method: <b>Credit Card</b><br>
                     <b>Payment Method description</b><br>
                     Amount: <b>${{total - parseInt(discount) + parseInt(shipping) }}</b><br>
                     Shipping: <b>${{parseInt(shipping) }}</b><br>
@@ -203,6 +198,7 @@
                     City: <b>{{ invoice.payment_method_desc.ship_city }}</b><br>
                     State: <b>{{ invoice.payment_method_desc.ship_state }}</b><br>
                     Zip: <b>{{ invoice.payment_method_desc.ship_zip }}</b><br>
+                    Payment Status: <b>PAID</b>
                   </div>
                 </div>
               </div>
