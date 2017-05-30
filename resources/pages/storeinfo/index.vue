@@ -38,6 +38,9 @@
               Quantity
             </th>
             <th>
+              Image
+            </th>
+            <th>
               Action
             </th>
           </tr>
@@ -48,6 +51,7 @@
             <td>{{ item.description }}</td>
             <td>{{ item.price }}</td>
             <td>{{ item.quantity }}</td>
+            <td><img style="max-width: 300px;" :src="`item_image/${item.image}`" alt=""></td>
             <td class="action">
               <section v-show="confirmation === false">
                 <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>

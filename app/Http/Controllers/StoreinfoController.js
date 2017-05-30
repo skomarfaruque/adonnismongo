@@ -23,7 +23,7 @@ class StoreinfoController {
     const description = req.input('description')
     const price = req.input('price')
     const quantity = req.input('quantity')
-    const image = req.file('back_file', {
+    const image = req.file('image', {
       maxSize: '2mb',
       allowedExtensions: ['jpg', 'png', 'jpeg']
     })

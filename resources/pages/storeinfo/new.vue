@@ -63,12 +63,7 @@ export default {
     async save () {
       var myForm = document.getElementById('myForm')
       let formData = new FormData(myForm)
-      console.log(formData)
       let newinfo = await this.axios.post(`storeinfo`, formData)
-      // if (!this.storeinfo._id) {
-      //   const storeinfo = await this.axios.post('storeinfo', this.storeinfo)
-      //   this.storeinfo._id = storeinfo.data._id
-      // }
       this.$router.push('/storeinfo')
     },
     onFileChange(e) {
