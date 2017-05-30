@@ -17,7 +17,7 @@
       </div>
       <div class="level-right">
         <div class="level-item">
-          <nuxt-link href="javascript:" class="button is-info" title="Add New" to="/supplies/new"> <i class="fa fa-plus"></i> </nuxt-link>
+          <nuxt-link href="javascript:" class="button is-info" title="Add New" to="/storeinfo/new"> <i class="fa fa-plus"></i> </nuxt-link>
         </div>
       </div>
     </nav>
@@ -35,7 +35,7 @@
               Price
             </th>
             <th>
-              commission
+              Quantity
             </th>
             <th>
               Action
@@ -47,7 +47,7 @@
             <td>{{ item.name }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.price }}</td>
-            <td>{{ item.commission }}</td>
+            <td>{{ item.quantity }}</td>
             <td class="action">
               <section v-show="confirmation === false">
                 <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
@@ -74,12 +74,12 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `Store Page (${this.name}-side)`
+      title: `Store item Page (${this.name}-side)`
     }
   },
   async asyncData ({ store, axios }) {
     store.commit('SET_HEAD', ['Store', 'View all your Store items.'])
-    let { data } = await axios.get('supplies')
+    let { data } = await axios.get('storeinfo')
     return {
       list: data,
       search: '',
