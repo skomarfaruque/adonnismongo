@@ -1,32 +1,32 @@
 <template>
   <section>
     <div class="columns">
-    <form id="myForm" name="myForm">
       <div class="column is-6">
-        <label class="label">Name</label>
-        <p class="control">
-          <input class="input" name="name" v-model="storeinfo.name" type="text" placeholder="Item Name">
-        </p>
-        <label class="label">description</label>
-        <p class="control">
-          <input class="input" name="description" v-model="storeinfo.description"  id=""/>
-        </p>
-        <label class="label">Price</label>
-        <p class="control">
-          <input class="input" name="price" v-model="storeinfo.price"  />
-        </p>
-        <label class="label">Quantity</label>
-        <p class="control">
-          <input class="input" name="quantity" v-model="storeinfo.quantity" />
-        </p>
-        <label class="label">Image</label>
-        <p class="control">
-        <span><input type="file" name="image" id="fileInput" @change="onFileChange"><br>
-        <img style="max-width: 300px;" :src="storeinfo.image" alt=""></span>
-        </p>
-        <a href="javascript:" class="button is-info" @click="save">Save Information</a>
+        <form id="myForm" name="myForm">
+          <label class="label">Name</label>
+          <p class="control">
+            <input class="input" name="name" v-model="storeinfo.name" type="text" placeholder="Item Name">
+          </p>
+          <label class="label">description</label>
+          <p class="control">
+            <input class="input" name="description" v-model="storeinfo.description"  id=""/>
+          </p>
+          <label class="label">Price</label>
+          <p class="control">
+            <input class="input" name="price" v-model="storeinfo.price"  />
+          </p>
+          <label class="label">Quantity</label>
+          <p class="control">
+            <input class="input" name="quantity" v-model="storeinfo.quantity" />
+          </p>
+          <label class="label">Image</label>
+          <p class="control">
+          <span><input type="file" name="image" id="fileInput" @change="onFileChange"><br>
+          <img style="max-width: 300px;" :src="storeinfo.image" alt=""></span>
+          </p>
+          <a href="javascript:" class="button is-info" @click="save">Save Information</a>
+        </form>
       </div>
-      </form>
     </div>
   </section>
 </template>

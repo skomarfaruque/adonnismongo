@@ -37,14 +37,14 @@ class StoreinfoController {
   * update (req, res) {
     const id = req.param('id')
     const obj = req.only('name', 'description', 'price', 'quantity')
-    const supplies = yield Storeinfo.update({ _id: id }, { name: obj.name, description: obj.description, price: obj.price, commission: obj.commission }).exec()
-    res.send(supplies)
+    const storeinfo = yield Storeinfo.update({ _id: id }, { name: obj.name, description: obj.description, price: obj.price, quantity: obj.quantity}).exec()
+    res.send(storeinfo)
   }
 
   * destroy (req, res) {
-    const suppliesId = req.param('id')
-    yield Storeinfo.deleteOne({ _id: suppliesId })
-    yield Storeinfo.remove({ supplies: suppliesId })
+    const storeinfoId = req.param('id')
+    yield Storeinfo.deleteOne({ _id: storeinfoId })
+    yield Storeinfo.remove({ storeinfo: storeinfoId })
     res.send('destroy')
   }
 

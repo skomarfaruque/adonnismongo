@@ -51,11 +51,11 @@
             <td>{{ item.description }}</td>
             <td>{{ item.price }}</td>
             <td>{{ item.quantity }}</td>
-            <td><img style="max-width: 300px;" :src="`item_image/${item.image}`" alt=""></td>
+            <td><img style="max-width: 200px;" :src="`item_image/${item.image}`" alt=""></td>
             <td class="action">
               <section v-show="confirmation === false">
                 <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
-                <nuxt-link class="button is-info" :to="`/supplies/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
+                <nuxt-link class="button is-info" :to="`/storeinfo/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
               </section>
               <section v-show="confirmation">
                 <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>
@@ -101,7 +101,7 @@ export default {
   },
   methods: {
     async remove (item, ind) {
-      await this.axios.delete(`supplies/${item._id}`)
+      await this.axios.delete(`storeinfo/${item._id}`)
       this.list.splice(ind, 1)
       this.confirmation = false
     },
