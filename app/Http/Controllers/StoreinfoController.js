@@ -36,8 +36,17 @@ class StoreinfoController {
 
   * update (req, res) {
     const id = req.param('id')
-    const obj = req.only('name', 'description', 'price', 'quantity')
-    const storeinfo = yield Storeinfo.update({ _id: id }, { name: obj.name, description: obj.description, price: obj.price, quantity: obj.quantity}).exec()
+    let obj = req.only('name', 'description', 'price', 'quantity', 'image')
+    const image = req.file('image', {
+      maxSize: '2mb',
+      allowedExtensions: ['jpg', 'png', 'jpeg']
+    })
+    if (image.extension()) {
+      const fileName = `${obj.name}_image.${image.extension()}`
+      yield image.move(Helpers.publicPath('item_image'), fileName)
+      obj.image = image.uploadName()
+    }
+    const storeinfo = yield Storeinfo.update({ _id: id }, {name: obj.name, description: obj.description, price: obj.price, quantity: obj.quantity, image: obj.image}).exec()
     res.send(storeinfo)
   }
 

@@ -14,16 +14,22 @@
           <label class="label">Price</label>
           <p class="control">
             <input class="input" name="price" v-model="price"  />
+            <input type="hidden" class="input" name="image" v-model="image"  />
           </p>
           <label class="label">Quantity</label>
           <p class="control">
             <input class="input" name="quantity" v-model="quantity" />
           </p>
-          <!--<label class="label">Image</label>
+          <label class="label">Image</label>
           <p class="control">
-          <span><input type="file" name="image" id="fileInput"><br>
-          <img style="max-width: 300px;" alt=""></span>
-          </p>-->
+<img style="max-width: 300px;" :src="`/item_image/${image}`" alt="">
+          <img style="max-width: 300px;" alt="">
+          </p>
+ <label class="label">Change image</label>
+          <p class="control">
+          <span><input type="file" name="image" id="fileInput" @change="onFileChange"><br>
+          <img style="max-width: 300px;" :src="tempImage" alt=""></span>
+          </p>
           <a href="javascript:" class="button is-info" @click="save">Save Information</a>
         </form>
       </div>
@@ -37,7 +43,7 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `New Suppliies Page`
+      title: `Edit item page`
     }
   },
   fetch ({ store }) {
@@ -53,7 +59,9 @@ export default {
       name: data.name,
       description: data.description,
       price: data.price,
-      quantity: data.quantity
+      quantity: data.quantity,
+      image: data.image,
+      tempImage: ''
     }
   },
   data () {
@@ -63,8 +71,26 @@ export default {
   },
   methods: {
     async save () {
-      await this.axios.put(`storeinfo/${this.id}`, this.$data)
+      var myForm = document.getElementById('myForm')
+      let formData = new FormData(myForm)
+      await this.axios.put(`storeinfo/${this.id}`, formData)
       this.$router.go(-1)
+    },
+    onFileChange(e) {
+      var targetId = e.target.id
+      var files = e.target.files || e.dataTransfer.files
+      if (!files.length)
+        return;
+      this.createImage(files[0], targetId);
+    },
+    createImage(file, targetId) {
+      var image = new Image();
+      var reader = new FileReader();
+      var vm = this;
+      reader.onload = (e) => {
+      vm.tempImage = e.target.result
+      };
+      reader.readAsDataURL(file);
     }
   }
 }
