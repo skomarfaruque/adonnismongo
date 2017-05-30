@@ -144,7 +144,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Tax({{totalTax}}%)</label></td>
-              <td>${{twoDigitFormat((total - parseInt(discount) + parseInt(shipping))*totalTax/100)}}</td>
+              <td>${{twoDigitFormat(taxCal)}}</td>
             </tr>
             <tr>
               <td><hr></td>
@@ -161,7 +161,7 @@
               <td></td>
               <td><label class="label">Grand Total</label></td>
               <!--<td>${{total - parseInt(discount) + parseInt(shipping) * totalTax / 100}}</td> -->
-              <td>${{twoDigitFormat((total - parseInt(discount) + parseInt(shipping)) + ((total - parseInt(discount) + parseInt(shipping))*totalTax/100)) }}</td>
+              <td>${{twoDigitFormat(priceDisShipTax) }}</td>
             </tr>
           </tfoot>
         </table>
@@ -369,7 +369,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{(total - parseInt(discount) + parseInt(shipping))*totalTax/100}}</span><br/>
+                      <span>${{taxCal}}</span><br/>
                     </div>
                   </div>
                 </nav>
@@ -377,12 +377,37 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Total Amount</span><br/>
+                      <span>Payable Amount</span><br/>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{twoDigitFormat((total - parseInt(discount) + parseInt(shipping)) + ((total - parseInt(discount) + parseInt(shipping))*totalTax/100)) }}</span><br/>
+                      <span>${{twoDigitFormat(priceDisShipTax) }}</span><br/>
+                    </div>
+                  </div>
+                </nav>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Cash paid</span><br/>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input type="number" v-model="paid_amount"></span><br/>
+                    </div>
+                  </div>
+                </nav>
+                <hr>
+                 <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Return amount</span><br/>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input type="number" v-model="returnAmount"></span><br/>
                     </div>
                   </div>
                 </nav>
@@ -885,6 +910,10 @@ export default {
         check_back_file:'',
         routing_no:''
       },
+      cash: {
+        return_amount:0
+      },
+      paid_amount:0,
       products,
       discount: 0,
       shipping: 0,
@@ -918,23 +947,45 @@ watch: {
       }else if(newValue== ''){
         this.discount = 0
       }
+      this.discount = newValue
+    },
+    paid_amount: function (newValue) {
+      if(newValue < 0){
+        this.$toasted.show('Paid  can not be less than 0.', { duration: 4500 })
+      }
     },
 
   },
   computed: {
     total () {
       let total = 0
+      let self = this
       this.invoice.items.forEach(item => {
         item.total = item.quantity * item.price * item.commission / 100
         total += item.quantity * item.price
       })
       return total
+    },
+    taxCal(){
+      return (parseInt(this.total) - parseInt(this.discount) + parseInt(this.shipping))*parseInt(this.totalTax)/100
+    },
+    priceDisShipTax(){
+      let tax = (this.total - parseInt(this.discount) + parseInt(this.shipping))*parseInt(this.totalTax)/100
+      let price = (this.total - parseInt(this.discount) + parseInt(this.shipping))
+      let grandTotal = tax + price
+      return grandTotal
+    },
+    returnAmount (){
+      let return_amount = (this.paid_amount - this.priceDisShipTax)<0 ? '' : (this.paid_amount - this.priceDisShipTax)
+      this.cash.return_amount = return_amount
+      return return_amount
     }
   },
   methods: {
     save () {
 
     },
+
     dateFormated (date) {
       return moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY');
     },
@@ -975,7 +1026,10 @@ watch: {
        this.$router.push(`/invoice/paid/${this.invoice._id}`)
         }
       } else {
-        paymentDescription = {}
+          if (this.paid_amount < this.priceDisShipTax){
+            return this.$toasted.show('Sorry amount is low', { duration: 4500 })
+          }
+          paymentDescription = {customer_paid:this.paid_amount, return_amount: this.cash.return_amount}
       }
       var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice, discount: this.discount, shipping: this.shipping, tax: this.totalTax })
       if(type === 'cash'){

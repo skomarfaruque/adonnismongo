@@ -137,6 +137,8 @@
           <div v-if="invoice.payment_method === 'cash'">
             <b>Comment: </b>{{ invoice.invoice_comment }}<br>
             <b>Payment Method: </b>Cash<br>
+            <b>Paid: </b>${{invoice.payment_method_desc.customer_paid}}<br>
+            <b>Change: </b>${{invoice.payment_method_desc.return_amount}}<br>
             <b>Payment Status: </b>PAID<br>
           </div>
           <div v-if="invoice.payment_method === 'check'">
@@ -152,12 +154,6 @@
           <div v-if="invoice.payment_method === 'card'">
             <b>Comment: </b>{{ invoice.invoice_comment }}<br>
             <b>Payment Method: </b>Credit Card<br>
-            <b>Amount: </b>${{total - parseInt(discount) + parseInt(shipping) }}<br>
-            <b>Shipping: </b>${{parseInt(shipping) }}<br>
-            <b>Exp Date: </b>{{ invoice.payment_method_desc.exp_date }}<br>
-            <b>Credit Card No: </b>{{ invoice.payment_method_desc.card_no }}<br>
-            <b>Credit Card Code: </b>{{ invoice.payment_method_desc.card_code }}<br>
-            <b>Tax:  </b>{{ invoice.payment_method_desc.tax }}<br>
             <b>Bill to:</b><br>
             <b>First Name: </b>{{ invoice.payment_method_desc.bill_first_name }}<br>
             <b>Last Name: </b>{{ invoice.payment_method_desc.bill_last_name }}<br>
