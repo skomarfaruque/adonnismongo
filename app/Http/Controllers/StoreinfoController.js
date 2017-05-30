@@ -1,6 +1,7 @@
 'use strict'
 
 const Storeinfo = use('App/Model/Storeinfo')
+const Helpers = use('Helpers')
 
 class StoreinfoController {
 
@@ -18,11 +19,18 @@ class StoreinfoController {
    * Create Supply
    */
   * store (req, res) {
-    const obj = req.only('name', 'price', 'description', 'quantity')
-    let storeinfo = yield Storeinfo.findOne({ name: obj.name }).exec()
-    if (!storeinfo) {
-      storeinfo = yield Storeinfo.create(obj)
-    }
+    const name = req.input('name')
+    const description = req.input('description')
+    const price = req.input('price')
+    const quantity = req.input('quantity')
+    const image = req.file('back_file', {
+      maxSize: '2mb',
+      allowedExtensions: ['jpg', 'png', 'jpeg']
+    })
+    const fileName = `${name}_back.${image.extension()}`
+    yield image.move(Helpers.publicPath('item_image'), fileName)
+    const obj = {name: name, description: description, price: price, quantity: quantity, image: image.uploadName()}
+    let storeinfo = yield Storeinfo.create(obj)
     res.send(storeinfo)
   }
 
@@ -47,7 +55,7 @@ class StoreinfoController {
    * Search supplies by Name, description, price
    */
   * search (req, res) {
-    if(req.input('key') != '') {
+    if (req.input('key') != '') {
       let regex = req.input('key')
       const supplies = yield Storeinfo
         .find({ $or: [{ name: regex }, { price: regex }, { description: regex }, { commission: regex }] })
