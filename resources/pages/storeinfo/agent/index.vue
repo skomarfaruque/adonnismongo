@@ -105,7 +105,7 @@ export default {
       } else if (!item.qunatity_temp  || item.qunatity_temp < 1){
         return this.$toasted.show('You must select valid quantity', { duration: 4500 })
       }
-      console.log(item.qunatity_temp)
+      let updateQuantity  = this.axios.post(`storeinfo/update/${item._id}`,{ quantity: item.quantity, quantity_temp: item.qunatity_temp})
     }
   }
 

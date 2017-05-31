@@ -1,6 +1,7 @@
 'use strict'
 
 const Storeinfo = use('App/Model/Storeinfo')
+const Cart = use('App/Model/Cart')
 const Helpers = use('Helpers')
 
 class StoreinfoController {
@@ -48,6 +49,14 @@ class StoreinfoController {
     }
     const storeinfo = yield Storeinfo.update({ _id: id }, {name: obj.name, description: obj.description, price: obj.price, quantity: obj.quantity, image: obj.image}).exec()
     res.send(storeinfo)
+  }
+  * updateItem (req, res) {
+    const itemId = req.param('id')
+    const quantity = req.input('quantity') - req.input('quantity_temp')
+    yield Storeinfo.update({ _id: itemId }, { $set: {quantity: quantity} }).exec()
+    let obj = {item: itemId, quantity: req.input('quantity_temp')}
+    yield Cart.create(obj)
+    res.ok('ok')
   }
 
   * destroy (req, res) {
