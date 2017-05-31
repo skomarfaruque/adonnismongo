@@ -50,13 +50,27 @@ class StoreinfoController {
     const storeinfo = yield Storeinfo.update({ _id: id }, {name: obj.name, description: obj.description, price: obj.price, quantity: obj.quantity, image: obj.image}).exec()
     res.send(storeinfo)
   }
-  * updateItem (req, res) {
+  * updateItemCartModification (req, res) {
+    let cartItems = []
+    let originalItem = req.input('item')
+    // console.log(originalItem)
+    let orderQuantity = parseInt(req.input('order_quantity'))
+    originalItem.order_quantity = orderQuantity
+    originalItem.order_price = orderQuantity * originalItem.price
+    cartItems.push(originalItem)
     const agentId = req.currentUser._id
     const itemId = req.param('id')
-    const quantity = req.input('quantity') - req.input('quantity_temp')
+    const quantity = originalItem.quantity - orderQuantity
     yield Storeinfo.update({ _id: itemId }, { $set: {quantity: quantity} }).exec()
-    let obj = {agentId: agentId, item: itemId, quantity: req.input('quantity_temp')}
-    yield Cart.create(obj)
+    let checkCartExists = yield Cart.findOne({agentId: agentId, is_paid: false}).exec()
+    if (checkCartExists) { // unpaid cart exisits
+      checkCartExists.items.push(originalItem)
+      yield Cart.update({ agentId: agentId }, { $set: {items: checkCartExists.items} }).exec()
+    } else { // new insert in cart table
+      let obj = {agentId: agentId, items: cartItems}
+     // console.log(obj)
+      yield Cart.create(obj)
+    }
     res.ok('ok')
   }
 

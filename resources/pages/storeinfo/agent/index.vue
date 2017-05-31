@@ -23,7 +23,7 @@
       Description:{{ item.description }}<br>
       Available:{{ item.quantity }}<br>
       Price:{{ item.price }}<br>
-      Quantity: <input type="number" min="1" :max="item.quantity" v-model="item.qunatity_temp"><br>
+      Quantity: <input type="number" min="1" :max="item.quantity" v-model="item.order_quantity"><br>
       <a href="javascript:" class="button is-info" @click="addToCart(item)" title="Add to cart"> <i class="fa fa-shopping-cart"></i> </a>
     </div>
   </section>
@@ -100,12 +100,12 @@ export default {
       this.list = data
     },
     addToCart (item){
-      if(item.qunatity_temp > item.quantity){
+      if(item.order_quantity > item.quantity){
         return this.$toasted.show('You must select quantity equal or less than available quantity', { duration: 4500 })
-      } else if (!item.qunatity_temp  || item.qunatity_temp < 1){
+      } else if (!item.order_quantity  || item.order_quantity < 1){
         return this.$toasted.show('You must select valid quantity', { duration: 4500 })
       }
-      let updateQuantity  = this.axios.post(`storeinfo/update/${item._id}`,{ quantity: item.quantity, quantity_temp: item.qunatity_temp})
+      let updateQuantity  = this.axios.post(`storeinfo/update/${item._id}`,{order_quantity: item.order_quantity, item: item})
     }
   }
 
