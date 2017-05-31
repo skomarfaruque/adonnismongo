@@ -24,7 +24,7 @@
       Available:{{ item.quantity }}<br>
       Price:{{ item.price }}<br>
       Quantity: <input type="number" min="1" :max="item.quantity" v-model="item.qunatity_temp"><br>
-      <a href="javascript:" class="button is-danger" @click="addToCart(item)" title="Add to card"> <i class="fa fa-shopping-cart"></i> </a>
+      <a href="javascript:" class="button is-info" @click="addToCart(item)" title="Add to cart"> <i class="fa fa-shopping-cart"></i> </a>
     </div>
   </section>
 </template>
@@ -38,7 +38,7 @@
     float: left;
     height: auto;
   }
-  .button.is-danger {
+  .button.is-info {
     padding: 5px 50px;
     margin-top: 5px;
     margin-bottom: 10px;
