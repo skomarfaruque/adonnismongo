@@ -68,7 +68,7 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `Store item Page (${this.name}-side)`
+      title: `Store item Page`
     }
   },
   async asyncData ({ store, axios }) {

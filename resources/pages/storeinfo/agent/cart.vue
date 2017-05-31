@@ -7,11 +7,14 @@
           </div>
           <div class="column is-3">
           </div>
-          <div class="column is-2">
+          <div class="column is-1">
             Price
           </div>
           <div class="column is-2">
             Quantity
+          </div>
+          <div class="column is-1">
+            Action
           </div>
         </div>
       </div>
@@ -26,11 +29,14 @@
           <div class="column is-3 shopitem">
             <span>Mens Shirt - Size M</span>
           </div>
-          <div class="column is-2 shopitem">
+          <div class="column is-1 shopitem">
             <span>$19.99</span>
           </div>
           <div class="column is-2 shopitem">
             <span>2</span>
+          </div>
+          <div class="column is-1 shopitem">
+            <a href="javascript:" class="button is-danger" title="Delete"> <i class="fa fa-trash"></i> </a>
           </div>
         </div>
       </div>
@@ -44,11 +50,14 @@
           <div class="column is-3 shopitem">
             <span>Mens Shirt - Size M</span>
           </div>
-          <div class="column is-2 shopitem">
+          <div class="column is-1 shopitem">
             <span>$19.99</span>
           </div>
           <div class="column is-2 shopitem">
             <span>2</span>
+          </div>
+          <div class="column is-1 shopitem">
+            <a href="javascript:" class="button is-danger" title="Delete"> <i class="fa fa-trash"></i> </a>
           </div>
         </div>
       </div>
@@ -62,11 +71,14 @@
           <div class="column is-3 shopitem">
             <span>Mens Shirt - Size M</span>
           </div>
-          <div class="column is-2 shopitem">
+          <div class="column is-1 shopitem">
             <span>$19.99</span>
           </div>
           <div class="column is-2 shopitem">
             <span>2</span>
+          </div>
+          <div class="column is-1 shopitem">
+            <a href="javascript:" class="button is-danger" title="Delete"> <i class="fa fa-trash"></i> </a>
           </div>
         </div>
       </div>
@@ -93,8 +105,12 @@
   .float-right {
     text-align: right;
   }
-  .shopitem span {
+  .shopitem span, .shopitem a {
     margin-top: 5%;
+    position: absolute;
+  }
+  .shopitem a {
+    margin-top: 4%;
     position: absolute;
   }
 </style>
