@@ -74,6 +74,7 @@ Route.group('supplies', () => {
 
 Route.group('storeinfo', () => {
   Route.resource('storeinfo', 'StoreinfoController').except('create', 'edit')
+  Route.get('storeinfo/search', 'StoreinfoController.search')
 }).prefix('api').middleware('auth')
 
 Route.any('*', 'NuxtController.render')

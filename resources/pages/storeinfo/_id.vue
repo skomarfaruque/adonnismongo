@@ -47,7 +47,7 @@ export default {
     }
   },
   fetch ({ store }) {
-    store.commit('SET_HEAD', ['New Item', 'Add a new Supply item.'])
+    store.commit('SET_HEAD', ['New Item', 'Add a new Store item.'])
   },
   components: {
     MaskedInput

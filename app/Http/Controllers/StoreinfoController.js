@@ -61,17 +61,17 @@ class StoreinfoController {
     res.ok()
   }
   /**
-   * Search supplies by Name, description, price
+   * Search storeinfo by Name, description, price
    */
   * search (req, res) {
     if (req.input('key') != '') {
       let regex = req.input('key')
-      const supplies = yield Storeinfo
-        .find({ $or: [{ name: regex }, { price: regex }, { description: regex }, { commission: regex }] })
+      const storeinfo = yield Storeinfo
+        .find({ $or: [{ name: regex }, { price: regex }, { description: regex }] })
         .exec()
 
-      res.ok(supplies)
-      console.log(supplies)
+      res.ok(storeinfo)
+      console.log(storeinfo)
     }
   }
 }

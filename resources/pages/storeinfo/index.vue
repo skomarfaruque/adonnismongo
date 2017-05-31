@@ -5,10 +5,10 @@
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <input class="input" type="search" placeholder="Search by Name, Price, Description" v-model="search" @keyup.enter="searchSupplies">
+              <input class="input" type="search" placeholder="Search by Name, Price, Description" v-model="search" @keyup.enter="searchStoreinfo">
             </p>
             <p class="control">
-              <button class="button" @click="searchSupplies">
+              <button class="button" @click="searchStoreinfo">
                 <i class="fa fa-search"></i>
               </button>
             </p>
@@ -78,11 +78,11 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `Store item Page (${this.name}-side)`
+      title: `Store Item Page`
     }
   },
   async asyncData ({ store, axios }) {
-    store.commit('SET_HEAD', ['Store', 'View all your Store items.'])
+    store.commit('SET_HEAD', ['Store', 'View all Store items.'])
     let { data } = await axios.get('storeinfo')
     return {
       list: data,
@@ -99,14 +99,21 @@ export default {
     this.list = []
     this.confirmation = false
   },
+  watch: {
+    search (value) {
+      if (value.length === 0) {
+        this.searchStoreinfo()
+      }
+    }
+  },
   methods: {
     async remove (item, ind) {
       await this.axios.delete(`storeinfo/${item._id}`)
       this.list.splice(ind, 1)
       this.confirmation = false
     },
-    async searchSupplies () {
-      let { data } = await this.axios.get(`customer/supplies?key=${this.search}`)
+    async searchStoreinfo () {
+      let { data } = await this.axios.get(`storeinfo/search?key=${this.search}`)
       this.list = data
     }
   }

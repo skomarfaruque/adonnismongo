@@ -37,7 +37,7 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `New iteam add Page`
+      title: `New item add Page`
     }
   },
   fetch ({ store }) {
