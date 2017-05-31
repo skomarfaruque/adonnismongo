@@ -17,46 +17,43 @@
       </div>
 
     </nav>
-    <div class="columns">
-      <table class="table is-striped">
-        <thead>
-          <tr>
-            <th>
-              Name
-            </th>
-            <th>
-              Description
-            </th>
-            <th>
-              Price
-            </th>
-            <th>
-              Image
-            </th>
-            <th>
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, ind) in list">
-            <td>{{ item.name }}</td>
-            <td>{{ item.description }}</td>
-            <td>${{ item.price }}</td>
-            <td><img style="max-width: 200px;" :src="`/item_image/${item.image}`" alt=""></td>
-            <td class="action">
-             <a href="javascript:" class="button is-danger" @click="addToCart(item._id)" title="Add to card"> <i class="fa fa-shopping-cart"></i> </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="columns">
-
+    <div class="storeitem" v-for="(item, ind) in list">
+      <img style="max-width: 200px;" :src="`/item_image/${item.image}`" alt=""><br>
+      Name:{{ item.name }}<br>
+      Description:{{ item.description }}<br>
+      Price:{{ item.price }}<br>
+      Quantity: <input type="number"><br>
+      <a href="javascript:" class="button is-danger" @click="addToCart(item._id)" title="Add to card"> <i class="fa fa-shopping-cart"></i> </a>
     </div>
   </section>
 </template>
-
+<style scoped>
+  .storeitem {
+    border: 1px solid #ccc;
+    text-align: center;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    width: 19%;
+    float: left;
+    height: 300px;
+  }
+  .button.is-danger {
+    padding: 5px 50px;
+    margin-top: 5px;
+}
+  .storeitem input {
+    width:40px;
+  }
+  .storeitem img {
+    padding-top: 10px;
+    height: 150px;
+  }
+  @media only screen and (max-width: 992px) {
+    .storeitem {
+      width: 49%;
+    }
+}
+</style>
 <script>
 
 export default {
