@@ -35,12 +35,13 @@
     margin-bottom: 10px;
     width: 19%;
     float: left;
-    height: 300px;
+    height: auto;
   }
   .button.is-danger {
     padding: 5px 50px;
     margin-top: 5px;
-}
+    margin-bottom: 10px;
+  }
   .storeitem input {
     width:40px;
   }
@@ -52,7 +53,13 @@
     .storeitem {
       width: 49%;
     }
-}
+  }
+  @media only screen and (max-width: 768px) {
+    .storeitem {
+      width: 100%;
+      margin-right: 0px;
+    }
+  }
 </style>
 <script>
 
