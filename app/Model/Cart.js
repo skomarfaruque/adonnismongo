@@ -3,8 +3,16 @@
 const mongoose = use('Mongoose')
 
 const cartSchema = mongoose.Schema({
-  item: String,
-  quantity: String,
+  agentId: String,
+  items: [],
+  is_paid: {
+    type: Boolean,
+    default: false
+  },
+  is_delivered: {
+    type: Boolean,
+    default: false
+  },
   created: {
     type: Date,
     default: Date.now

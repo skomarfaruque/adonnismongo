@@ -51,10 +51,11 @@ class StoreinfoController {
     res.send(storeinfo)
   }
   * updateItem (req, res) {
+    const agentId = req.currentUser._id
     const itemId = req.param('id')
     const quantity = req.input('quantity') - req.input('quantity_temp')
     yield Storeinfo.update({ _id: itemId }, { $set: {quantity: quantity} }).exec()
-    let obj = {item: itemId, quantity: req.input('quantity_temp')}
+    let obj = {agentId: agentId, item: itemId, quantity: req.input('quantity_temp')}
     yield Cart.create(obj)
     res.ok('ok')
   }
