@@ -53,7 +53,6 @@ class StoreinfoController {
   * updateItemCartModification (req, res) {
     let cartItems = []
     let originalItem = req.input('item')
-    // console.log(originalItem)
     let orderQuantity = parseInt(req.input('order_quantity'))
     originalItem.order_quantity = orderQuantity
     originalItem.order_price = orderQuantity * originalItem.price
@@ -64,7 +63,20 @@ class StoreinfoController {
     yield Storeinfo.update({ _id: itemId }, { $set: {quantity: quantity} }).exec()
     let checkCartExists = yield Cart.findOne({agentId: agentId, is_paid: false}).exec()
     if (checkCartExists) { // unpaid cart exisits
-      checkCartExists.items.push(originalItem)
+      let checkData = checkCartExists.items.find(function (data) {
+        return data._id === originalItem._id
+      })
+      if (checkData) {
+        // remove the element
+        checkCartExists.items = checkCartExists.items.filter(function (objVal) {
+          return objVal._id !== originalItem._id
+        })
+        checkData.order_quantity += originalItem.order_quantity
+        checkData.order_price += originalItem.order_price
+        checkCartExists.items.push(checkData)
+      } else {
+        checkCartExists.items.push(originalItem)
+      }
       yield Cart.update({ agentId: agentId }, { $set: {items: checkCartExists.items} }).exec()
     } else { // new insert in cart table
       let obj = {agentId: agentId, items: cartItems}
