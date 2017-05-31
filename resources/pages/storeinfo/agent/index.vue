@@ -21,9 +21,10 @@
       <img style="max-width: 200px;" :src="`/item_image/${item.image}`" alt=""><br>
       Name:{{ item.name }}<br>
       Description:{{ item.description }}<br>
+      Available:{{ item.quantity }}<br>
       Price:{{ item.price }}<br>
-      Quantity: <input type="number"><br>
-      <a href="javascript:" class="button is-danger" @click="addToCart(item._id)" title="Add to card"> <i class="fa fa-shopping-cart"></i> </a>
+      Quantity: <input type="number" min="1" :max="item.quantity" v-model="item.qunatity_temp"><br>
+      <a href="javascript:" class="button is-danger" @click="addToCart(item)" title="Add to card"> <i class="fa fa-shopping-cart"></i> </a>
     </div>
   </section>
 </template>
@@ -91,8 +92,13 @@ export default {
       let { data } = await this.axios.get(`customer/supplies?key=${this.search}`)
       this.list = data
     },
-    addToCart (itemId){
-      console.log(itemId)
+    addToCart (item){
+      if(item.qunatity_temp > item.quantity){
+        return this.$toasted.show('You must select quantity equal or less than available quantity', { duration: 4500 })
+      } else if (!item.qunatity_temp  || item.qunatity_temp < 1){
+        return this.$toasted.show('You must select valid quantity', { duration: 4500 })
+      }
+      console.log(item.qunatity_temp)
     }
   }
 
