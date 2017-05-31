@@ -46,8 +46,8 @@
           <tr v-for="(item, ind) in list">
             <td>{{ item.name }}</td>
             <td>{{ item.description }}</td>
-            <td>{{ item.price }}</td>
-            <td>{{ item.commission }}</td>
+            <td>${{ item.price }}</td>
+            <td>{{ item.commission }}%</td>
             <td class="action">
               <section v-show="confirmation === false">
                 <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
@@ -74,7 +74,7 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `Supplies Page (${this.name}-side)`
+      title: `Supplies Page`
     }
   },
   async asyncData ({ store, axios }) {
