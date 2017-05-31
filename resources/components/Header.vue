@@ -21,12 +21,27 @@
             Profile
           </nuxt-link>
           <a href="javascript:" class="nav-item is-tab" @click="logout">Log out</a>
+          <nuxt-link class="button is-info nav-item is-tab cardicon" title="card" to="/storeinfo/agent/cart"><i class="fa fa-shopping-cart"></i><span>9</span></nuxt-link>
         </div>
       </div>
     </nav>
   </header>
 </template>
-
+<style scoped>
+  .cardicon {
+    margin-top: 8px;
+  }
+  .cardicon i {
+    font-size: 25px;
+  }
+  .cardicon span[data-v-e7863304] {
+    border-radius: 50%;
+    padding: 0px 4px;
+    font-size: 11px;
+    margin-top: -13px;
+    background-color: red;
+  }
+</style>
 <script>
   export default {
     methods: {
