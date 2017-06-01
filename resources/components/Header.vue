@@ -47,7 +47,6 @@
     async asyncData ({ store, axios }) {
     store.commit('SET_HEAD', ['Store', 'Store items.'])
     let { data } = await axios.post('storeinfo/cartitem')
-    console.log(data)
     return {
       list: data,
       search: 0,
