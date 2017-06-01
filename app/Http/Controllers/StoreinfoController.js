@@ -97,6 +97,13 @@ class StoreinfoController {
     res.send('destroy')
   }
 
+  * destroy (req, res) {
+    const cartsId = req.param('id')
+    yield Cart.deleteOne({ _id: cartsId })
+    yield Cart.remove({ carts: cartsId })
+    res.send('destroy')
+  }
+
   * import (req, res) {
     res.ok()
   }

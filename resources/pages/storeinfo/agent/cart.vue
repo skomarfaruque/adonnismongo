@@ -6,80 +6,44 @@
           <div class="column is-3 is-offset-2">
           </div>
           <div class="column is-3">
+            Description
           </div>
           <div class="column is-1">
             Price
           </div>
-          <div class="column is-2">
+          <div class="column is-1">
             Quantity
           </div>
-          <div class="column is-1">
+          <div class="column is-2">
             Action
           </div>
         </div>
       </div>
     </div>
 {{list}}
-
-    <div class="columns">
+    <div class="columns" v-for="(item, ind) in list">
       <div class="column is-12">
         <div class="columns">
           <div class="column is-3 is-offset-2">
-            <img src="/item_image/Shirt_back.png" alt="" style="max-width: 150px;max-height: 150px;">
+            <img :src="`/item_image/${item.image}`"  alt="" style="max-width: 150px;height: 150px;">
           </div>
           <div class="column is-3 shopitem">
-            <span>Mens Shirt - Size M</span>
+            <span>{{item.description}}</span>
           </div>
           <div class="column is-1 shopitem">
-            <span>$19.99</span>
-          </div>
-          <div class="column is-2 shopitem">
-            <span>2</span>
+            <span>${{item.price}}</span>
           </div>
           <div class="column is-1 shopitem">
-            <a href="javascript:" class="button is-danger" title="Delete"> <i class="fa fa-trash"></i> </a>
+            <span>{{item.quantity}}</span>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="columns">
-      <div class="column is-12">
-        <div class="columns">
-          <div class="column is-3 is-offset-2">
-            <img src="/item_image/Shirt_back.png" alt="" style="max-width: 150px;max-height: 150px;">
-          </div>
-          <div class="column is-3 shopitem">
-            <span>Mens Shirt - Size M</span>
-          </div>
-          <div class="column is-1 shopitem">
-            <span>$19.99</span>
-          </div>
-          <div class="column is-2 shopitem">
-            <span>2</span>
-          </div>
-          <div class="column is-1 shopitem">
-            <a href="javascript:" class="button is-danger" title="Delete"> <i class="fa fa-trash"></i> </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="columns">
-      <div class="column is-12">
-        <div class="columns">
-          <div class="column is-3 is-offset-2">
-            <img src="/item_image/Shirt_back.png" alt="" style="max-width: 150px;max-height: 150px;">
-          </div>
-          <div class="column is-3 shopitem">
-            <span>Mens Shirt - Size M</span>
-          </div>
-          <div class="column is-1 shopitem">
-            <span>$19.99</span>
-          </div>
-          <div class="column is-2 shopitem">
-            <span>2</span>
-          </div>
-          <div class="column is-1 shopitem">
-            <a href="javascript:" class="button is-danger" title="Delete"> <i class="fa fa-trash"></i> </a>
+          <div class="column is-2">
+            <section v-show="confirmation === false" class="shopitems">
+              <a href="javascript:" class="button is-danger" title="Delete" @click="confirmation = true"> <i class="fa fa-trash"></i> </a>
+            </section>
+            <section v-show="confirmation" class="shopitems">
+              <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>
+              <a href="javascript:" class="button is-info" @click="confirmation = false" title="Cancel"> <i class="fa fa-times"></i> </a>
+            </section>
           </div>
         </div>
       </div>
@@ -88,14 +52,16 @@
     <div class="columns subtotal">
       <div class="column is-12">
         <div class="columns">
-          <div class="column is-3 is-offset-3">
+          <div class="column is-3 is-offset-2">
           </div>
-          <div class="column is-3">
+          <div class="column is-1">
+          </div>
+          <div class="column is-2">
           </div>
           <div class="column is-2">
             Subtotal:$159.99
           </div>
-          <div class="column is-1">
+          <div class="column is-2">
             <a href="javascript:" class="button is-info" title="Checkout" @click="isCreditOff=true"> Checkout </a>
           </div>
         </div>
@@ -425,6 +391,10 @@
     margin-top: 5%;
     position: absolute;
   }
+  .shopitems a {
+    margin-top: 53px;
+    margin-right: 5px;
+  }
   .shopitem a {
     margin-top: 4%;
     position: absolute;
@@ -445,9 +415,14 @@ export default {
   async asyncData ({ store, axios }) {
     store.commit('SET_HEAD', ['Cart', 'Finalize Purchase'])
     let data = await axios.post('storeinfo/cartitem')
+    // let items = []
+    // if(data){
+    //   items = data.data[0].items
+    // }
     return {
-      list: data.data[0].items,
+      list:  data.data[0].items,
       isCreditOff: false,
+      confirmation: false,
       card: {
         card_no:'',
         tax:'',
@@ -477,9 +452,16 @@ export default {
       axios: this.$root.$options.axios
     }
   },
-
+  destroyed () {
+    this.list = []
+    this.confirmation = false
+  },
   methods: {
-
+    async remove (item, ind) {
+      await this.axios.delete(`cart/${item._id}`)
+      this.list.splice(ind, 1)
+      this.confirmation = false
+    },
   }
 
 
