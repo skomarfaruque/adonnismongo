@@ -21,7 +21,7 @@
             Profile
           </nuxt-link>
           <a href="javascript:" class="nav-item is-tab" @click="logout">Log out</a>
-          <nuxt-link class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent/cart"><i class="fa fa-shopping-cart"></i><span>9</span></nuxt-link>
+          <nuxt-link class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent/cart"><i class="fa fa-shopping-cart"></i><span>9{{cartVal()}}</span></nuxt-link>
         </div>
       </div>
     </nav>
@@ -44,10 +44,29 @@
 </style>
 <script>
   export default {
+    async asyncData ({ store, axios }) {
+    store.commit('SET_HEAD', ['Store', 'Store items.'])
+    let { data } = await axios.post('storeinfo/cartitem')
+    console.log(data)
+    return {
+      list: data,
+      search: 0,
+      confirmation: false
+    }
+  },
+  data () {
+    return {
+      axios: this.$root.$options.axios
+    }
+  },
     methods: {
       logout () {
         this.$store.dispatch('logout')
         this.$router.push('/')
+      },
+       cartVal (){
+         console.log(this.search)
+        return this.search
       }
     }
   }

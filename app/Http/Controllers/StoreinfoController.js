@@ -10,6 +10,10 @@ class StoreinfoController {
     const stores = yield Storeinfo.find().exec()
     res.send(stores)
   }
+  * cartInfo (req, res) {
+    const cartinfo = yield Cart.find({agentId: req.currentUser._id}).exec()
+    res.send(cartinfo)
+  }
 
   * show (req, res) {
     const id = req.param('id')
