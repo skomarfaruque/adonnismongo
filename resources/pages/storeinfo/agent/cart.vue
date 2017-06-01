@@ -19,6 +19,7 @@
         </div>
       </div>
     </div>
+{{list}}
 
     <div class="columns">
       <div class="column is-12">
@@ -443,9 +444,9 @@ export default {
   },
   async asyncData ({ store, axios }) {
     store.commit('SET_HEAD', ['Cart', 'Finalize Purchase'])
-    let { data } = await axios.get('storeinfo')
+    let data = await axios.post('storeinfo/cartitem')
     return {
-      list: data,
+      list: data.data[0].items,
       isCreditOff: false,
       card: {
         card_no:'',
@@ -476,9 +477,9 @@ export default {
       axios: this.$root.$options.axios
     }
   },
-  
+
   methods: {
-    
+
   }
 
 
