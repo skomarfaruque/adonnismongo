@@ -324,8 +324,8 @@
         isPersonalOff: false,
         isAdded: false,
         personal: {
-          blockDate: tomorrow.toLocaleDateString(),
-          endDate: tomorrow.toLocaleDateString(),
+          blockDate: new Date().toLocaleDateString(),
+          endDate: new Date().toLocaleDateString(),
           fullday: false,
           start: '09:00 AM',
           end: '05:00 PM',
@@ -630,9 +630,11 @@
 
       },
       async deletePersonalTask() {
+        console.log(this.personal)
         const id = this.personal._id
         let d = new Date(this.personal.blockDate)
-        await this.axios.delete(`agent/${this.id}/block-date/${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${d.getDate()}`)
+        // await this.axios.delete(`agent/${this.id}/block-date/${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${d.getDate()}`)
+        await this.axios.delete(`agent/${this.id}/block-date/${id}`)
         for (var i = 0; i < this.allMarkedId.length; i++ ) {
           let off = this.allMarkedId[i]
 

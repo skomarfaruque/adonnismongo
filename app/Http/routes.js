@@ -32,7 +32,7 @@ Route.group('agent', () => {
   Route.resource('agents', 'AgentController').except('create', 'edit')
   Route.get('agent/:aid/assign-customer/:cid', 'AgentController.assignCustomer')
   Route.post('agent/:id/block-date', 'AgentController.addBlockDay')
-  Route.delete('agent/:id/block-date/:date', 'AgentController.removeBlockDay')
+  Route.delete('agent/:id/block-date/:blockid', 'AgentController.removeBlockDay')
   Route.get('agent/:id/block-dates', 'AgentController.getBlockDays')
   Route.get('agent/:id/customer', 'AgentController.customers')
   Route.get('agent/search', 'AgentController.search')

@@ -64,7 +64,6 @@
         this.$router.push('/')
       },
        cartVal (){
-         console.log(this.search)
         return this.search
       }
     }
