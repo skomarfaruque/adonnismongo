@@ -630,7 +630,6 @@
 
       },
       async deletePersonalTask() {
-        console.log(this.personal)
         const id = this.personal._id
         let d = new Date(this.personal.blockDate)
         // await this.axios.delete(`agent/${this.id}/block-date/${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${d.getDate()}`)
@@ -656,6 +655,7 @@
         }
         this.isPersonalOff = false
         this.isDeletePersonalOff = false
+        location.reload()
       },
       moveDown () {
         if (!this.isOpen) {
