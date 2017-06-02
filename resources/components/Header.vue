@@ -21,7 +21,7 @@
             Profile
           </nuxt-link>
           <a href="javascript:" class="nav-item is-tab" @click="logout">Log out</a>
-          <nuxt-link class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent/cart"><i class="fa fa-shopping-cart"></i><span>9{{cartVal()}}</span></nuxt-link>
+          <!--<nuxt-link class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent/cart"><i class="fa fa-shopping-cart"></i><span>9{{cartVal()}}</span></nuxt-link> -->
         </div>
       </div>
     </nav>
