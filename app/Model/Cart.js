@@ -6,6 +6,9 @@ const cartSchema = mongoose.Schema({
   agentId: String,
   items: [],
   payment: [],
+  paymentDate: {
+    type: Date
+  },
   is_paid: {
     type: Boolean,
     default: false

@@ -108,7 +108,8 @@ class StoreinfoController {
   * payment (req, res) {
     const cartsId = req.input('id')
     const card = req.input('card')
-    yield Cart.update({ _id: cartsId }, { payment: card })
+    const date = new Date()
+    yield Cart.update({ _id: cartsId }, { payment: card, is_paid: true, paymentDate: date})
     res.send('cart payment add')
   }
 
