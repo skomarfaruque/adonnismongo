@@ -106,13 +106,10 @@ class StoreinfoController {
   }
 
   * payment (req, res) {
-    const obj = req.only('card_no')
     const cartsId = req.input('id')
-    let card = yield Cart.findOne({ _id: cartsId }).exec()
-    if (!card) {
-      card = yield Cart.create(obj)
-    }
-    res.send(card)
+    const card = req.input('card')
+    yield Cart.update({ _id: cartsId }, { payment: card })
+    res.send('cart payment add')
   }
 
   * import (req, res) {
