@@ -98,8 +98,10 @@ class StoreinfoController {
   }
 
   * removecart (req, res) {
-    const cartsId = req.param('id')
-    yield Cart.deleteOne({ _id: cartsId })
+    const cartsId = req.input('id')
+    const cartItems = req.input('items')
+    yield Cart.update({ _id: cartsId }, { items: cartItems })
+    // yield Cart.deleteOne({ _id: cartsId })
     res.send('remove cart item')
   }
 

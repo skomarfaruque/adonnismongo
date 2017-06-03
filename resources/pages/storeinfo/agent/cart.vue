@@ -414,13 +414,10 @@ export default {
   },
   async asyncData ({ store, axios }) {
     store.commit('SET_HEAD', ['Cart', 'Finalize Purchase'])
-    let data = await axios.post('storeinfo/cartitem')
-    // let items = []
-    // if(data){
-    //   items = data.data[0].items
-    // }
+    let {data} = await axios.post('storeinfo/cartitem')
     return {
-      list:  data.data[0].items,
+      list: data[0].items,
+      cart_id: data[0]._id,
       isCreditOff: false,
       confirmation: false,
       card: {
@@ -458,8 +455,8 @@ export default {
   },
   methods: {
     async remove (item, ind) {
-      await this.axios.delete(`storeinfo/cartitem/${item._id}`)
       this.list.splice(ind, 1)
+      let removeCartItem =  this.axios.post(`storeinfo/removecartitem/`,{id: this.cart_id, items: this.list})
       this.confirmation = false
     },
   }

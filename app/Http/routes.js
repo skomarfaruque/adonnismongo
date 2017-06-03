@@ -77,8 +77,7 @@ Route.group('storeinfo', () => {
   Route.get('storeinfo/search', 'StoreinfoController.search')
   Route.post('storeinfo/update/:id', 'StoreinfoController.updateItemCartModification')
   Route.post('storeinfo/cartitem', 'StoreinfoController.cartInfo')
-  Route.delete('storeinfo/cartitem/:id', 'StoreinfoController.removecart')
-  
+  Route.post('storeinfo/removecartitem', 'StoreinfoController.removecart')
 }).prefix('api').middleware('auth')
 
 Route.any('*', 'NuxtController.render')

@@ -333,7 +333,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{total}}</span><br/>
+                      <span>${{ twoDigitFormat(total)}}</span><br/>
                     </div>
                   </div>
                 </nav>
