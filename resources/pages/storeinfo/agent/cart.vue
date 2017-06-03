@@ -20,7 +20,6 @@
         </div>
       </div>
     </div>
-{{list}}
     <div class="columns" v-for="(item, ind) in list">
       <div class="column is-12">
         <div class="columns">
@@ -31,10 +30,10 @@
             <span>{{item.description}}</span>
           </div>
           <div class="column is-1 shopitem">
-            <span>${{item.price}}</span>
+            <span>${{item.order_price}}</span>
           </div>
           <div class="column is-1 shopitem">
-            <span>{{item.quantity}}</span>
+            <span>{{item.order_quantity}}</span>
           </div>
           <div class="column is-2">
             <section v-show="confirmation === false" class="shopitems">
@@ -59,7 +58,7 @@
           <div class="column is-2">
           </div>
           <div class="column is-2">
-            Subtotal:$159.99
+            <b>Subtotal:</b> ${{total}}
           </div>
           <div class="column is-2">
             <a href="javascript:" class="button is-info" title="Checkout" @click="isCreditOff=true"> Checkout </a>
@@ -83,7 +82,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>Total</span>
+                      <span>${{total}}</span>
                     </div>
                   </div>
                 </nav><br>
@@ -447,6 +446,17 @@ export default {
   data () {
     return {
       axios: this.$root.$options.axios
+    }
+  },
+  computed: {
+    total () {
+      let total = 0
+      let self = this
+      this.list.forEach(item => {
+        item.total = item.order_price
+        total += item.order_price
+      })
+      return total
     }
   },
   destroyed () {
