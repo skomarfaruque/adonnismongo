@@ -458,7 +458,7 @@ export default {
   },
   methods: {
     async remove (item, ind) {
-      await this.axios.delete(`cart/${item._id}`)
+      await this.axios.delete(`storeinfo/cartitem/${item._id}`)
       this.list.splice(ind, 1)
       this.confirmation = false
     },
