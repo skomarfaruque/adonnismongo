@@ -5,6 +5,7 @@ const mongoose = use('Mongoose')
 const cartSchema = mongoose.Schema({
   agentId: String,
   items: [],
+  payment: [],
   is_paid: {
     type: Boolean,
     default: false

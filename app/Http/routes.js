@@ -78,6 +78,7 @@ Route.group('storeinfo', () => {
   Route.post('storeinfo/update/:id', 'StoreinfoController.updateItemCartModification')
   Route.post('storeinfo/cartitem', 'StoreinfoController.cartInfo')
   Route.post('storeinfo/removecartitem', 'StoreinfoController.removecart')
+  Route.post('storeinfo/payment', 'StoreinfoController.payment')
 }).prefix('api').middleware('auth')
 
 Route.any('*', 'NuxtController.render')

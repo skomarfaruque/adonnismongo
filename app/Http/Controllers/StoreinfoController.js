@@ -105,6 +105,16 @@ class StoreinfoController {
     res.send('remove cart item')
   }
 
+  * payment (req, res) {
+    const obj = req.only('card_no')
+    const cartsId = req.input('id')
+    let card = yield Cart.findOne({ _id: cartsId }).exec()
+    if (!card) {
+      card = yield Cart.create(obj)
+    }
+    res.send(card)
+  }
+
   * import (req, res) {
     res.ok()
   }
