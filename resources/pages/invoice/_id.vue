@@ -63,9 +63,9 @@
               </td>
               <td>{{i + 1}} </td>
               <td>{{item.description}}</td>
-              <td>${{item.price}}</td>
+              <td>${{twoDigitFormat(item.price)}}</td>
               <td>{{item.quantity}}</td>
-              <td>${{item.price * item.quantity}}</td>
+              <td>${{twoDigitFormat(item.price * item.quantity)}}</td>
 
             </tr>
             <tr>
@@ -911,15 +911,15 @@ export default {
         routing_no:''
       },
       cash: {
-        return_amount:0
+        return_amount:0.00
       },
-      paid_amount:0,
+      paid_amount:0.00,
       products,
-      discount: 0,
-      shipping: 0,
-      totalTax: 0,
+      discount: 0.00,
+      shipping: 0.00,
+      totalTax: 0.00,
       newItem: '',
-      price: 0,
+      price: 0.00,
       quantity: 1,
       isCashOff: false,
       isCheckOff: false,
@@ -976,9 +976,9 @@ watch: {
       return grandTotal
     },
     returnAmount (){
-      let return_amount = (this.paid_amount - this.priceDisShipTax)<0 ? '' : (this.paid_amount - this.priceDisShipTax)
-      this.cash.return_amount = return_amount
-      return return_amount
+      let return_amount = (this.paid_amount - this.priceDisShipTax)<0 ? 0 : (this.paid_amount - this.priceDisShipTax)
+      this.cash.return_amount = return_amount.toFixed(2)
+      return return_amount.toFixed(2)
     }
   },
   methods: {
@@ -1005,6 +1005,7 @@ watch: {
         quantity: this.quantity,
         commission: this.newItem.commission
       })
+      location.reload()
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
     },
     async removeItem (index) {
