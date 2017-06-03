@@ -385,14 +385,7 @@
         self.title = ev.text
         self.customer = ev.customer ? ev.customer.email : ''
         self.comment = ev.comment
-        self.customerData.name = ev.customer.name
-        self.customerData.phone = ev.customer.phone
-        self.customerData.address1 = ev.customer.address1
-        self.customerData.zipCode = ev.customer.zipCode
-        self.customerData.city = ev.customer.city
-        self.customerData.country = ev.customer.country
-        self.customerData.state = ev.customer.state
-
+        self.customerData = ev.customer
         startTime.setDate(ev.start_date)
         let endDate = new Date(ev.start_date)
         endDate.setHours(ev.start_date.getHours() + 2)
