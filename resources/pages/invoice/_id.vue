@@ -112,7 +112,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Discount Saving</label></td>
-              <td>${{discount}}</td>
+              <td>${{parseFloat(!discount?0:discount)}}</td>
             </tr>
             <tr>
               <td></td>
@@ -120,7 +120,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Shipping</label></td>
-              <td>${{shipping}}</td>
+              <td>${{!shipping?0:shipping}}</td>
             </tr>
             <tr>
               <td><hr></td>
@@ -136,7 +136,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Total</label></td>
-              <td>${{twoDigitFormat(total - parseInt(discount) + parseInt(shipping)) }}</td>
+              <td>${{twoDigitFormat(total - parseFloat(discount < 0 || !discount ? 0: discount) + parseFloat(shipping < 0 || !shipping  ? 0:shipping)) }}</td>
             </tr>
             <tr>
               <td></td>
@@ -160,7 +160,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Grand Total</label></td>
-              <!--<td>${{total - parseInt(discount) + parseInt(shipping) * totalTax / 100}}</td> -->
+              <!--<td>${{total - parseFloat(discount) + parseFloat(shipping) * totalTax / 100}}</td> -->
               <td>${{twoDigitFormat(priceDisShipTax) }}</td>
             </tr>
           </tfoot>
@@ -245,9 +245,9 @@
               <div class="card-content">
                 <div class="content">
                     Total: <b>${{ total }}</b><br>
-                    Discount: <b>${{ parseInt(discount) }}</b><br>
-                    Shipping: <b>${{ parseInt(shipping) }}</b><hr>
-                    Amount: <b>${{total - parseInt(discount) + parseInt(shipping)}}</b>
+                    Discount: <b>${{ parseFloat(discount) }}</b><br>
+                    Shipping: <b>${{ parseFloat(shipping) }}</b><hr>
+                    Amount: <b>${{total - parseFloat(discount) + parseFloat(shipping)}}</b>
                 </div>
               </div>
             </div>
@@ -286,8 +286,8 @@
               <div class="card-content">
                 <div class="content">
                   <b>Payment Method description</b><br>
-                  Amount: <b>${{total - parseInt(discount) + parseInt(shipping) }}</b><br>
-                  Shipping: <b>${{parseInt(shipping) }}</b><br>
+                  Amount: <b>${{total - parseFloat(discount) + parseFloat(shipping) }}</b><br>
+                  Shipping: <b>${{parseFloat(shipping) }}</b><br>
                   Exp Date: <b>{{ invoice.payment_method_desc.exp_date }}</b><br>
                   Credit Card No: <b>{{ invoice.payment_method_desc.card_no }}</b><br>
                   Credit Card Code: <b>{{ invoice.payment_method_desc.card_code }}</b><br>
@@ -345,7 +345,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{parseInt(shipping)}}</span><br/>
+                      <span>${{parseFloat(shipping)}}</span><br/>
                     </div>
                   </div>
                 </nav>
@@ -357,7 +357,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{parseInt(discount)}}</span><br/>
+                      <span>${{parseFloat(discount)}}</span><br/>
                     </div>
                   </div>
                 </nav>
@@ -541,7 +541,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{total - parseInt(discount) + parseInt(shipping)}}</span>
+                      <span>${{total - parseFloat(discount) + parseFloat(shipping)}}</span>
                     </div>
                   </div>
                 </nav><br>
@@ -687,7 +687,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{parseInt(shipping)}}</span>
+                      <span>${{parseFloat(shipping)}}</span>
                     </div>
                   </div>
                 </nav><br>
@@ -915,9 +915,9 @@ export default {
       },
       paid_amount:0.00,
       products,
-      discount: 0.00,
-      shipping: 0.00,
-      totalTax: 0.00,
+      discount: '',
+      shipping: '',
+      totalTax: '',
       newItem: '',
       price: 0.00,
       quantity: 1,
@@ -934,20 +934,21 @@ export default {
 watch: {
     shipping: function (newValue) {
       if(newValue < 0 ){
-        this.shipping = 0
+        this.shipping =''
         this.$toasted.show('Shipping can not be less than 0.', { duration: 4500 })
-      }else if(newValue== ''){
-        this.shipping = 0
       }
     },
     discount: function (newValue) {
       if(newValue < 0){
-        this.discount = 0
+        this.discount = ''
         this.$toasted.show('Discount can not be less than 0.', { duration: 4500 })
-      }else if(newValue== ''){
-        this.discount = 0
       }
-      this.discount = newValue
+    },
+    totalTax: function (newValue) {
+      if(newValue < 0){
+        this.totalTax = ''
+        this.$toasted.show('Tax can not be less than 0.', { duration: 4500 })
+      }
     },
     paid_amount: function (newValue) {
       if(newValue < 0){
@@ -967,11 +968,11 @@ watch: {
       return total
     },
     taxCal(){
-      return (parseInt(this.total) - parseInt(this.discount) + parseInt(this.shipping))*parseInt(this.totalTax)/100
+      return (parseFloat(this.total) - parseFloat(!this.discount || this.discount<0?0:this.discount) + parseFloat(!this.shipping || this.shipping<0?0:this.shipping))*parseFloat(!this.totalTax || this.totalTax<0?0:this.totalTax)/100
     },
     priceDisShipTax(){
-      let tax = (this.total - parseInt(this.discount) + parseInt(this.shipping))*parseInt(this.totalTax)/100
-      let price = (this.total - parseInt(this.discount) + parseInt(this.shipping))
+      let tax = (this.total - parseFloat(!this.discount || this.discount<0?0:this.discount) + parseFloat(!this.shipping || this.shipping<0?0:this.shipping))*parseFloat(!this.totalTax || this.totalTax<0?0:this.totalTax)/100
+      let price = (this.total - parseFloat(!this.discount || this.discount<0?0:this.discount) + parseFloat(!this.shipping || this.shipping<0?0:this.shipping))
       let grandTotal = tax + price
       return grandTotal
     },
