@@ -372,7 +372,7 @@
 
             </div>
             <div class="level-right is-6 block">
-              <a class="button is-info" @click="payment">Submit</a>
+              <a class="button is-info" @click="payment">Submit </a>
               <a class="button is-info" @click="isCreditOff=false">Cancel</a>
             </div>
           </div>
@@ -470,9 +470,9 @@ export default {
       this.confirmation = false
     },
     async payment () {
-      //  const card = await this.axios.post(`storeinfo/payment/`, { id: this.cart_id, })
-       const card = await this.axios.post('storeinfo/payment', this.card)
-       this.card._id = this.cart_id
+       const card = await this.axios.post(`storeinfo/payment`, { id: this.cart_id, card:this.card })
+      //  const card = await this.axios.post('storeinfo/payment/cart_id')
+      //  this.card._id = this.cart_id
     }
   }
 
