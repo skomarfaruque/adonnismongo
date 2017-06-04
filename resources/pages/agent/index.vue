@@ -108,6 +108,7 @@
         await this.axios.delete(`agents/${item._id}`)
         this.list.splice(ind, 1)
         this.confirmation = false
+        return this.$toasted.show('Successfully deleted', { duration: 4500 })
       },
       async searchAgent () {
         let { data } = await this.axios.get(`agent/search?key=${this.search}`)
