@@ -111,6 +111,7 @@ export default {
       await this.axios.delete(`storeinfo/${item._id}`)
       this.list.splice(ind, 1)
       this.confirmation = false
+      return this.$toasted.show('Successfully deleted', { duration: 4500 })
     },
     async searchStoreinfo () {
       let { data } = await this.axios.get(`storeinfo/search?key=${this.search}`)

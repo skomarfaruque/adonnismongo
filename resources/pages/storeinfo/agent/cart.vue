@@ -468,6 +468,7 @@ export default {
       this.list.splice(ind, 1)
       let removeCartItem =  this.axios.post(`storeinfo/removecartitem/${item._id}`,{id: this.cart_id, items: this.list,order_quantity: item.order_quantity, quantity: item.quantity, item: item})
       this.confirmation = false
+      return this.$toasted.show('Successfully deleted', { duration: 4500 })
     },
     async payment () {
        const card = await this.axios.post(`storeinfo/payment`, { id: this.cart_id, card:this.card })
