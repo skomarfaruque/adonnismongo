@@ -21,11 +21,7 @@
             Profile
           </nuxt-link>
           <a href="javascript:" class="nav-item is-tab" @click="logout">Log out</a>
-<<<<<<< HEAD
-          <nuxt-link class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent/cart"><i class="fa fa-shopping-cart"></i><span>9{{cartVal()}}</span></nuxt-link>
-=======
-          <nuxt-link class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent/cart"><i class="fa fa-shopping-cart"></i><span>9{{cartVal()}}</span></nuxt-link> 
->>>>>>> 297f121125751aaf2c742d936261c91310777c1a
+          <nuxt-link class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent/cart"><i class="fa fa-shopping-cart"></i><span>9</span></nuxt-link>
         </div>
       </div>
     </nav>
