@@ -60,7 +60,7 @@
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span>${{dataYearVal}}</span><br/>
+              <span>${{twoDigitFormat(dataYearVal)}}</span><br/>
             </div>
           </div>
         </nav>
@@ -73,7 +73,7 @@
           </div>
           <div class="level-right">
             <div class="level-item">
-              <span class="invoice-head">${{list.year.totalPrice}}</span>
+              <span class="invoice-head">${{twoDigitFormat(list.year.totalPrice)}}</span>
             </div>
           </div>
         </nav>
