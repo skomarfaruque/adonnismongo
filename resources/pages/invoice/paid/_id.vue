@@ -81,14 +81,14 @@
               <td></td>
               <td></td>
               <td><label class="label">Discount Saving</label></td>
-              <td>${{invoice.discount}}</td>
+              <td>${{parseFloat(!invoice.discount?0:invoice.discount)}}</td>
             </tr>
             <tr>
               <td></td>
               <td></td>
               <td></td>
               <td><label class="label">Shipping</label></td>
-              <td>${{invoice.shipping}}</td>
+              <td>${{parseFloat(!invoice.shipping?0:invoice.shipping)}}</td>
             </tr>
             <tr>
               <td><hr></td>
