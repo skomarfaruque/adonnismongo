@@ -19,24 +19,25 @@
     </nav>
     <div class="storeitem" v-for="(item, ind) in list">
       <img style="max-width: 200px;" :src="`/item_image/${item.image}`" alt=""><br>
-      Name:{{ item.name }}<br>
-      Description:{{ item.description }}<br>
-      Available:{{ item.quantity }}<br>
-      Price:{{ item.price }}<br>
-      Quantity: <input type="number" min="1" :max="item.quantity" v-model="item.order_quantity"><br>
+      <b>Name:</b> {{ item.name }}<br>
+      <b>Description:</b> {{ item.description }}<br>
+      <b>Available:</b> {{ item.quantity }}<br>
+      <b>Price:</b> {{ item.price }}<br>
+      <b>Quantity:</b> <input type="number" min="1" :max="item.quantity" v-model="item.order_quantity"><br>
       <a href="javascript:" class="button is-info" @click="addToCart(item)" title="Add to cart"> <i class="fa fa-shopping-cart"></i> </a>
     </div>
   </section>
 </template>
 <style scoped>
   .storeitem {
-    border: 1px solid #ccc;
+    border-radius: 2px;
     text-align: center;
-    margin-right: 5px;
+    margin-right: 1%;
     margin-bottom: 10px;
     width: 19%;
     float: left;
     height: auto;
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
   .button.is-info {
     padding: 5px 50px;
