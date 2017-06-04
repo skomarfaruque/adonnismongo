@@ -92,7 +92,7 @@
                 <input type="number" class="input" min="1"  v-model="quantity">
               </td>
               <td>
-                ${{price*quantity}}
+                ${{twoDigitFormat(price*quantity)}}
               </td>
 
             </tr>
@@ -345,7 +345,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{parseFloat(shipping)}}</span><br/>
+                      <span>${{parseFloat(!shipping?0:shipping)}}</span><br/>
                     </div>
                   </div>
                 </nav>
@@ -357,7 +357,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{parseFloat(discount)}}</span><br/>
+                      <span>${{parseFloat(!discount?0:discount)}}</span><br/>
                     </div>
                   </div>
                 </nav>
@@ -541,7 +541,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{total - parseFloat(discount) + parseFloat(shipping)}}</span>
+                      <span>${{twoDigitFormat(priceDisShipTax) }}</span>
                     </div>
                   </div>
                 </nav><br>
@@ -687,7 +687,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{parseFloat(shipping)}}</span>
+                      <span>${{parseFloat(!shipping?0:shipping)}}</span>
                     </div>
                   </div>
                 </nav><br>
