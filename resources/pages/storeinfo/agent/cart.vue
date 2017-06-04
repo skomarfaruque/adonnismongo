@@ -466,11 +466,12 @@ export default {
   methods: {
     async remove (item, ind) {
       this.list.splice(ind, 1)
-      let removeCartItem =  this.axios.post(`storeinfo/removecartitem/`,{id: this.cart_id, items: this.list})
+      let removeCartItem =  this.axios.post(`storeinfo/removecartitem/${item._id}`,{id: this.cart_id, items: this.list,order_quantity: item.order_quantity, quantity: item.quantity, item: item})
       this.confirmation = false
     },
     async payment () {
        const card = await this.axios.post(`storeinfo/payment`, { id: this.cart_id, card:this.card })
+       this.$router.push(`/dashboard`)
       //  const card = await this.axios.post('storeinfo/payment/cart_id')
       //  this.card._id = this.cart_id
     }

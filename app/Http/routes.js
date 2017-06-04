@@ -77,7 +77,7 @@ Route.group('storeinfo', () => {
   Route.get('storeinfo/search', 'StoreinfoController.search')
   Route.post('storeinfo/update/:id', 'StoreinfoController.updateItemCartModification')
   Route.post('storeinfo/cartitem', 'StoreinfoController.cartInfo')
-  Route.post('storeinfo/removecartitem', 'StoreinfoController.removecart')
+  Route.post('storeinfo/removecartitem/:id', 'StoreinfoController.removecart')
   Route.post('storeinfo/payment', 'StoreinfoController.payment')
 }).prefix('api').middleware('auth')
 

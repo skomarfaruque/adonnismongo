@@ -101,6 +101,15 @@ class StoreinfoController {
     const cartsId = req.input('id')
     const cartItems = req.input('items')
     yield Cart.update({ _id: cartsId }, { items: cartItems })
+
+    const itemId = req.param('id')
+    let orderQuantity = parseInt(req.input('order_quantity'))
+    cartItems.order_quantity = orderQuantity
+    let orginalQuantity = parseInt(req.input('quantity'))
+    cartItems.quantity = orginalQuantity
+    const quantity = orginalQuantity
+    yield Storeinfo.update({ _id: itemId }, { $set: {quantity: quantity} }).exec()
+    
     // yield Cart.deleteOne({ _id: cartsId })
     res.send('remove cart item')
   }
