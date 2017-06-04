@@ -102,14 +102,14 @@
               <td></td>
               <td></td>
               <td><label class="label">Total</label></td>
-              <td>${{twoDigitFormat(total - parseInt(invoice.discount) + parseInt(invoice.shipping))}}</td>
+              <td>${{twoDigitFormat(total - parseFloat(!invoice.discount?0:invoice.discount) + parseFloat(!invoice.shipping?0:invoice.shipping))}}</td>
             </tr>
             <tr>
               <td></td>
               <td></td>
               <td></td>
               <td><label class="label">Tax({{invoice.tax}}%)</label></td>
-              <td>${{twoDigitFormat ((total - parseInt(invoice.discount) + parseInt(invoice.shipping))*invoice.tax/100)}}</td>
+              <td>${{twoDigitFormat ((total - parseInt(!invoice.discount?0:invoice.discount) + parseInt(!invoice.shipping?0:invoice.shipping))*invoice.tax?0:invoice.tax/100)}}</td>
             </tr>
             <tr>
               <td><hr></td>
@@ -124,7 +124,7 @@
               <td></td>
               <td><label class="label">Grand Total</label></td>
               <!--<td>${{total - parseInt(discount) + parseInt(shipping) * totalTax / 100}}</td> -->
-              <td>${{ twoDigitFormat((total - parseInt(invoice.discount) + parseInt(invoice.shipping)) + ((total - parseInt(invoice.discount) + parseInt(invoice.shipping))*invoice.tax/100)) }}</td>
+              <td>${{ twoDigitFormat((total - parseInt(!invoice.discount?0:invoice.discount) + parseInt(!invoice.shipping?0:invoice.shipping)) + ((total - parseInt(!invoice.discount?0:invoice.discount) + parseInt(!invoice.shipping?0:invoice.shipping))*!invoice.tax?0:invoice.tax/100)) }}</td>
             </tr>
           </tfoot>
         </table>
