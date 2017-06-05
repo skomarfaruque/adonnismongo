@@ -376,6 +376,11 @@
         <br/><b>Customer:</b> ${ev.customer.name} <br/> <b>Address:</b> ${ev.customer.address1}, ${ev.customer.address2}
         <br/> <b>City:</b> ${ev.customer.city} <br/> <b>State:</b> ${ev.customer.state} <br/> <b>Zip Code:</b> ${ev.customer.zipCode}`
       }
+
+      // =======================================================================
+      // Show Popup for Calendar Event Click
+      // =======================================================================
+
       scheduler.showLightbox = function (id) {
         var ev = scheduler.getEvent(id)
         scheduler.startLightbox(id, document.getElementById('custom_form'))
@@ -415,6 +420,10 @@
         self.invoice_settled = ev.invoice_settled
         self.isStarted = ev.isStarted
       }
+      
+      // =======================================================================
+      // Show event
+      // =======================================================================
       var events = []
       this.events.forEach(m => {
         events.push({
@@ -432,6 +441,9 @@
           ended: m.ended
         })
       })
+      // =======================================================================
+      // Block Times Array
+      // =======================================================================
       this.block_time.forEach((b, i) => {
         let off
         if (typeof b.day === 'number') {
@@ -456,6 +468,9 @@
         scheduler.addMarkedTimespan(off)
         self.allMarkedId.push(off)
       })
+      // =======================================================================
+      // Personal Off Array
+      // =======================================================================
       function showPersonalTask (id) {
         this.showPersonalTask(id)
       }
@@ -647,18 +662,33 @@
             break;
           }
         }
-        this.personal = {
-          blockDate: (new Date()).toLocaleDateString(),
-          endDate: (new Date().toLocaleDateString()),
-          fullday: false,
-          start: '09:00 AM',
-          end: '05:00 PM',
-          comment: '',
-          isRepeat: false
+        let b = this.block_time[d.getDay()]
+        
+        let off
+        if (typeof b.day === 'number') {
+          off = {
+            days: d,
+            zones: 'fullday',
+            css: 'holiday',
+            html: 'Off Day',
+            type: 'dhx_time_block'
+          }
+        } else {
+          const startMinute = helper.convertTimetoInt(b.start)
+          const endMinute = helper.convertTimetoInt(b.end)
+          off = {
+            days: d,
+            zones: [startMinute, endMinute],
+            invert_zones: true,
+            type: 'dhx_time_block',
+            css: 'fat_lines_section'
+          }
         }
+        scheduler.addMarkedTimespan(off)
+        scheduler.updateView()
+        this.allMarkedId.push(off)
         this.isPersonalOff = false
         this.isDeletePersonalOff = false
-        this.$mount()
       },
       moveDown () {
         if (!this.isOpen) {
