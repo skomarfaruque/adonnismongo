@@ -413,10 +413,11 @@ export default {
   },
   async asyncData ({ store, axios }) {
     store.commit('SET_HEAD', ['Cart', 'Finalize Purchase'])
-    let {data} = await axios.post('storeinfo/cartitem')
+    let {data} = await axios.get('store/cart')
+    console.log(data)
     return {
-      list: data[0].items,
-      cart_id: data[0]._id,
+      list: data.items,
+      cart_id: data._id,
       isCreditOff: false,
       confirmation: false,
       card: {
