@@ -12,6 +12,7 @@ class StoreinfoController {
   }
   * cartInfo (req, res) {
     const cartinfo = yield Cart.find({agentId: req.currentUser._id, is_paid: false}).exec()
+    console.log(cartinfo)
     res.send(cartinfo)
   }
 

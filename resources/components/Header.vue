@@ -44,26 +44,30 @@
 </style>
 <script>
   export default {
-    async asyncData ({ store, axios }) {
-    store.commit('SET_HEAD', ['Store', 'Store items.'])
-    let { data } = await axios.post('storeinfo/cartitem')
-    return {
-      list: data,
-      search: 0,
-      confirmation: false
-    }
-  },
-  data () {
-    return {
-      axios: this.$root.$options.axios
-    }
-  },
+    data () {
+      return {
+        cart: 0,
+        search: 0,
+        confirmation: false,
+        axios: this.$root.$options.axios
+      }
+    },
+    mounted () {
+      let self = this
+      this.axios.get('store/cart')
+        .then(obj => {
+          self.cart = obj
+        })
+        .catch(function (err) {
+          console.log(err)
+        })
+    },
     methods: {
       logout () {
         this.$store.dispatch('logout')
         this.$router.push('/')
       },
-       cartVal (){
+      cartVal () {
         return this.search
       }
     }

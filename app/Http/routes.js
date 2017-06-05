@@ -76,7 +76,7 @@ Route.group('storeinfo', () => {
   Route.resource('storeinfo', 'StoreinfoController').except('create', 'edit')
   Route.get('storeinfo/search', 'StoreinfoController.search')
   Route.post('storeinfo/update/:id', 'StoreinfoController.updateItemCartModification')
-  Route.post('storeinfo/cartitem', 'StoreinfoController.cartInfo')
+  Route.get('store/cart', 'StoreinfoController.cartInfo')
   Route.post('storeinfo/removecartitem/:id', 'StoreinfoController.removecart')
   Route.post('storeinfo/payment', 'StoreinfoController.payment')
 }).prefix('api').middleware('auth')

@@ -658,7 +658,7 @@
         }
         this.isPersonalOff = false
         this.isDeletePersonalOff = false
-        location.reload()
+        this.$mount()
       },
       moveDown () {
         if (!this.isOpen) {
