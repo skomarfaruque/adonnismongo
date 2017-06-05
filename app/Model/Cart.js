@@ -10,6 +10,9 @@ const cartSchema = mongoose.Schema({
     type: Boolean,
     default: false
   },
+  paymentDate: {
+    type: Date
+  },
   is_delivered: {
     type: Boolean,
     default: false
