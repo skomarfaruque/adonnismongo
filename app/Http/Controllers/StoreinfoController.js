@@ -111,14 +111,22 @@ class StoreinfoController {
     res.send('remove cart item')
   }
 
+  // * payment (req, res) {
+  //   // const obj = req.only('card_no', 'tax','exp_date','ship_first_name', 'ship_last_name','ship_company','ship_address','ship_city','ship_state', 'ship_zip', 'ship_country','card_code', 'bill_first_name','bill_last_name','bill_company','bill_address','bill_city','bill_state','bill_zip','bill_country')
+  //   const cartsId = req.input('id')
+  //   let card = yield Cart.findOne({ _id: cartsId }).exec()
+  //   if (!card) {
+  //     card = yield Cart.create(obj)
+  //   }
+  //   res.send(card)
+  // }
+
   * payment (req, res) {
-    const obj = req.only('card_no')
     const cartsId = req.input('id')
-    let card = yield Cart.findOne({ _id: cartsId }).exec()
-    if (!card) {
-      card = yield Cart.create(obj)
-    }
-    res.send(card)
+    const card = req.input('card')
+    const date = new Date()
+    yield Cart.update({ _id: cartsId }, { payment: card, is_paid: true, paymentDate: date})
+    res.send('cart payment add')
   }
 
   * import (req, res) {
