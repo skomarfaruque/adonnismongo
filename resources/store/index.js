@@ -61,6 +61,7 @@ export const actions = {
 
   logout ({ commit }) {
     commit('SET_USER', { token: null, permissions: [] })
+    commit('SET_CART_ITEM', '')
     cookie.set('backend-app', '{}')
   },
   forgotpassword ({ commit }, { email }) {

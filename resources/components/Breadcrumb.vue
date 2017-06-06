@@ -8,6 +8,9 @@
         <h2 class="subtitle">
           {{heading.subtitle}}
         </h2>
+        <h2 class="subtitle">
+          {{cartItem}}
+        </h2>
       </div>
     </div>
   </section>
@@ -22,6 +25,6 @@
 <script>
   import { mapState } from 'vuex'
   export default {
-    computed: mapState(['heading'])
+    computed: mapState(['heading','cartItem'])
   }
 </script>

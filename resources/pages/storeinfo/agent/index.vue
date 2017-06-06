@@ -75,6 +75,9 @@ export default {
   async asyncData ({ store, axios }) {
     store.commit('SET_HEAD', ['Store', 'Store items.'])
     let { data } = await axios.get('storeinfo')
+    let presentQuantity = await axios.get('store/cart')
+    console.log(presentQuantity)
+    store.commit('SET_CART_ITEM', presentQuantity.data?presentQuantity.data.items.length:0)
     return {
       list: data,
       search: '',
