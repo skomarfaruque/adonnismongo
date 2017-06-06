@@ -48,7 +48,6 @@ class SuppliesController {
    */
   * search (req, res) {
     if (req.input('key') !== '') {
-      // let regex = new RegExp(req.input('key'))
       let regex = req.input('key')
       let price = parseInt(regex)
       let commission = parseInt(regex)
@@ -56,9 +55,13 @@ class SuppliesController {
         price = -1
         commission = -1
       }
-      console.log(price)
       const supplies = yield Supplies
         .find({ $or: [{ name: regex }, { price: price }, { description: regex }, { commission: commission }] })
+        .exec()
+      res.ok(supplies)
+    } else {
+      const supplies = yield Supplies
+        .find({})
         .exec()
       res.ok(supplies)
     }
