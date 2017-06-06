@@ -21,7 +21,9 @@
             Profile
           </nuxt-link>
           <a href="javascript:" class="nav-item is-tab" @click="logout">Log out</a>
-          <nuxt-link class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent/cart"><i class="fa fa-shopping-cart"></i><span>{{cart}}</span></nuxt-link>
+          <span v-if="userType==='Agent'">
+          <nuxt-link v-if="cartItem > 0 " class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent/cart"><i class="fa fa-shopping-cart"></i><span>{{cartItem}}</span></nuxt-link>
+<nuxt-link v-else class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent"><i class="fa fa-shopping-cart"></i><span>{{cartItem}}</span></nuxt-link></span>
         </div>
       </div>
     </nav>
@@ -43,29 +45,29 @@
   }
 </style>
 <script>
+import { mapState } from 'vuex'
   export default {
     data () {
       return {
-        cart: this.$store.state.cartItem,
+        cart:'',
         search: 0,
         confirmation: false,
         axios: this.$root.$options.axios,
-        store: this.$root.$options.store
+        userType: this.$store.state.role
       }
     },
     mounted () {
       let self = this
-      const per = this.$store.state
-      console.log(per)
       this.axios.get('store/cart')
         .then(obj => {
-          console.log(obj.data.items.length)
+          self.$store.commit('SET_CART_ITEM', obj.data?obj.data.items.length:0)
           self.cart = obj.data.items.length
         })
         .catch(function (err) {
           console.log(err)
         })
     },
+computed: mapState(['heading','cartItem']),
     methods: {
       logout () {
         this.$store.dispatch('logout')

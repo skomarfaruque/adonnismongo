@@ -24,10 +24,10 @@
             <p class="subtitle">View all your supply items.</p>
           </nuxt-link>
           <nuxt-link class="tile is-child notification is-info" to="/storeinfo" v-if="isAdmin">
-            <p class="title">Store Management</p>
+            <p class="title">Store</p>
             <p class="subtitle">View all store items.</p>
           </nuxt-link>
-          <nuxt-link class="tile is-child notification is-info" to="/storeinfo/agent" v-if="isSupply">
+          <nuxt-link class="tile is-child notification is-info" to="/storeinfo/agent" v-if="usertype ==='Agent'">
             <p class="title">Store</p>
             <p class="subtitle">View all store items.</p>
           </nuxt-link>
@@ -54,13 +54,15 @@ export default {
   asyncData ({ store }) {
     store.commit('SET_HEAD', ['Dashboard', 'Navigate your application.'])
     const per = store.state.permissions
+    const usertype = store.state.role
     return {
       isCalendar: per.includes('calendar-view'),
       isAgent: per.includes('agent-view'),
       isAdmin: per.includes('admin-view'),
       isCustomer: per.includes('customer-view'),
       isSupply: per.includes('supply-view'),
-      isInvoice: per.includes('invoice-view')
+      isInvoice: per.includes('invoice-view'),
+      usertype: usertype
     }
   }
 }

@@ -101,10 +101,11 @@
                   <p class="control has-icon has-icon-right">
                     <input v-validate="'required|email'" class="input" type="email" placeholder="Select Customer" name="customer" v-model="customer" @input="searchCustomer($event.target.value)" @keyup.esc="isOpen = false" @blur="isOpen = false" @keydown.down="moveDown" @keydown.up="moveUp" @keydown.enter="selectOption">
                     <span class="icon is-small" v-if="isAdded">
-                      <i class="fa fa-check" aria-hidden="true"></i>
+                      <i class="fa fa-check" aria-hidden="true">address</i>
                     </span>
                     <span class="help is-success" v-if="isAdded">Customer with this email has added to your profile!</span>
                     <span class="help is-danger" v-show="errors.has('customer')" >{{ errors.first('customer') }}</span>
+                    Address: <span v-if="customer">{{customerData.address1}}</span>
                   </p>
                   <p class="control">
                     <button class="button" @click="isCustomer=true">
@@ -421,7 +422,7 @@
         self.invoice_settled = ev.invoice_settled
         self.isStarted = ev.isStarted
       }
-      
+
       // =======================================================================
       // Show event
       // =======================================================================
@@ -676,7 +677,7 @@
           }
         }
         let b = this.block_time[d.getDay()]
-        
+
         let off
         if (typeof b.day === 'number') {
           off = {
