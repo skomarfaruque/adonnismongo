@@ -100,13 +100,16 @@ export default {
       let { data } = await this.axios.get(`customer/supplies?key=${this.search}`)
       this.list = data
     },
-    addToCart (item){
+    async addToCart (item){
+      self = this
       if(item.order_quantity > item.quantity){
         return this.$toasted.show('You must select quantity equal or less than available quantity', { duration: 4500 })
       } else if (!item.order_quantity  || item.order_quantity < 1){
         return this.$toasted.show('You must select valid quantity', { duration: 4500 })
       }
-      let updateQuantity  = this.axios.post(`storeinfo/update/${item._id}`,{order_quantity: item.order_quantity, item: item})
+      let updateQuantity  = await this.axios.post(`storeinfo/update/${item._id}`,{order_quantity: item.order_quantity, item: item})
+      let presentQuantity = await this.axios.get('store/cart')
+      self.$store.commit('SET_CART_ITEM', presentQuantity.data.items.length)
       return this.$toasted.show('Successfully added to cart', { duration: 4500 })
     }
   }

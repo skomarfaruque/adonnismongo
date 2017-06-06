@@ -414,7 +414,6 @@ export default {
   async asyncData ({ store, axios }) {
     store.commit('SET_HEAD', ['Cart', 'Finalize Purchase'])
     let {data} = await axios.get('store/cart')
-    console.log(data)
     return {
       list: data.items,
       cart_id: data._id,
@@ -469,6 +468,8 @@ export default {
       this.list.splice(ind, 1)
       let removeCartItem =  this.axios.post(`storeinfo/removecartitem/${item._id}`,{id: this.cart_id, items: this.list,order_quantity: item.order_quantity, quantity: item.quantity, item: item})
       this.confirmation = false
+      let presentQuantity = await this.axios.get('store/cart')
+      this.$store.commit('SET_CART_ITEM', presentQuantity.data.items.length)
       return this.$toasted.show('Successfully deleted', { duration: 4500 })
     },
     async payment () {

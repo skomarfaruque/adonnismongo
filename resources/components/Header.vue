@@ -46,14 +46,17 @@
   export default {
     data () {
       return {
-        cart: 0,
+        cart: this.$store.state.cartItem,
         search: 0,
         confirmation: false,
-        axios: this.$root.$options.axios
+        axios: this.$root.$options.axios,
+        store: this.$root.$options.store
       }
     },
     mounted () {
       let self = this
+      const per = this.$store.state
+      console.log(per)
       this.axios.get('store/cart')
         .then(obj => {
           console.log(obj.data.items.length)
