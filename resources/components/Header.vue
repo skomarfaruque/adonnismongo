@@ -21,8 +21,9 @@
             Profile
           </nuxt-link>
           <a href="javascript:" class="nav-item is-tab" @click="logout">Log out</a>
+          <span v-if="userType==='Agent'">
           <nuxt-link v-if="cartItem > 0 " class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent/cart"><i class="fa fa-shopping-cart"></i><span>{{cartItem}}</span></nuxt-link>
-<nuxt-link v-else class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent"><i class="fa fa-shopping-cart"></i><span>{{cartItem}}</span></nuxt-link>
+<nuxt-link v-else class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent"><i class="fa fa-shopping-cart"></i><span>{{cartItem}}</span></nuxt-link></span>
         </div>
       </div>
     </nav>
@@ -52,7 +53,7 @@ import { mapState } from 'vuex'
         search: 0,
         confirmation: false,
         axios: this.$root.$options.axios,
-        store: this.$root.$options.store
+        userType: this.$store.state.role
       }
     },
     mounted () {
