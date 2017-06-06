@@ -136,14 +136,21 @@ class StoreinfoController {
    * Search storeinfo by Name, description, price
    */
   * search (req, res) {
-    if (req.input('key') != '') {
+    if (req.input('key') !== '') {
       let regex = req.input('key')
+      let price = parseInt(regex)
+      if (!parseInt(regex)) {
+        price = -1
+      }
       const storeinfo = yield Storeinfo
-        .find({ $or: [{ name: regex }, { price: regex }, { description: regex }] })
+        .find({ $or: [{ name: regex }, { price: price }, { description: regex }] })
         .exec()
-
       res.ok(storeinfo)
-      console.log(storeinfo)
+    } else {
+      const storeinfo = yield Storeinfo
+        .find({})
+        .exec()
+      res.ok(storeinfo)
     }
   }
 }
