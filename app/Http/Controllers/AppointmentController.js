@@ -80,6 +80,11 @@ class AppointmentController {
     yield Appointment.update({ _id: id }, { isStarted: true, started: start })
     res.ok('started')
   }
+  * pauseAppointment (req, res) {
+    const id = req.input('_id')
+    yield Appointment.update({ _id: id }, { isPaused: true })
+    res.ok('paused')
+  }
 
   * stopAppointment (req, res) {
     const id = req.input('_id')

@@ -53,6 +53,7 @@ Route.group('appointment', () => {
   Route.get('customer/:id', 'AppointmentController.byCustomer')
   Route.post('/', 'AppointmentController.store')
   Route.post('start', 'AppointmentController.startAppointment')
+  Route.post('pause', 'AppointmentController.pauseAppointment')
   Route.post('stop', 'AppointmentController.stopAppointment')
   Route.delete(':id', 'AppointmentController.destroy')
 }).prefix('api/appointment')

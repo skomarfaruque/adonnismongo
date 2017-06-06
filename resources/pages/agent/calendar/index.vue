@@ -121,6 +121,7 @@
                 </ul>
               </div>
             </div>
+            
             <div class="columns">
               <div class="column is-2">
                 <label class="label">Time</label>
@@ -515,6 +516,9 @@
       this.title = 'Scanning Session'
     },
     methods: {
+      // =======================================================================
+      // Save Appointment
+      // =======================================================================
       async save () {
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
@@ -534,6 +538,9 @@
         scheduler.endLightbox(true, document.getElementById('custom_form'))
         this.isCustomer = false
       },
+      // =======================================================================
+      // Save Personal Off
+      // =======================================================================
       async saveOff () {
           if (this.errors.any()) {
             return
@@ -595,6 +602,9 @@
           }
           this.isPersonalOff = false
       },
+      // =======================================================================
+      // Remove Personal Off
+      // =======================================================================
       async remove () {
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
@@ -612,6 +622,9 @@
 
         scheduler.endLightbox(false, document.getElementById('custom_form'))
       },
+      // =======================================================================
+      // Add Customer to the System
+      // =======================================================================
       async addCustomer () {
         if (this.customer && !this.errors.has('customer')) {
           this.customerData.email = this.customer

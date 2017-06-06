@@ -19,6 +19,10 @@ const scheduleSchema = mongoose.Schema({
     type: Boolean,
     default: false
   },
+  isPaused: {
+    type: Boolean,
+    default: false
+  },
   started: Number,
   ended: Number,
   invoice_title: String,
