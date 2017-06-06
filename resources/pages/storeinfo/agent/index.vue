@@ -5,10 +5,10 @@
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <input class="input" type="search" placeholder="Search by Name, Price, Description" v-model="search" @keyup.enter="searchSupplies">
+              <input class="input" type="search" placeholder="Search by Name, Price, Description" v-model="search" @keyup.enter="searchStore">
             </p>
             <p class="control">
-              <button class="button" @click="searchSupplies">
+              <button class="button" @click="searchStore">
                 <i class="fa fa-search"></i>
               </button>
             </p>
@@ -96,8 +96,8 @@ export default {
       this.list.splice(ind, 1)
       this.confirmation = false
     },
-    async searchSupplies () {
-      let { data } = await this.axios.get(`customer/supplies?key=${this.search}`)
+    async searchStore () {
+      let { data } = await this.axios.get(`storeall/search?key=${this.search}`)
       this.list = data
     },
     addToCart (item){

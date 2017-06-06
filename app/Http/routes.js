@@ -73,7 +73,8 @@ Route.group('supplies', () => {
 
 Route.group('storeinfo', () => {
   Route.resource('storeinfo', 'StoreinfoController').except('create', 'edit')
-  Route.get('storeinfo/search', 'StoreinfoController.search')
+  Route.get('storein/search', 'StoreinfoController.search')
+  Route.get('storeall/search', 'StoreinfoController.search')
   Route.post('storeinfo/update/:id', 'StoreinfoController.updateItemCartModification')
   Route.get('store/cart', 'StoreinfoController.cartInfo')
   Route.post('storeinfo/removecartitem/:id', 'StoreinfoController.removecart')

@@ -49,7 +49,7 @@
           <tr v-for="(item, ind) in list">
             <td>{{ item.name }}</td>
             <td>{{ item.description }}</td>
-            <td>{{ item.price }}</td>
+            <td>${{ item.price }}</td>
             <td>{{ item.quantity }}</td>
             <td><img style="max-width: 200px;" :src="`item_image/${item.image}`" alt=""></td>
             <td class="action">
@@ -99,13 +99,6 @@ export default {
     this.list = []
     this.confirmation = false
   },
-  watch: {
-    search (value) {
-      if (value.length === 0) {
-        this.searchStoreinfo()
-      }
-    }
-  },
   methods: {
     async remove (item, ind) {
       await this.axios.delete(`storeinfo/${item._id}`)
@@ -114,7 +107,7 @@ export default {
       return this.$toasted.show('Successfully deleted', { duration: 4500 })
     },
     async searchStoreinfo () {
-      let { data } = await this.axios.get(`storeinfo/search?key=${this.search}`)
+      let { data } = await this.axios.get(`storein/search?key=${this.search}`)
       this.list = data
     }
   }
