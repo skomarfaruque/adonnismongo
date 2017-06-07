@@ -69,17 +69,29 @@
     <div class='columns'>
       <calendar />
     </div>
+   
     <div id="custom_form" v-bind:class="{ modal: true }">
-      <div class="modal-content">
+      <div class="modal-content"> 
+        <!--===========================================================
+          Start Creating Appointment Timer 
+        ============================================================-->
         <div class="box" v-show="!isEdit">
           <h1 class="title">Appointment Timer <span style="float:right"> <a class="button" @click="isEdit=true">X</a></span></h1>
           <div class="box has-text-centered">
             <h1 style="font-size:64px;">{{timer}}</h1>
             <button class="button is-large is-info" @click="startWatch" v-show="!stopButton && !isFinished">Start</button>
-            <button class="button is-large is-danger" @click="stopWatch" v-show="stopButton && !isFinished">Stop</button>
+            <div v-show="stopButton && !isFinished" class="block">
+              <button class="button is-large is-info" @click="pauseWatch" ><span v-if="isPaused">Start</span><span v-else>Pause</span></button>
+              <button class="button is-large is-danger" @click="stopWatch">Stop</button>
+            </div>
+            
             <h2 style="font-size:28px;" v-show="isFinished">Job Finished <span @click="closeForm"> <nuxt-link class="phosto-blue" @click="closeForm" :to="`/invoice/${invoice}`" title="Edit"> View Invoice </nuxt-link></span></h2>
           </div>
         </div>
+
+        <!--===========================================================
+          Start Creating Appointment 
+        ============================================================-->
         <div class="box" v-show="!isCustomer && isEdit">
           <h1 class="title">Create Appointment for {{name}}</h1>
           <div class="box">
@@ -105,7 +117,7 @@
                     </span>
                     <span class="help is-success" v-if="isAdded">Customer with this email has added to your profile!</span>
                     <span class="help is-danger" v-show="errors.has('customer')" >{{ errors.first('customer') }}</span>
-                    Address: <span v-if="customer">{{customerData.address1}}</span>
+                    <div v-if="customer">Address: {{customerData.address1}}, City: {{customerData.city}}, State: {{customerData.state}}, Zip Code: {{customerData.zipCode}}</div>
                   </p>
                   <p class="control">
                     <button class="button" @click="isCustomer=true">
@@ -160,6 +172,10 @@
             </div>
           </div>
         </div>
+
+        <!--===========================================================
+          Start Creating Customer
+        ============================================================-->
         <div class="box" v-show="isCustomer">
           <h2 class="title">Create Customer</h2>
           <div class="box">
@@ -213,6 +229,7 @@
             </div>
           </div>
         </div>
+        <!-- End Creating Customer -->
       </div>
       <button class="modal-close" @click="closeForm"></button>
     </div>
@@ -260,6 +277,9 @@
     width: 100% !important;
   }
   #custom_form .block label {
+    margin-right: 10px;
+  }
+  .block a.button {
     margin-right: 10px;
   }
 </style>
@@ -322,6 +342,7 @@
         invoice_settled: false,
         isOpen: false,
         isStarted: false,
+        isPaused: false,
         highlightedPosition: 0,
         isPersonalOff: false,
         isAdded: false,
@@ -421,6 +442,7 @@
         self.invoice = ev._id
         self.invoice_settled = ev.invoice_settled
         self.isStarted = ev.isStarted
+        self.isPaused = ev.isPaused
       }
 
       // =======================================================================
@@ -438,6 +460,7 @@
           agent: m.agent.email,
           comment: m.comment,
           isStarted: m.isStarted,
+          isPaused: m.isPaused,
           started: m.started,
           invoice_settled: m.invoice_settled,
           ended: m.ended
@@ -720,7 +743,7 @@
         this.customer = this.searchedCustomers[this.highlightedPosition].email
         this.isOpen = false
       },
-      startWatch () {
+      async startWatch () {
         let self = this
         this.isFinshed = false
         let id = scheduler.getState().lightbox_id
@@ -745,22 +768,37 @@
           var countDownDate = ev.started
         } else {
           var countDownDate = new Date().getTime();
-          this.axios.post('appointment/start', { _id: ev._id, start: countDownDate })
+          await this.axios.post('appointment/start', { _id: ev._id, start: countDownDate })
           ev.started = countDownDate
+        }
+        this.stopButton = true
+        if (ev.isPaused) {
+          var now = new Date().getTime()
+          toTimeString(now, countDownDate)
+          return
         }
         this.sw = setInterval(function() {
           var now = new Date().getTime()
           toTimeString(now, countDownDate)
         }, 1000)
-        this.stopButton = true
+        
         // Update the count down every 1 second
 
       },
-      stopWatch () {
+      async pauseWatch () {
         clearInterval(this.sw)
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
-        this.axios.post('appointment/stop', { _id: ev._id, start: ev.started, end: new Date().getTime() })
+        this.isPaused = !this.isPaused
+        await this.axios.post('appointment/pause', { _id: ev._id, pasued: this.isPaused })
+        ev.isPaused = this.isPaused
+        await this.startWatch()
+      },
+      async stopWatch () {
+        clearInterval(this.sw)
+        let id = scheduler.getState().lightbox_id
+        let ev = scheduler.getEvent(id)
+        await this.axios.post('appointment/stop', { _id: ev._id, start: ev.started, end: new Date().getTime() })
         this.stopButton = false
         this.isFinished = true
       }

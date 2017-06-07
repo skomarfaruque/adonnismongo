@@ -82,7 +82,8 @@ class AppointmentController {
   }
   * pauseAppointment (req, res) {
     const id = req.input('_id')
-    yield Appointment.update({ _id: id }, { isPaused: true })
+    const paused = req.input('paused')
+    yield Appointment.update({ _id: id }, { isPaused: paused })
     res.ok('paused')
   }
 
