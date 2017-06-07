@@ -415,7 +415,7 @@ export default {
     store.commit('SET_HEAD', ['Cart', 'Finalize Purchase'])
     let {data} = await axios.get('store/cart')
     return {
-      list: data.items,
+      list: data.items?data.items:'',
       cart_id: data._id,
       isCreditOff: false,
       confirmation: false,
@@ -447,6 +447,13 @@ export default {
     return {
       axios: this.$root.$options.axios
     }
+  },
+  watch: {
+ list: function (newValue) {
+      if(newValue < 1 ){
+        this.$router.push(`/storeinfo/agent`)
+      }
+    },
   },
   computed: {
     total () {
