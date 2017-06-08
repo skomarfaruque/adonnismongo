@@ -516,7 +516,7 @@
 
               </div>
               <div class="level-right is-6 block">
-                <a class="button is-info" @click="payment('check')">Submit</a>
+                <a class="button is-info" @click="paymentCheck()">Submit</a>
                 <a class="button is-info" @click="isCheckOff=false">Cancel</a>
               </div>
             </div>
@@ -1018,16 +1018,7 @@ watch: {
       var self = this
       if (type === 'card') {
         paymentDescription = this.card
-      } else if (type === 'check') { // for check
-        var myForm = document.getElementById('myForm');
-        let formData = new FormData(myForm);
-         let newinfo = await this.axios.post(`invoice/payment`, formData)
-         if (newinfo.data.error !=='no'){
-           return this.$toasted.show(newinfo.data.error, { duration: 4500 })
-        }else {
-       this.$router.push(`/invoice/paid/${this.invoice._id}`)
-        }
-      } else {
+      }  else {
           if (this.paid_amount < this.priceDisShipTax){
             return this.$toasted.show('Sorry amount is low', { duration: 4500 })
           }
@@ -1041,12 +1032,6 @@ watch: {
           this.$router.push(`/invoice/paid/${this.invoice._id}`)
         }
 
-      } else if (type === 'check'){
-        if (result.data.error !=='no'){
-           return this.$toasted.show(result.data.error, { duration: 4500 })
-        }else {
-        this.$router.push(`/invoice/paid/${this.invoice._id}`)
-        }
       } else {
          if (result.data.error !=='no'){
            return this.$toasted.show(result.data.error, { duration: 4500 })
@@ -1056,6 +1041,16 @@ watch: {
       }
 
 
+    },
+    async paymentCheck (){
+var myForm = document.getElementById('myForm');
+        let formData = new FormData(myForm);
+         let newinfo = await this.axios.post(`invoice/payment`, formData)
+         if (newinfo.data.error !=='no'){
+           return this.$toasted.show(newinfo.data.error, { duration: 4500 })
+        }else {
+       this.$router.push(`/invoice/paid/${this.invoice._id}`)
+        }
     },
     changePrice () {
         this.price = 0
