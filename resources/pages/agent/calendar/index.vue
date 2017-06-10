@@ -81,7 +81,7 @@
             <h1 style="font-size:64px;">{{timer}}</h1>
             <button class="button is-large is-info" @click="startWatch" v-show="!stopButton && !isFinished">Start</button>
             <div v-show="stopButton && !isFinished" class="block">
-              <button class="button is-large is-info" @click="pauseWatch" ><span v-if="isPaused">Start</span><span v-else>Pause</span></button>
+              <button class="button is-large is-info space-btn" @click="pauseWatch" ><span v-if="isPaused">Start</span><span v-else>Pause</span></button>
               <button class="button is-large is-danger" @click="stopWatch">Stop</button>
             </div>
             
@@ -280,6 +280,9 @@
     margin-right: 10px;
   }
   .block a.button {
+    margin-right: 10px;
+  }
+  .space-btn {
     margin-right: 10px;
   }
 </style>
