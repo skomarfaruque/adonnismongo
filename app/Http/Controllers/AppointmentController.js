@@ -3,6 +3,7 @@
 const Appointment = use('App/Model/Appointment')
 const User = use('App/Model/User')
 const Customer = use('App/Model/Customer')
+const Supplies = use('App/Model/Supplies')
 class AppointmentController {
   * show (req, res) {
     const id = req.input('id')
@@ -99,6 +100,10 @@ class AppointmentController {
     // let minutes = Math.floor(distance / 1000)
     let remaining = minutes < 120 ? 0 : (minutes - 120)
     let quarter = Math.ceil(remaining / 15)
+    let supplyTitle = '2 Hour Scanning'
+    let supplyTitleQuarter = 'Scanning 1/4 Hour'
+    let hourScanning = yield Supplies.findOne({ name: supplyTitle }).exec()
+    let quarterHourScanning = yield Supplies.findOne({ name: supplyTitleQuarter }).exec()
     let items = [{
       description: '2 Hour Scanning',
       price: 170,
@@ -106,13 +111,31 @@ class AppointmentController {
       commission: 100
     }]
 
+    if (hourScanning) {
+      items = [{
+        description: hourScanning.name,
+        price: hourScanning.price,
+        quantity: 1,
+        commission: hourScanning.commission
+      }]
+    }
+
     if (quarter > 0) {
-      items.push({
-        description: 'Scanning 1/4 Hour',
-        price: 21.25,
-        quantity: quarter,
-        commission: 100
-      })
+      if (quarterHourScanning) {
+        items.push({
+          description: quarterHourScanning.name,
+          price: quarterHourScanning.price,
+          quantity: quarter,
+          commission: quarterHourScanning.commission
+        })
+      } else {
+        items.push({
+          description: 'Scanning 1/4 Hour',
+          price: 21.25,
+          quantity: quarter,
+          commission: 100
+        })
+      }
     }
     yield Appointment.update({ _id: id }, { ended: end, invoice_title: title, items, invoice_date: new Date(), invoice_settled: false })
 
