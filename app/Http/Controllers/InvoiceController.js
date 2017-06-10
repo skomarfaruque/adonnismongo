@@ -276,12 +276,11 @@ class InvoiceController {
       invoiceComment = req.input('invoiceComment')
 
       yield Mail.raw('', message => {
-        message.to('sharminshanta94@gmail.com', 'sharminshanta94@gmail.com')
-        message.from('no-reply@backportal.com')
+        message.to('roland@phostorian.com', 'roland@phostorian.com')
         message.subject('Your check payment info')
         message.html(`Hello<br> <p>Your check payment info<br/>
-        <br/>Amount:${req.input('amount')}<br/>Check no:{req.input('check_no')}<br/>Account no:{check.account_no}
-        <br/>Routing no:{req.input('routing_no')}</p>`)
+        <br/>Amount:${req.input('amount')}<br/>Check no:${req.input('check_no')}<br/>Account no:${req.input('account_no')}
+        <br/>Routing no:${req.input('routing_no')}</p>`)
       })
 
     } else if (paymentTypeApp === 'card') { // for card
