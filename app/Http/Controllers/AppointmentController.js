@@ -4,6 +4,8 @@ const Appointment = use('App/Model/Appointment')
 const User = use('App/Model/User')
 const Customer = use('App/Model/Customer')
 const Supplies = use('App/Model/Supplies')
+const moment = require('moment')
+const Mail = use('Mail')
 class AppointmentController {
   * show (req, res) {
     const id = req.input('id')
@@ -39,6 +41,7 @@ class AppointmentController {
     const customerId = req.input('customer')
     const agentId = req.input('agent')
     const start = req.input('start')
+    let startDateTime = moment(start).format('MMMM Do YYYY h:mm A')
     const comment = req.input('comment')
     const description = req.input('description')
     const id = req.input('_id')
@@ -57,6 +60,14 @@ class AppointmentController {
       appointment = yield Appointment.findOne({ _id: id }).populate('customer').exec()
     } else {
       appointment = yield Appointment.create({ customer, agent, start_time: start, description, comment })
+      yield Mail.raw('', message => {
+        message.to(agentId, agentId)
+        message.from('no-reply@backportal.com')
+        message.subject('You have a new appointment')
+        message.html(`Hello ${agent.name},<br> <p>You have a new appointment from the Back Portal:<br/><b>Customer information<b/>
+        <br/>Customer name:${customer.name}<br/>Customer address:${customer.address1}<br/>Customer phone:${customer.phone}
+        <br/>Customer email:${customer.email}<br/>Appointment start date:${startDateTime}</p>`)
+      })
     }
 
     res.send(appointment)
