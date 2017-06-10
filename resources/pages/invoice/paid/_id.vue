@@ -144,6 +144,7 @@
           <div v-if="invoice.payment_method === 'check'">
             <b>Comment: </b>{{ invoice.invoice_comment }}<br>
             <b>Payment Method: </b>Check<br>
+            <b>Amount: </b>${{invoice.payment_method_desc.amount}}<br>
             <b>Check Number: </b>{{invoice.payment_method_desc.check_no}}<br>
             <b>Account Number: </b>{{ invoice.payment_method_desc.account_no }}<br>
             <b>Routing Number: </b>{{ invoice.payment_method_desc.routing_no }}<br>

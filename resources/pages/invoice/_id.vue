@@ -433,11 +433,24 @@
       <div class="modal-content">
         <form id="myForm" name="myForm">
           <div class="box">
-            <h1 class="title">Pay Via Check</h1>
+            <h1 class="title">Pay Via Check <span style="float: right;font-size: 15px;padding-top: 10px;">Invoice: {{invoice._id}}</span></h1>
             <div class="box">
               <div class="columns invoice-label">
                 <div class="column is-1"></div>
                 <div class="column is-10">
+                  <nav class="level">
+                    <div class="level-left">
+                      <div class="level-item">
+                        <span>Amount</span>
+                      </div>
+                    </div>
+                    <div class="level-right">
+                      <div class="level-item">
+                        <span><input class="input"  name="amount" type="number" v-model="check.amount" placeholder="Enter Amount">
+                        </span>
+                      </div>
+                    </div>
+                  </nav><br>
                   <nav class="level">
                     <div class="level-left">
                       <div class="level-item">
@@ -902,6 +915,7 @@ export default {
         bill_country:''
       },
       check: {
+        amount:'',
         check_no:'',
         account_no:'',
         check_front:'/_nuxt/img/logo.9fd5444.png',

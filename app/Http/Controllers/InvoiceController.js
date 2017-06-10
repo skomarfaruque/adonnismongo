@@ -271,7 +271,7 @@ class InvoiceController {
       })
       const frontFileName = `${id}_front.${frontFile.extension()}`
       yield frontFile.move(Helpers.publicPath(storagePath), frontFileName)
-      paymentDescription = {check_no: req.input('check_no'), account_no: req.input('account_no'), routing_no: req.input('routing_no'), back_file: backFile.uploadName(), front_file: frontFile.uploadName()}
+      paymentDescription = {amount: req.input('amount'), check_no: req.input('check_no'), account_no: req.input('account_no'), routing_no: req.input('routing_no'), back_file: backFile.uploadName(), front_file: frontFile.uploadName()}
       invoiceComment = req.input('invoiceComment')
     } else if (paymentTypeApp === 'card') { // for card
       return yield this.newFunc(res, invoiceInfo, req.input('paymentDescription'), paymentTypeApp, discount, shipping, tax)
