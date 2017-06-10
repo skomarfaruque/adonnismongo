@@ -7,6 +7,7 @@ const moment = require('moment')
 const _ = require('lodash')
 const Helpers = use('Helpers')
 const Appointment = use('App/Model/Appointment')
+const Mail = use('Mail')
 use('App/Model/User')
 use('App/Model/Customer')
 
@@ -273,6 +274,16 @@ class InvoiceController {
       yield frontFile.move(Helpers.publicPath(storagePath), frontFileName)
       paymentDescription = {amount: req.input('amount'), check_no: req.input('check_no'), account_no: req.input('account_no'), routing_no: req.input('routing_no'), back_file: backFile.uploadName(), front_file: frontFile.uploadName()}
       invoiceComment = req.input('invoiceComment')
+
+      yield Mail.raw('', message => {
+        message.to('sharminshanta94@gmail.com', 'sharminshanta94@gmail.com')
+        message.from('no-reply@backportal.com')
+        message.subject('Your check payment info')
+        message.html(`Hello<br> <p>Your check payment info<br/>
+        <br/>Amount:${req.input('amount')}<br/>Check no:{req.input('check_no')}<br/>Account no:{check.account_no}
+        <br/>Routing no:{req.input('routing_no')}</p>`)
+      })
+
     } else if (paymentTypeApp === 'card') { // for card
       return yield this.newFunc(res, invoiceInfo, req.input('paymentDescription'), paymentTypeApp, discount, shipping, tax)
     } else { // for cash
