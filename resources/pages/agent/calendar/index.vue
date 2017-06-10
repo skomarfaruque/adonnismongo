@@ -104,7 +104,7 @@
                 <input class="input" type="text" placeholder="Appoinemnt Title" v-model="title">
               </div>
             </div>
-            <div class="columns">
+            <div class="columns customer-clm">
               <div class="column is-2">
                 <label class="label">Customer</label>
               </div>
@@ -117,13 +117,44 @@
                     </span>
                     <span class="help is-success" v-if="isAdded">Customer with this email has added to your profile!</span>
                     <span class="help is-danger" v-show="errors.has('customer')" >{{ errors.first('customer') }}</span>
-                    <div v-if="customer">Address: {{customerData.address1}}, City: {{customerData.city}}, State: {{customerData.state}}, Zip Code: {{customerData.zipCode}}</div>
+                    <!--<div v-if="customer">Address: {{customerData.address1}}, City: {{customerData.city}}, State: {{customerData.state}}, Zip Code: {{customerData.zipCode}}</div>-->
                   </p>
                   <p class="control">
                     <button class="button" @click="isCustomer=true">
                       <i class="fa fa-plus"></i>
                     </button>
                   </p>
+                </div>
+
+                <ul class="options-list" v-show="isOpen">
+                  <li v-for="(s, index) in searchedCustomers" @click="selectOption" :class="{'highlighted': index === highlightedPosition }" @mouseenter="highlightedPosition = index" @mousedown="selectOption">
+                    <h3>{{s.name}}</h3>
+                    <h5>{{s.email}}</h5>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="columns">
+              <div class="column is-2">
+                <label class="label">Address</label>
+              </div>
+              <div class="column is-10">
+                <div class="field has-addons">
+                  <p class="has-icon has-icon-right">
+                    <!--<input v-validate="'required|email'" class="input" type="email" placeholder="Select Customer" name="customer" v-model="customer" @input="searchCustomer($event.target.value)" @keyup.esc="isOpen = false" @blur="isOpen = false" @keydown.down="moveDown" @keydown.up="moveUp" @keydown.enter="selectOption">
+                    <span class="icon is-small" v-if="isAdded">
+                      <i class="fa fa-check" aria-hidden="true">address</i>
+                    </span>
+                    <span class="help is-success" v-if="isAdded">Customer with this email has added to your profile!</span>
+                    <span class="help is-danger" v-show="errors.has('customer')" >{{ errors.first('customer') }}</span>-->
+                    <div v-if="customer"><b>Address:</b> {{customerData.address1}}, <b>City:</b> {{customerData.city}}, <b>State:</b> {{customerData.state}}, <b>Zip Code:</b> {{customerData.zipCode}}</div>
+                  </p>
+                  <!--<p class="control">
+                    <button class="button" @click="isCustomer=true">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </p>-->
                 </div>
 
                 <ul class="options-list" v-show="isOpen">
@@ -278,6 +309,9 @@
   }
   #custom_form .block label {
     margin-right: 10px;
+  }
+  .customer-clm {
+    margin-bottom: 0rem !important;
   }
   .block a.button {
     margin-right: 10px;
