@@ -23,7 +23,11 @@ const scheduleSchema = mongoose.Schema({
     type: Boolean,
     default: false
   },
-  started: Number,
+  startedttt: Number,
+  started: {
+    type: Number,
+    default: 0
+  },
   ended: Number,
   invoice_title: String,
   invoice_no: String,

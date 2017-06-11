@@ -89,14 +89,23 @@ class AppointmentController {
   * startAppointment (req, res) {
     const id = req.input('_id')
     const start = req.input('start')
-    yield Appointment.update({ _id: id }, { isStarted: true, started: start })
-    res.ok('started')
+    let oldVal = yield Appointment.findOne({ _id: id }).exec()
+    var now = new Date().getTime()
+    let updateTimeTotal = parseInt(oldVal.started) + (parseInt(now) - parseInt(start))
+    yield Appointment.update({ _id: id }, { isStarted: true, started: updateTimeTotal })
+    res.ok(updateTimeTotal)
   }
   * pauseAppointment (req, res) {
     const id = req.input('_id')
     const paused = req.input('paused')
-    yield Appointment.update({ _id: id }, { isPaused: paused })
-    res.ok('paused')
+    console.log(paused)
+    const start = req.input('start')
+    let oldVal = yield Appointment.findOne({ _id: id }).exec()
+    var now = new Date().getTime()
+    let updateTimeTotal = parseInt(oldVal.started) + (parseInt(now) - parseInt(start))
+    console.log(updateTimeTotal)
+    yield Appointment.update({ _id: id }, { isPaused: paused, started: updateTimeTotal })
+    res.ok(updateTimeTotal)
   }
 
   * stopAppointment (req, res) {

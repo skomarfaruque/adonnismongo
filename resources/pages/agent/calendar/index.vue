@@ -69,11 +69,11 @@
     <div class='columns'>
       <calendar />
     </div>
-   
+
     <div id="custom_form" v-bind:class="{ modal: true }">
-      <div class="modal-content"> 
+      <div class="modal-content">
         <!--===========================================================
-          Start Creating Appointment Timer 
+          Start Creating Appointment Timer
         ============================================================-->
         <div class="box" v-show="!isEdit">
           <h1 class="title">Appointment Timer <span style="float:right"> <a class="button" @click="isEdit=true">X</a></span></h1>
@@ -81,16 +81,16 @@
             <h1 style="font-size:64px;">{{timer}}</h1>
             <button class="button is-large is-info" @click="startWatch" v-show="!stopButton && !isFinished">Start</button>
             <div v-show="stopButton && !isFinished" class="block">
-              <button class="button is-large is-info space-btn" @click="pauseWatch" ><span v-if="isPaused">Start</span><span v-else>Pause</span></button>
+              <button class="button is-large is-info space-btn" @click="pauseWatch" ><span v-if="isPaused" id="r">Resume</span><span id="p" v-else>Pause</span></button>
               <button class="button is-large is-danger" @click="stopWatch">Stop</button>
             </div>
-            
+
             <h2 style="font-size:28px;" v-show="isFinished">Job Finished <span @click="closeForm"> <nuxt-link class="phosto-blue" @click="closeForm" :to="`/invoice/${invoice}`" title="Edit"> View Invoice </nuxt-link></span></h2>
           </div>
         </div>
 
         <!--===========================================================
-          Start Creating Appointment 
+          Start Creating Appointment
         ============================================================-->
         <div class="box" v-show="!isCustomer && isEdit">
           <h1 class="title">Create Appointment for {{name}}</h1>
@@ -165,7 +165,7 @@
                 </ul>
               </div>
             </div>
-            
+
             <div class="columns">
               <div class="column is-2">
                 <label class="label">Time</label>
@@ -786,11 +786,13 @@
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
         function toTimeString (now, countDownDate) {
+
           var distance =  now - countDownDate;
 
           var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
           var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
           var seconds = Math.floor((distance % (1000 * 60)) / 1000)
+          console.log(distance)
 
           // Output the result in an element with id="demo"
           self.timer = `${('00'+hours).slice(-2)}:${('00'+minutes).slice(-2)}:${('00'+seconds).slice(-2)}`
@@ -801,34 +803,50 @@
           this.isFinished = true
           return
 
-        } else if (ev.isStarted && !ev.ended) {
+        } else if (ev.isStarted && !ev.ended && !ev.isPaused) {
           var countDownDate = ev.started
+        }else if(ev.isPaused){
+          var now = new Date().getTime()
+          toTimeString(now, ev.started)
+          return
         } else {
           var countDownDate = new Date().getTime();
-          await this.axios.post('appointment/start', { _id: ev._id, start: countDownDate })
-          ev.started = countDownDate
+          let startResult = await this.axios.post('appointment/start', { _id: ev._id, start: countDownDate })
+          ev.started = startResult.data
         }
         this.stopButton = true
-        if (ev.isPaused) {
-          var now = new Date().getTime()
-          toTimeString(now, countDownDate)
-          return
+        if(!ev.isPaused){
+
         }
         this.sw = setInterval(function() {
           var now = new Date().getTime()
           toTimeString(now, countDownDate)
         }, 1000)
-        
+
         // Update the count down every 1 second
 
       },
-      async pauseWatch () {
+      async pauseWatch (e) {
         clearInterval(this.sw)
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
         this.isPaused = !this.isPaused
-        await this.axios.post('appointment/pause', { _id: ev._id, pasued: this.isPaused })
+        if(e.target.id === 'p'){
+          this.isPaused = true
+           console.log(ev)
+           console.log(e.target.id)
+
+
+        }else{
+
+        }
+        let resultDb =  await this.axios.post('appointment/pause', { _id: ev._id, paused: this.isPaused, start: ev.started })
+            ev.started = resultDb.data
+
+
+
         ev.isPaused = this.isPaused
+
         await this.startWatch()
       },
       async stopWatch () {
