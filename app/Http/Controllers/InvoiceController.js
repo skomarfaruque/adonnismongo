@@ -1,16 +1,15 @@
 'use strict'
+
 var ApiContracts = require('authorizenet').APIContracts
 var ApiControllers = require('authorizenet').APIControllers
 
 // end authorize
 const moment = require('moment')
-const _ = require('lodash')
 const Helpers = use('Helpers')
 const Appointment = use('App/Model/Appointment')
 const Mail = use('Mail')
 use('App/Model/User')
 use('App/Model/Customer')
-
 
 class InvoiceController {
 
@@ -86,6 +85,29 @@ class InvoiceController {
     const id = req.input('id')
     yield Appointment.update({ _id: id }, { items }).exec()
   }
+
+  * getInvoices (req, res) {
+    const cursor = yield new Promise((resolve, reject) => {
+      let data = []
+      Appointment.aggregate([
+        { $unwind: '$items' },
+        {
+          $group: {
+            _id: '$items.description',
+            total: { $sum: '$items.price' },
+            quan: { $sum: '$items.quantity' },
+            com: { $first: '$items.commission' }
+          }
+        }])
+        .cursor({ batchSize: 1000 })
+        .exec()
+        .on('data', doc => data.push(doc))
+        .on('end', () => resolve(data))
+    })
+
+    res.ok(cursor)
+  }
+
   * newFunc (res, invoiceInfo, paymentDescription, paymentTypeApp, discount, shippingAmount, tax) {
     var errorInfo = 'no'
     var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
@@ -149,12 +171,12 @@ class InvoiceController {
     lineItemId1.setQuantity('18')
     lineItemId1.setUnitPrice(45.00)
 
-    var lineItemId2 = new ApiContracts.LineItemType();
-    lineItemId2.setItemId('2');
-    lineItemId2.setName('vase2');
-    lineItemId2.setDescription('cannes logo2');
-    lineItemId2.setQuantity('28');
-    lineItemId2.setUnitPrice('25.00');
+    var lineItemId2 = new ApiContracts.LineItemType()
+    lineItemId2.setItemId('2')
+    lineItemId2.setName('vase2')
+    lineItemId2.setDescription('cannes logo2')
+    lineItemId2.setQuantity('28')
+    lineItemId2.setUnitPrice('25.00')
 
     var lineItemList = []
     lineItemList.push(lineItemId1)
@@ -210,7 +232,6 @@ class InvoiceController {
     var createRequest = new ApiContracts.CreateTransactionRequest()
     createRequest.setMerchantAuthentication(merchantAuthenticationType)
     createRequest.setTransactionRequest(transactionRequestType)
-
 
     var ctrl = new ApiControllers.CreateTransactionController(createRequest.getJSON())
 
@@ -282,7 +303,6 @@ class InvoiceController {
         <br/>Amount:${req.input('amount')}<br/>Check no:${req.input('check_no')}<br/>Account no:${req.input('account_no')}
         <br/>Routing no:${req.input('routing_no')}</p>`)
       })
-
     } else if (paymentTypeApp === 'card') { // for card
       return yield this.newFunc(res, invoiceInfo, req.input('paymentDescription'), paymentTypeApp, discount, shipping, tax)
     } else { // for cash
