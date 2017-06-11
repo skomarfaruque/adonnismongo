@@ -401,11 +401,6 @@
         axios: this.$root.$options.axios
       }
     },
-    watch: {
-      'block_time.work_start_time': (val) => {
-        console.log(val)
-      }
-    },
     mounted () {
       window.calendar = this
       let self = this
@@ -628,13 +623,12 @@
           }
           this.isAdded = false
           const { data } = await this.axios.post(`agent/${this.id}/block-date`, this.personal)
-
           this.blockDays.push(data)
           const startMinute = helper.convertTimetoInt(this.personal.start)
           const endMinute = helper.convertTimetoInt(this.personal.end)
-          let date = new Date(this.personal.blockDate)
+          let date = new Date(this.personal.blockDate + 'T00:00:00')
           date.setHours(0, 0, 0)
-          let endDate = new Date(this.personal.endDate)
+          let endDate = new Date(this.personal.endDate + 'T00:00:00')
           endDate.setHours(24, 0, 0)
           let offDay = {
             _id: `${data._id}`,
@@ -652,15 +646,15 @@
           this.allMarkedId.push(offDay)
           scheduler.endLightbox(false, document.getElementById('custom_form'))
           scheduler.updateView()
-          this.personal = {
-            blockDate: (new Date()).toLocaleDateString(),
-            endDate: (new Date().toLocaleDateString()),
-            fullday: false,
-            start: '09:00 AM',
-            end: '05:00 PM',
-            comment: '',
-            isRepeat: false
-          }
+          // this.personal = {
+          //   blockDate: (new Date()).toLocaleDateString(),
+          //   endDate: (new Date().toLocaleDateString()),
+          //   fullday: false,
+          //   start: '09:00 AM',
+          //   end: '05:00 PM',
+          //   comment: '',
+          //   isRepeat: false
+          // }
           this.isPersonalOff = false
       },
       // =======================================================================
