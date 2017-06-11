@@ -831,7 +831,7 @@
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
         this.isPaused = !this.isPaused
-        if(e.target.id === 'p'){
+        if(e.target.id === 'p'){// p means pause
           this.isPaused = true
            console.log(ev)
            console.log(e.target.id)
