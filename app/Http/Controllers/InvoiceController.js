@@ -1,9 +1,8 @@
 'use strict'
-var moment = require('moment');
+var moment = require('moment')
 const Appointment = use('App/Model/Appointment')
 use('App/Model/User')
 use('App/Model/Customer')
-
 
 class InvoiceController {
   * index (req, res) {
@@ -80,6 +79,29 @@ class InvoiceController {
     const id = req.input('id')
     yield Appointment.update({ _id: id }, { items }).exec()
   }
+
+  * getInvoices (req, res) {
+    const cursor = yield new Promise((resolve, reject) => {
+      let data = []
+      Appointment.aggregate([
+        { $unwind: '$items' },
+        {
+          $group: {
+            _id: '$items.description',
+            total: { $sum: '$items.price' },
+            quan: { $sum: '$items.quantity' },
+            com: { $first: '$items.commission' }
+          }
+        }])
+        .cursor({ batchSize: 1000 })
+        .exec()
+        .on('data', doc => data.push(doc))
+        .on('end', () => resolve(data))
+    })
+
+    res.ok(cursor)
+  }
+
 }
 
 module.exports = InvoiceController
