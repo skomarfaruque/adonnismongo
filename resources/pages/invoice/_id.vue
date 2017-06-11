@@ -407,7 +407,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input type="number" v-model="returnAmount"></span><br/>
+                      <span>{{returnAmount}}<input type="hidden" v-model="returnAmount"></span><br/>
                     </div>
                   </div>
                 </nav>
