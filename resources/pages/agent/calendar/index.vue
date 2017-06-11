@@ -79,9 +79,9 @@
           <h1 class="title">Appointment Timer <span style="float:right"> <a class="button" @click="isEdit=true">X</a></span></h1>
           <div class="box has-text-centered">
             <h1 style="font-size:64px;">{{timer}}</h1>
-            <button class="button is-large is-info" @click="startWatch" v-show="!stopButton && !isFinished">Start</button>
-            <div v-show="stopButton && !isFinished" class="block">
-              <button class="button is-large is-info space-btn" @click="pauseWatch" ><span v-if="isPaused" id="r">Resume</span><span id="p" v-else>Pause</span></button>
+            <button class="button is-large is-info" @click="startWatch" v-show="watchStatus === 0 || watchStatus === 3">Start</button>
+            <div v-show="watchStatus !== 0 && watchStatus !== 3" class="block">
+              <button class="button is-large is-info space-btn" @click="pauseWatch" ><span v-if="watchStatus === 2" id="r">Resume</span><span id="p" v-else>Pause</span></button>
               <button class="button is-large is-danger" @click="stopWatch">Stop</button>
             </div>
 
@@ -148,7 +148,7 @@
                     </span>
                     <span class="help is-success" v-if="isAdded">Customer with this email has added to your profile!</span>
                     <span class="help is-danger" v-show="errors.has('customer')" >{{ errors.first('customer') }}</span>-->
-                    <div v-if="customer"><b>Address:</b> {{customerData.address1}}, <b>City:</b> {{customerData.city}}, <b>State:</b> {{customerData.state}}, <b>Zip Code:</b> {{customerData.zipCode}}</div>
+                    <div v-if="customer">{{customerData.address1}}, {{customerData.address1}}, <b>City:</b> {{customerData.city}}, <b>State:</b> {{customerData.state}}, <b>Zip Code:</b> {{customerData.zipCode}}</div>
                   </p>
                   <!--<p class="control">
                     <button class="button" @click="isCustomer=true">
@@ -378,8 +378,7 @@
         invoice: null,
         invoice_settled: false,
         isOpen: false,
-        isStarted: false,
-        isPaused: false,
+        watchStatus: 0,
         highlightedPosition: 0,
         isPersonalOff: false,
         isAdded: false,
@@ -465,16 +464,17 @@
         }
         self.block_time.work_start_time = timeFormat(ev.start_date)
         self.block_time.work_end_time = timeFormat(endDate)
-        if (ev.isStarted) {
-          self.startWatch()
-        } else {
+        if (ev.watchStatus === 0) {
           self.timer = '00:00:00'
           self.isFinished = false
+        } else {
+          self.startWatch()
+
         }
         self.invoice = ev._id
         self.invoice_settled = ev.invoice_settled
-        self.isStarted = ev.isStarted
-        self.isPaused = ev.isPaused
+        self.watchStatus = ev.watchStatus
+        
       }
 
       // =======================================================================
@@ -491,8 +491,8 @@
           customer: m.customer,
           agent: m.agent.email,
           comment: m.comment,
-          isStarted: m.isStarted,
-          isPaused: m.isPaused,
+          watchStatus: m.watchStatus,
+          prevDiff: m.totalDiff,
           started: m.started,
           invoice_settled: m.invoice_settled,
           ended: m.ended
@@ -646,15 +646,7 @@
           this.allMarkedId.push(offDay)
           scheduler.endLightbox(false, document.getElementById('custom_form'))
           scheduler.updateView()
-          // this.personal = {
-          //   blockDate: (new Date()).toLocaleDateString(),
-          //   endDate: (new Date().toLocaleDateString()),
-          //   fullday: false,
-          //   start: '09:00 AM',
-          //   end: '05:00 PM',
-          //   comment: '',
-          //   isRepeat: false
-          // }
+
           this.isPersonalOff = false
       },
       // =======================================================================
@@ -674,7 +666,7 @@
         if (this.isAgent) {
           this.isEdit = false
         }
-
+        clearInterval(this.sw)
         scheduler.endLightbox(false, document.getElementById('custom_form'))
       },
       // =======================================================================
@@ -779,67 +771,67 @@
         this.isFinshed = false
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
-        function toTimeString (now, countDownDate) {
+        let totalDiff = ev.prevDiff
+        this.watchStatus = ev.watchStatus
+        function toTimeString (now, countDownDate, prevDiff) {
 
-          var distance =  now - countDownDate;
+          var distance =  now - countDownDate + prevDiff;
+          ev.totalDiff = distance
 
           var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
           var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
           var seconds = Math.floor((distance % (1000 * 60)) / 1000)
-          console.log(distance)
 
           // Output the result in an element with id="demo"
           self.timer = `${('00'+hours).slice(-2)}:${('00'+minutes).slice(-2)}:${('00'+seconds).slice(-2)}`
         }
         // Set the date we're counting down to
-        if (ev.isStarted && ev.ended) {
-          toTimeString(ev.ended, ev.started)
+
+        if (ev.watchStatus === 3) {
+
+          toTimeString(0, 0, totalDiff)
           this.isFinished = true
           return
 
-        } else if (ev.isStarted && !ev.ended && !ev.isPaused) {
+        } else if (ev.watchStatus === 1) {
+
           var countDownDate = ev.started
-        }else if(ev.isPaused){
-          var now = new Date().getTime()
-          toTimeString(now, ev.started)
+
+        } else if (ev.watchStatus === 2) {
+          toTimeString(0, 0, totalDiff)
           return
-        } else {
+
+        } else {          
           var countDownDate = new Date().getTime();
           let startResult = await this.axios.post('appointment/start', { _id: ev._id, start: countDownDate })
-          ev.started = startResult.data
+          ev.started = countDownDate
+          this.watchStatus = ev.watchStatus = 1
         }
         this.stopButton = true
-        if(!ev.isPaused){
-
-        }
-        this.sw = setInterval(function() {
+        
+        this.sw = setInterval(function () {
           var now = new Date().getTime()
-          toTimeString(now, countDownDate)
+          toTimeString(now, ev.started, totalDiff)
         }, 1000)
 
         // Update the count down every 1 second
 
       },
       async pauseWatch (e) {
-        clearInterval(this.sw)
+        
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
-        this.isPaused = !this.isPaused
-        if(e.target.id === 'p'){// p means pause
-          this.isPaused = true
-           console.log(ev)
-           console.log(e.target.id)
-
-
-        }else{
-
+        if (ev.watchStatus === 1) {
+          clearInterval(this.sw)
+          ev.watchStatus = 2
+          ev.prevDiff = ev.totalDiff
+        } else if (ev.watchStatus === 2) {
+          ev.watchStatus = 1
+          ev.started = new Date().getTime()
         }
-        let resultDb =  await this.axios.post('appointment/pause', { _id: ev._id, paused: this.isPaused, start: ev.started })
-            ev.started = resultDb.data
+        
+        let resultDb =  await this.axios.post('appointment/pause', { _id: ev._id, paused: ev.watchStatus, start: ev.started, total: ev.totalDiff })
 
-
-
-        ev.isPaused = this.isPaused
 
         await this.startWatch()
       },
@@ -847,7 +839,7 @@
         clearInterval(this.sw)
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
-        await this.axios.post('appointment/stop', { _id: ev._id, start: ev.started, end: new Date().getTime() })
+        await this.axios.post('appointment/stop', { _id: ev._id, totalDiff: ev.totalDiff, end: new Date().getTime() })
         this.stopButton = false
         this.isFinished = true
       }

@@ -60,14 +60,14 @@ class AppointmentController {
       appointment = yield Appointment.findOne({ _id: id }).populate('customer').exec()
     } else {
       appointment = yield Appointment.create({ customer, agent, start_time: start, description, comment })
-      yield Mail.raw('', message => {
-        message.to(agentId, agentId)
-        message.from('no-reply@backportal.com')
-        message.subject('You have a new appointment')
-        message.html(`Hello ${agent.name},<br> <p>You have a new appointment from the Back Portal:<br/><b>Customer information<b/>
-        <br/>Customer name:${customer.name}<br/>Customer address:${customer.address1}<br/>Customer phone:${customer.phone}
-        <br/>Customer email:${customer.email}<br/>Appointment start date:${startDateTime}</p>`)
-      })
+      // yield Mail.raw('', message => {
+      //   message.to(agentId, agentId)
+      //   message.from('no-reply@backportal.com')
+      //   message.subject('You have a new appointment')
+      //   message.html(`Hello ${agent.name},<br> <p>You have a new appointment from the Back Portal:<br/><b>Customer information<b/>
+      //   <br/>Customer name:${customer.name}<br/>Customer address:${customer.address1}<br/>Customer phone:${customer.phone}
+      //   <br/>Customer email:${customer.email}<br/>Appointment start date:${startDateTime}</p>`)
+      // })
     }
 
     res.send(appointment)
@@ -89,33 +89,27 @@ class AppointmentController {
   * startAppointment (req, res) {
     const id = req.input('_id')
     const start = req.input('start')
-    let oldVal = yield Appointment.findOne({ _id: id }).exec()
-    var now = new Date().getTime()
-    let updateTimeTotal = parseInt(oldVal.started) + (parseInt(now) - parseInt(start))
-    yield Appointment.update({ _id: id }, { isStarted: true, started: updateTimeTotal })
-    res.ok(updateTimeTotal)
+    yield Appointment.update({ _id: id }, { watchStatus: 1, started: start })
+    res.ok('Started')
   }
   * pauseAppointment (req, res) {
     const id = req.input('_id')
     const paused = req.input('paused')
-    console.log(paused)
     const start = req.input('start')
-    let oldVal = yield Appointment.findOne({ _id: id }).exec()
-    var now = new Date().getTime()
-    let updateTimeTotal = parseInt(oldVal.started) + (parseInt(now) - parseInt(start))
-    console.log(updateTimeTotal)
-    yield Appointment.update({ _id: id }, { isPaused: paused, started: updateTimeTotal })
-    res.ok(updateTimeTotal)
+    const totalDiff = req.input('total')
+
+    yield Appointment.update({ _id: id }, { watchStatus: paused, started: start, totalDiff })
+    res.ok('Activated')
   }
 
   * stopAppointment (req, res) {
     const id = req.input('_id')
     const end = req.input('end')
-    const start = req.input('start')
+    const distance = req.input('totalDiff')
 
     const title = 'Scanning Appointment'
 
-    let distance = end - start
+
     let minutes = Math.floor(distance / (1000 * 60))
     // let minutes = Math.floor(distance / 1000)
     let remaining = minutes < 120 ? 0 : (minutes - 120)
@@ -157,7 +151,7 @@ class AppointmentController {
         })
       }
     }
-    yield Appointment.update({ _id: id }, { ended: end, invoice_title: title, items, invoice_date: new Date(), invoice_settled: false })
+    yield Appointment.update({ _id: id }, { watchStatus: 3, totalDiff: distance, ended: end, invoice_title: title, items, invoice_date: new Date(), invoice_settled: false })
 
     res.ok('Stopped')
   }

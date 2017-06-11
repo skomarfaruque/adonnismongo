@@ -15,15 +15,17 @@ const scheduleSchema = mongoose.Schema({
   end_time: Date,
   description: String,
   comment: String,
-  isStarted: {
-    type: Boolean,
-    default: false
+  /**
+   * 0: Not Started, 1: Started, 2: Paused, 3: Stopped
+   */
+  watchStatus: {
+    type: Number,
+    default: 0
   },
-  isPaused: {
-    type: Boolean,
-    default: false
+  totalDiff: {
+    type: Number,
+    default: 0
   },
-  startedttt: Number,
   started: {
     type: Number,
     default: 0
