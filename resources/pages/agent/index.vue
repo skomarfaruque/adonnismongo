@@ -1,7 +1,7 @@
 <template>
   <section>
     <nav class="level">
-      <div class="level-left">   
+      <div class="level-left">
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <div class="level-right">   
+      <div class="level-right">
         <div class="level-item">
           <nuxt-link href="javascript:" class="button is-info" title="Add New" to="/agent/new"> <i class="fa fa-plus"></i> </nuxt-link>
         </div>
@@ -54,6 +54,7 @@
                 <nuxt-link class="button is-info" :to="`/agent/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
                 <nuxt-link class="button is-info" :to="`/agent/calendar?id=${item._id}`" title="Calender"><i class="fa fa-calendar"></i> </nuxt-link>
                 <nuxt-link class="button is-info" :to="`/agent/customers?id=${item._id}`" title="View Customers"><i class="fa fa-users"></i> </nuxt-link>
+                <nuxt-link class="button is-info" :to="`invoice?agentId=${item._id}`" title="View Comissoin"><i class="fa fa-money"></i> </nuxt-link>
               </section>
               <section v-show="confirmation">
                 <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>
@@ -67,7 +68,7 @@
   </section>
 </template>
 <style>
-  
+
 </style>
 <script>
   export default {
@@ -107,6 +108,7 @@
         await this.axios.delete(`agents/${item._id}`)
         this.list.splice(ind, 1)
         this.confirmation = false
+        return this.$toasted.show('Successfully deleted', { duration: 4500 })
       },
       async searchAgent () {
         let { data } = await this.axios.get(`agent/search?key=${this.search}`)

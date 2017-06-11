@@ -23,6 +23,9 @@
     border-color: #CECECE;
     border-width: 1px 1px 0 1px;
   }
+  .dhx_cal_event.dhx_cal_select_menu {
+    z-index: 9;
+  }
 </style>
 
 <script>
@@ -38,6 +41,7 @@
       scheduler.config.auto_end_date = true
       scheduler.config.first_hour = 9;
       // scheduler.config.last_hour = 17;
+      scheduler.config.details_on_create = true;
       scheduler.init('scheduler_here', new Date(), 'month')
       scheduler.config.max_month_events = 4
       scheduler.templates.month_events_link = function (date, count) {

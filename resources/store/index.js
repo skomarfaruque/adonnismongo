@@ -5,6 +5,7 @@ import cookie from '~/plugins/cookie'
 export const state = {
   authUser: null,
   role: '',
+  cartItem: '',
   permissions: [],
   heading: {
     title: '',
@@ -21,6 +22,9 @@ export const mutations = {
   SET_HEAD: function (state, heading) {
     state.heading.title = heading[0]
     state.heading.subtitle = heading[1]
+  },
+  SET_CART_ITEM: function (state, cartItem) {
+    state.cartItem = cartItem
   }
 }
 
@@ -57,6 +61,7 @@ export const actions = {
 
   logout ({ commit }) {
     commit('SET_USER', { token: null, permissions: [] })
+    commit('SET_CART_ITEM', '')
     cookie.set('backend-app', '{}')
   },
   forgotpassword ({ commit }, { email }) {

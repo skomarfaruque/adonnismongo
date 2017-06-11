@@ -19,6 +19,10 @@ const scheduleSchema = mongoose.Schema({
     type: Boolean,
     default: false
   },
+  isPaused: {
+    type: Boolean,
+    default: false
+  },
   started: Number,
   ended: Number,
   invoice_title: String,
@@ -29,8 +33,12 @@ const scheduleSchema = mongoose.Schema({
   invoice_settled: {
     type: Boolean
   },
+  payment_method: String,
+  invoice_comment: String,
+  payment_method_desc: mongoose.Schema.Types.Mixed,
   shipping: Number,
   discount: Number,
+  tax: Number,
   created: {
     type: Date,
     default: Date.now

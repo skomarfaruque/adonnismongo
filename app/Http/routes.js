@@ -32,7 +32,7 @@ Route.group('agent', () => {
   Route.resource('agents', 'AgentController').except('create', 'edit')
   Route.get('agent/:aid/assign-customer/:cid', 'AgentController.assignCustomer')
   Route.post('agent/:id/block-date', 'AgentController.addBlockDay')
-  Route.delete('agent/:id/block-date/:date', 'AgentController.removeBlockDay')
+  Route.delete('agent/:id/block-date/:blockid', 'AgentController.removeBlockDay')
   Route.get('agent/:id/block-dates', 'AgentController.getBlockDays')
   Route.get('agent/:id/customer', 'AgentController.customers')
   Route.get('agent/search', 'AgentController.search')
@@ -46,7 +46,6 @@ Route.group('staff', () => {
 Route.group('customer', () => {
   Route.resource('customers', 'CustomerController').except('create', 'edit')
   Route.get('customer/search', 'CustomerController.search')
-  Route.get('customer/supplies', 'SuppliesController.search')
 }).prefix('api').middleware('auth')
 Route.group('appointment', () => {
   Route.get('/:id', 'AppointmentController.show')
@@ -54,6 +53,7 @@ Route.group('appointment', () => {
   Route.get('customer/:id', 'AppointmentController.byCustomer')
   Route.post('/', 'AppointmentController.store')
   Route.post('start', 'AppointmentController.startAppointment')
+  Route.post('pause', 'AppointmentController.pauseAppointment')
   Route.post('stop', 'AppointmentController.stopAppointment')
   Route.delete(':id', 'AppointmentController.destroy')
 }).prefix('api/appointment')
@@ -61,14 +61,26 @@ Route.group('appointment', () => {
 Route.group('invoice', () => {
   Route.get('/', 'InvoiceController.index')
   Route.get('/:id', 'InvoiceController.show')
+  Route.get('/invoice/paid/:id', 'InvoiceController.show')
   Route.get('agent/:id', 'InvoiceController.getByAgent')
   Route.post('/item-add', 'InvoiceController.addItem')
   Route.get('/get/all', 'InvoiceController.getInvoices')
+  Route.post('/payment', 'InvoiceController.payment')
 }).prefix('api/invoice')
 
 Route.group('supplies', () => {
   Route.resource('supplies', 'SuppliesController').except('create', 'edit')
-  Route.get('supplies/search', 'SuppliesController.search')
+  Route.get('supply/search', 'SuppliesController.search')
+}).prefix('api').middleware('auth')
+
+Route.group('storeinfo', () => {
+  Route.resource('storeinfo', 'StoreinfoController').except('create', 'edit')
+  Route.get('storein/search', 'StoreinfoController.search')
+  Route.get('storeall/search', 'StoreinfoController.search')
+  Route.post('storeinfo/update/:id', 'StoreinfoController.updateItemCartModification')
+  Route.get('store/cart', 'StoreinfoController.cartInfo')
+  Route.post('storeinfo/removecartitem/:id', 'StoreinfoController.removecart')
+  Route.post('storeinfo/payment', 'StoreinfoController.payment')
 }).prefix('api').middleware('auth')
 
 Route.any('*', 'NuxtController.render')

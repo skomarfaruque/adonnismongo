@@ -3,6 +3,9 @@
 const Appointment = use('App/Model/Appointment')
 const User = use('App/Model/User')
 const Customer = use('App/Model/Customer')
+const Supplies = use('App/Model/Supplies')
+const moment = require('moment')
+const Mail = use('Mail')
 class AppointmentController {
   * show (req, res) {
     const id = req.input('id')
@@ -38,6 +41,7 @@ class AppointmentController {
     const customerId = req.input('customer')
     const agentId = req.input('agent')
     const start = req.input('start')
+    let startDateTime = moment(start).format('MMMM Do YYYY h:mm A')
     const comment = req.input('comment')
     const description = req.input('description')
     const id = req.input('_id')
@@ -52,10 +56,18 @@ class AppointmentController {
     }
     let appointment
     if (id) {
-     yield Appointment.update({ _id: id }, { customer, agent, start_time: start, description, comment })
-     appointment = yield Appointment.findOne({ _id: id }).populate('customer').exec()
+      yield Appointment.update({ _id: id }, { customer, agent, start_time: start, description, comment })
+      appointment = yield Appointment.findOne({ _id: id }).populate('customer').exec()
     } else {
-     appointment = yield Appointment.create({ customer, agent, start_time: start, description, comment })
+      appointment = yield Appointment.create({ customer, agent, start_time: start, description, comment })
+      yield Mail.raw('', message => {
+        message.to(agentId, agentId)
+        message.from('no-reply@backportal.com')
+        message.subject('You have a new appointment')
+        message.html(`Hello ${agent.name},<br> <p>You have a new appointment from the Back Portal:<br/><b>Customer information<b/>
+        <br/>Customer name:${customer.name}<br/>Customer address:${customer.address1}<br/>Customer phone:${customer.phone}
+        <br/>Customer email:${customer.email}<br/>Appointment start date:${startDateTime}</p>`)
+      })
     }
 
     res.send(appointment)
@@ -80,6 +92,12 @@ class AppointmentController {
     yield Appointment.update({ _id: id }, { isStarted: true, started: start })
     res.ok('started')
   }
+  * pauseAppointment (req, res) {
+    const id = req.input('_id')
+    const paused = req.input('paused')
+    yield Appointment.update({ _id: id }, { isPaused: paused })
+    res.ok('paused')
+  }
 
   * stopAppointment (req, res) {
     const id = req.input('_id')
@@ -90,8 +108,13 @@ class AppointmentController {
 
     let distance = end - start
     let minutes = Math.floor(distance / (1000 * 60))
+    // let minutes = Math.floor(distance / 1000)
     let remaining = minutes < 120 ? 0 : (minutes - 120)
     let quarter = Math.ceil(remaining / 15)
+    let supplyTitle = '2 Hour Scanning'
+    let supplyTitleQuarter = 'Scanning 1/4 Hour'
+    let hourScanning = yield Supplies.findOne({ name: supplyTitle }).exec()
+    let quarterHourScanning = yield Supplies.findOne({ name: supplyTitleQuarter }).exec()
     let items = [{
       description: '2 Hour Scanning',
       price: 170,
@@ -99,13 +122,31 @@ class AppointmentController {
       commission: 100
     }]
 
+    if (hourScanning) {
+      items = [{
+        description: hourScanning.name,
+        price: hourScanning.price,
+        quantity: 1,
+        commission: hourScanning.commission
+      }]
+    }
+
     if (quarter > 0) {
-      items.push({
-        description: 'Scanning 1/4 Hour',
-        price: 21.25,
-        quantity: quarter,
-        commission: 100
-      })
+      if (quarterHourScanning) {
+        items.push({
+          description: quarterHourScanning.name,
+          price: quarterHourScanning.price,
+          quantity: quarter,
+          commission: quarterHourScanning.commission
+        })
+      } else {
+        items.push({
+          description: 'Scanning 1/4 Hour',
+          price: 21.25,
+          quantity: quarter,
+          commission: 100
+        })
+      }
     }
     yield Appointment.update({ _id: id }, { ended: end, invoice_title: title, items, invoice_date: new Date(), invoice_settled: false })
 
