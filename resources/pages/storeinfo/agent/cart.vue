@@ -82,7 +82,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{total}}</span>
+                      <span></span>
                     </div>
                   </div>
                 </nav><br>
@@ -223,12 +223,12 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Shipping</span>
+                      <span>${{total}}</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>Shipping</span>
+                      <span></span>
                     </div>
                   </div>
                 </nav><br>
