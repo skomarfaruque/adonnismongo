@@ -79,11 +79,13 @@
           <h1 class="title">Appointment Timer <span style="float:right"> <a class="button" @click="isEdit=true">X</a></span></h1>
           <div class="box has-text-centered">
             <h1 style="font-size:64px;">{{timer}}</h1>
-            <button class="button is-large is-info" @click="startWatch" v-show="watchStatus === 0 || watchStatus === 3">Start</button>
-            <div v-show="watchStatus !== 0 && watchStatus !== 3" class="block">
+            <span v-show="watchStatus !== 3">
+            <button class="button is-large is-info" @click="startWatch" v-show="watchStatus === 0 ">Start</button>
+            <div v-show="watchStatus !== 0 && this.isFinished !== true" class="block">
               <button class="button is-large is-info space-btn" @click="pauseWatch" ><span v-if="watchStatus === 2" id="r">Resume</span><span id="p" v-else>Pause</span></button>
               <button class="button is-large is-danger" @click="stopWatch">Stop</button>
             </div>
+            </span>
 
             <h2 style="font-size:28px;" v-show="isFinished">Job Finished <span @click="closeForm"> <nuxt-link class="phosto-blue" @click="closeForm" :to="`/invoice/${invoice}`" title="Edit"> View Invoice </nuxt-link></span></h2>
           </div>
@@ -464,10 +466,12 @@
         }
         self.block_time.work_start_time = timeFormat(ev.start_date)
         self.block_time.work_end_time = timeFormat(endDate)
-        if (ev.watchStatus === 0) {
+        if (!ev.watchStatus || ev.watchStatus === 0) {
           self.timer = '00:00:00'
+          ev.watchStatus = 0
           self.isFinished = false
         } else {
+          console.log('s')
           self.startWatch()
 
         }
@@ -776,7 +780,7 @@
         this.isFinshed = false
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
-        let totalDiff = ev.prevDiff
+        let totalDiff = ev.prevDiff || 0
         this.watchStatus = ev.watchStatus
         function toTimeString (now, countDownDate, prevDiff) {
 
