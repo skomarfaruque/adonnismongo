@@ -7,6 +7,7 @@ const storeinfoSchema = mongoose.Schema({
   description: String,
   price: Number,
   quantity: Number,
+  option: [],
   image: String,
   synced: {
     type: Boolean,
