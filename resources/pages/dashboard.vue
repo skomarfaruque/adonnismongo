@@ -31,9 +31,13 @@
             <p class="title">Store</p>
             <p class="subtitle">View all store items.</p>
           </nuxt-link>
-          <nuxt-link class="tile is-child notification is-info" to="/invoice?agentId=me" v-if="isInvoice">
+          <nuxt-link class="tile is-child notification is-info" to="/invoice?agentId=me" v-if="isInvoice && usertype ==='Agent'">
             <p class="title">Invoice</p>
             <p class="subtitle">Create and print invoices.</p>
+          </nuxt-link>
+          <nuxt-link class="tile is-child notification is-info" to="/invoice/agentall" v-if="isInvoice && usertype ==='Admin'">
+            <p class="title">Invoice</p>
+            <p class="subtitle">Show agents report.</p>
           </nuxt-link>
         </div>
 

@@ -148,7 +148,7 @@
                     </span>
                     <span class="help is-success" v-if="isAdded">Customer with this email has added to your profile!</span>
                     <span class="help is-danger" v-show="errors.has('customer')" >{{ errors.first('customer') }}</span>-->
-                    <div v-if="customer">{{customerData.address1}}, {{customerData.address1}}, <b>City:</b> {{customerData.city}}, <b>State:</b> {{customerData.state}}, <b>Zip Code:</b> {{customerData.zipCode}}</div>
+                    <div v-if="customer"><b>Address 1:</b>{{customerData.address1}},<b>Address 2:</b> {{customerData.address2}}, <b>City:</b> {{customerData.city}}, <b>State:</b> {{customerData.state}}, <b>Zip Code:</b> {{customerData.zipCode}}</div>
                   </p>
                   <!--<p class="control">
                     <button class="button" @click="isCustomer=true">
@@ -474,7 +474,7 @@
         self.invoice = ev._id
         self.invoice_settled = ev.invoice_settled
         self.watchStatus = ev.watchStatus
-        
+
       }
 
       // =======================================================================
@@ -764,6 +764,11 @@
       },
       selectOption (customer) {
         this.customer = this.searchedCustomers[this.highlightedPosition].email
+        this.customerData.address1 = this.searchedCustomers[this.highlightedPosition].address1
+        this.customerData.address2 = this.searchedCustomers[this.highlightedPosition].address2
+        this.customerData.city = this.searchedCustomers[this.highlightedPosition].city
+        this.customerData.state = this.searchedCustomers[this.highlightedPosition].state
+        this.customerData.zipCode = this.searchedCustomers[this.highlightedPosition].zipCode
         this.isOpen = false
       },
       async startWatch () {
@@ -801,14 +806,14 @@
           toTimeString(0, 0, totalDiff)
           return
 
-        } else {          
+        } else {
           var countDownDate = new Date().getTime();
           let startResult = await this.axios.post('appointment/start', { _id: ev._id, start: countDownDate })
           ev.started = countDownDate
           this.watchStatus = ev.watchStatus = 1
         }
         this.stopButton = true
-        
+
         this.sw = setInterval(function () {
           var now = new Date().getTime()
           toTimeString(now, ev.started, totalDiff)
@@ -818,7 +823,7 @@
 
       },
       async pauseWatch (e) {
-        
+
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
         if (ev.watchStatus === 1) {
@@ -829,7 +834,7 @@
           ev.watchStatus = 1
           ev.started = new Date().getTime()
         }
-        
+
         let resultDb =  await this.axios.post('appointment/pause', { _id: ev._id, paused: ev.watchStatus, start: ev.started, total: ev.totalDiff })
 
 

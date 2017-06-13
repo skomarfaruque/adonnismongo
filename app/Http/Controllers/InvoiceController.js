@@ -79,6 +79,10 @@ class InvoiceController {
     console.log(year)
     res.send({year: year, weeks: weeks})
   }
+  * getAllAgent (req, res) {
+    const invoices = yield Appointment.find({ invoice_settled: false }).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
+    res.ok(invoices)
+  }
 
   * addItem (req, res) {
     const items = req.input('items')
