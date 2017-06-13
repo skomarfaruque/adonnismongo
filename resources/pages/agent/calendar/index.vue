@@ -451,7 +451,7 @@
         }
 
         startTime.setDate(ev.start_date)
-        let endDate = new Date(ev.start_date)
+        let endDate = new Date(ev.start_date + 'T00:00:00')
         endDate.setHours(ev.start_date.getHours() + 2)
         endTime.setDate(endDate)
         let timeFormat = (date) => {
@@ -490,8 +490,8 @@
           id: m._id,
           _id: m._id,
           text: m.description,
-          start_date: new Date(m.start_time),
-          end_date: new Date(m.start_time),
+          start_date: new Date(m.start_time + 'T00:00:00'),
+          end_date: new Date(m.start_time + 'T00:00:00'),
           customer: m.customer,
           agent: m.agent.email,
           comment: m.comment,
@@ -539,7 +539,7 @@
 
         const startMinute = helper.convertTimetoInt(b.start)
         const endMinute = helper.convertTimetoInt(b.end)
-        let date = new Date(b.blockDate)
+        let date = new Date(b.blockDate + 'T00:00:00')
         date.setHours(0, 0, 0)
         let day = {
           _id: `${b._id}`,
@@ -551,7 +551,7 @@
         }
         if (b.isRepeat) {
           day.start_date = date
-          let endDate = new Date(b.endDate)
+          let endDate = new Date(b.endDate + 'T00:00:00')
           endDate.setHours(24, 0, 0)
           day.end_date = endDate
         }
@@ -703,8 +703,8 @@
 
           if (off._id && off._id === id) {
             this.personal = off
-            this.personal.blockDate = (new Date(this.personal.blockDate)).toLocaleDateString()
-            this.personal.endDate = (new Date(this.personal.endDate)).toLocaleDateString()
+            this.personal.blockDate = (new Date(this.personal.blockDate + 'T00:00:00')).toLocaleDateString()
+            this.personal.endDate = (new Date(this.personal.endDate + 'T00:00:00')).toLocaleDateString()
             break;
           }
         }
@@ -713,7 +713,7 @@
       },
       async deletePersonalTask() {
         const id = this.personal._id
-        let d = new Date(this.personal.blockDate)
+        let d = new Date(this.personal.blockDate + 'T00:00:00')
         // await this.axios.delete(`agent/${this.id}/block-date/${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${d.getDate()}`)
         await this.axios.delete(`agent/${this.id}/block-date/${id}`)
         for (var i = 0; i < this.allMarkedId.length; i++ ) {
