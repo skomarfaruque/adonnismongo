@@ -39,7 +39,7 @@
                   <div class="column is-1">
                     <a href="javascript:" class="button is-danger" @click="removeOption(ind)"><i class="fa fa-minus"></i></a>
                   </div>
-                  <div class="column is-5"><input class="input" v-model="storeinfo.option[ind]" type="text" placeholder="option"></div>
+                  <div class="column is-5"><input class="input" name="option[]" v-model="storeinfo.option[ind]" type="text" placeholder="option"></div>
                 </div>
               </li>
             </ul>
@@ -74,12 +74,12 @@ export default {
   },
   async asyncData ({ store, axios, params }) {
     let { data } = await axios.get(`storeinfo/${params.id}`)
-    if (!data.option) {
-      data.option = []
-    }
+    // if (!data.option) {
+    //   data.option = []
+    // }
     return {
       storeinfo: {
-        option: []
+        option: data.option,
       },
       id: data._id,
       name: data.name,
