@@ -24,6 +24,26 @@
           <span><input type="file" name="image" id="fileInput" @change="onFileChange"><br>
           <img style="max-width: 300px;" :src="storeinfo.image" alt=""></span>
           </p>
+
+          <label class="label">Option</label>
+          <div class="control">
+            <ul>
+              <li v-for="(option, ind) in storeinfo.option">
+                <div class="columns">
+                  <div class="column is-1">
+                    <a href="javascript:" class="button is-danger" @click="removeOption(ind)"><i class="fa fa-minus"></i></a>
+                  </div>
+                  <div class="column is-5"><input class="input" v-model="storeinfo.option[ind]" type="text" placeholder="option"></div>
+                </div>
+              </li>
+            </ul>
+
+            <div class="columns">
+              <div class="column is-1"><a href="javascript:" class="button is-info" @click="addOption"><i class="fa fa-plus"></i></a></div>
+            </div>
+
+          </div>
+
           <a href="javascript:" class="button is-info" @click="save">Save Information</a>
         </form>
       </div>
@@ -47,10 +67,10 @@ export default {
     MaskedInput
   },
   asyncData ({ store, axios }) {
-
     return {
       storeinfo: {
-        image: ''
+        image: '',
+        option: []
       }
     }
   },
@@ -84,7 +104,13 @@ export default {
     },
     removeImage: function (e) {
       this.storeinfo.image = '';
-    }
+    },
+    addOption () {
+      this.storeinfo.option.push('')
+    },
+    removeOption (ind) {
+      this.storeinfo.option.splice(ind, 1)
+    },
   }
 }
 </script>
