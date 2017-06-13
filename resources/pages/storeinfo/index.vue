@@ -38,6 +38,9 @@
               Quantity
             </th>
             <th>
+              Option
+            </th>
+            <th>
               Image
             </th>
             <th>
@@ -51,6 +54,12 @@
             <td>{{ item.description }}</td>
             <td>${{ item.price }}</td>
             <td>{{ item.quantity }}</td>
+            <td v-if="item.option ">
+              <span v-for="(optionVal, index) in item.option">
+                <span>{{optionVal}}</span><span v-if="index+1 < item.option.length">, </span>
+              </span>
+            </td>
+            <td v-else>NA</td>
             <td><img style="max-width: 200px;" :src="`item_image/${item.image}`" alt=""></td>
             <td class="action">
               <section v-show="confirmation === false">
