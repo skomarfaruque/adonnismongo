@@ -63,7 +63,7 @@
               </td>
               <td>{{i + 1}} </td>
               <td>{{item.description}}</td>
-              <td>${{twoDigitFormat(item.price)}}</td>
+              <td><input type="number" class="input" min="0"  step="any"  v-model="item.price"></td>
               <td>{{item.quantity}}</td>
               <td>${{twoDigitFormat(item.price * item.quantity)}}</td>
 
