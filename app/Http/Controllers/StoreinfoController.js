@@ -28,20 +28,21 @@ class StoreinfoController {
     const description = req.input('description')
     const price = req.input('price')
     const quantity = req.input('quantity')
+    const option = req.input('option')
     const image = req.file('image', {
       maxSize: '2mb',
       allowedExtensions: ['jpg', 'png', 'jpeg']
     })
     const fileName = `${name}_back.${image.extension()}`
     yield image.move(Helpers.publicPath('item_image'), fileName)
-    const obj = {name: name, description: description, price: price, quantity: quantity, image: image.uploadName()}
+    const obj = {name: name, description: description, price: price, quantity: quantity, option: option, image: image.uploadName()}
     let storeinfo = yield Storeinfo.create(obj)
     res.send(storeinfo)
   }
 
   * update (req, res) {
     const id = req.param('id')
-    let obj = req.only('name', 'description', 'price', 'quantity', 'image')
+    let obj = req.only('name', 'description', 'price', 'quantity', 'image', 'option')
     const image = req.file('image', {
       maxSize: '2mb',
       allowedExtensions: ['jpg', 'png', 'jpeg']
@@ -51,7 +52,7 @@ class StoreinfoController {
       yield image.move(Helpers.publicPath('item_image'), fileName)
       obj.image = image.uploadName()
     }
-    const storeinfo = yield Storeinfo.update({ _id: id }, {name: obj.name, description: obj.description, price: obj.price, quantity: obj.quantity, image: obj.image}).exec()
+    const storeinfo = yield Storeinfo.update({ _id: id }, {name: obj.name, description: obj.description, price: obj.price, quantity: obj.quantity, option: obj.option, image: obj.image}).exec()
     res.send(storeinfo)
   }
   * updateItemCartModification (req, res) {

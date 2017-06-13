@@ -28,7 +28,7 @@
           <label class="label">Option</label>
           <div class="control">
             <ul>
-              <li v-for="(option, ind) in storeinfo.option">
+              <li v-for="(item, ind) in storeinfo.option">
                 <div class="columns">
                   <div class="column is-1">
                     <a href="javascript:" class="button is-danger" @click="removeOption(ind)"><i class="fa fa-minus"></i></a>
