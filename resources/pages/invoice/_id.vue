@@ -428,6 +428,14 @@
         <button class="modal-close" @click="isCashOff=false"></button>
       </div>
     </div>
+<div v-bind:class="{ modal: true, 'is-active': processing }">
+  <div class="modal-background"></div>
+  <div class="modal-content has-text-centered">
+    <p class="image is-64x64 has-text-centered" style="margin:auto">
+     <img src="~assets/img/loading.gif" alt="Bulma logo">
+    </p>
+  </div>
+</div>
     <div v-bind:class="{ modal: true, 'is-active': isCheckOff }">
       <div class="modal-background"></div>
       <div class="modal-content">
@@ -446,7 +454,7 @@
                     </div>
                     <div class="level-right">
                       <div class="level-item">
-                        <span><input class="input"  name="amount" type="number" v-model="check.amount" placeholder="Enter Amount">
+                        <span><input class="input"  name="amount"  required type="number" v-model="check.amount" placeholder="Enter Amount">
                         </span>
                       </div>
                     </div>
@@ -502,7 +510,7 @@
                     </div>
                     <div class="level-right">
                       <div class="level-item">
-                        <span><input type="file" name="front_file" id="frontFile" @change="onFileChange"><br><img
+                        <span><input type="file" required name="front_file" id="frontFile" @change="onFileChange"><br><img
                          style="max-width: 300px;" :src="check.check_front" alt=""></span>
                       </div>
                     </div>
@@ -515,7 +523,7 @@
                     </div>
                     <div class="level-right">
                       <div class="level-item">
-                        <span><input type="file" name="back_file" id="fileInput" ref="fileInput" @change="onFileChange"><br><img style="max-width: 300px;" :src="check.check_back" alt=""></span>
+                        <span><input type="file" name="back_file" id="backFile" ref="fileInput" @change="onFileChange"><br><img style="max-width: 300px;" :src="check.check_back" alt=""></span>
                         <!-- <span><input type="file" @change="onFileChange"><br><img :src="check.check_back" alt=""><button @click="removeImage">Remove image</button></span> -->
                       </div>
                     </div>
@@ -892,6 +900,7 @@ export default {
       invoice: data,
       invoice_settled:'',
       payment_method:'',
+      processing:false,
       card: {
         card_no:'4242424242424242',
         tax:'',
@@ -1057,15 +1066,37 @@ watch: {
 
     },
     async paymentCheck (){
-var myForm = document.getElementById('myForm');
-        let formData = new FormData(myForm);
-         let newinfo = await this.axios.post(`invoice/payment`, formData)
-         if (newinfo.data.error !=='no'){
-           return this.$toasted.show(newinfo.data.error, { duration: 4500 })
-        }else {
-       this.$router.push(`/invoice/paid/${this.invoice._id}`)
+        var myForm = document.getElementById('myForm')
+        let formData = new FormData(myForm)
+        if (formData.get('amount') == "") {
+          return this.$toasted.show("Amount can not be empty", { duration: 4500 })
         }
-    },
+        if (formData.get('check_no') == "") {
+          return this.$toasted.show("Check number can not be empty", { duration: 4500 })
+        }
+        if (formData.get('account_no') == "") {
+          return this.$toasted.show("Acount number can not be empty", { duration: 4500 })
+        }
+        if (formData.get('routing_no') == "") {
+          return this.$toasted.show("Routing can not be empty", { duration: 4500 })
+        }
+        if (document.getElementById('frontFile').value  == "") {
+          return this.$toasted.show("Check front side is empty", { duration: 4500 })
+        }
+        if (document.getElementById('backFile').value  == "") {
+          return this.$toasted.show("Check back side is empty", { duration: 4500 })
+        }
+        this.isCheckOff = false
+        this.processing = true
+        let newinfo = await this.axios.post(`invoice/payment`, formData)
+          if (newinfo.data.error !=='no'){
+            this.processing = false
+            this.isCheckOff = true
+            return this.$toasted.show(newinfo.data.error, { duration: 4500 })
+          }else {
+            this.$router.push(`/invoice/paid/${this.invoice._id}`)
+          }
+      },
     changePrice () {
         this.price = 0
         if(this.newItem.price){
