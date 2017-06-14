@@ -451,7 +451,7 @@
         }
 
         startTime.setDate(ev.start_date)
-        let endDate = new Date(ev.start_date + 'T00:00:00')
+        let endDate = new Date(ev.start_date)
         endDate.setHours(ev.start_date.getHours() + 2)
         endTime.setDate(endDate)
         let timeFormat = (date) => {
@@ -471,7 +471,6 @@
           ev.watchStatus = 0
           self.isFinished = false
         } else {
-          console.log('s')
           self.startWatch()
 
         }
@@ -484,14 +483,15 @@
       // =======================================================================
       // Show event
       // =======================================================================
+      console.log(this.events)
       var events = []
       this.events.forEach(m => {
         events.push({
           id: m._id,
           _id: m._id,
           text: m.description,
-          start_date: new Date(m.start_time + 'T00:00:00'),
-          end_date: new Date(m.start_time + 'T00:00:00'),
+          start_date: new Date(m.start_time),
+          end_date: new Date(m.start_time),
           customer: m.customer,
           agent: m.agent.email,
           comment: m.comment,
@@ -539,7 +539,7 @@
 
         const startMinute = helper.convertTimetoInt(b.start)
         const endMinute = helper.convertTimetoInt(b.end)
-        let date = new Date(b.blockDate + 'T00:00:00')
+        let date = new Date(b.blockDate)
         date.setHours(0, 0, 0)
         let day = {
           _id: `${b._id}`,
@@ -551,7 +551,7 @@
         }
         if (b.isRepeat) {
           day.start_date = date
-          let endDate = new Date(b.endDate + 'T00:00:00')
+          let endDate = new Date(b.endDate + 'T00:00:00.000Z')
           endDate.setHours(24, 0, 0)
           day.end_date = endDate
         }
@@ -626,13 +626,15 @@
             }
           }
           this.isAdded = false
+          this.personal.blockDate = new Date(this.personal.blockDate + 'T00:00:00.000Z')
+          this.personal.endDate = new Date(this.personal.endDate + 'T00:00:00.000Z')
           const { data } = await this.axios.post(`agent/${this.id}/block-date`, this.personal)
           this.blockDays.push(data)
           const startMinute = helper.convertTimetoInt(this.personal.start)
           const endMinute = helper.convertTimetoInt(this.personal.end)
-          let date = new Date(this.personal.blockDate + 'T00:00:00')
+          let date = new Date(this.personal.blockDate)
           date.setHours(0, 0, 0)
-          let endDate = new Date(this.personal.endDate + 'T00:00:00')
+          let endDate = new Date(this.personal.endDate)
           endDate.setHours(24, 0, 0)
           let offDay = {
             _id: `${data._id}`,
@@ -703,8 +705,8 @@
 
           if (off._id && off._id === id) {
             this.personal = off
-            this.personal.blockDate = (new Date(this.personal.blockDate + 'T00:00:00')).toLocaleDateString()
-            this.personal.endDate = (new Date(this.personal.endDate + 'T00:00:00')).toLocaleDateString()
+            this.personal.blockDate = (new Date(this.personal.blockDate)).toLocaleDateString()
+            this.personal.endDate = (new Date(this.personal.endDate)).toLocaleDateString()
             break;
           }
         }
@@ -713,7 +715,7 @@
       },
       async deletePersonalTask() {
         const id = this.personal._id
-        let d = new Date(this.personal.blockDate + 'T00:00:00')
+        let d = new Date(this.personal.blockDate + 'T00:00:00.000Z')
         // await this.axios.delete(`agent/${this.id}/block-date/${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${d.getDate()}`)
         await this.axios.delete(`agent/${this.id}/block-date/${id}`)
         for (var i = 0; i < this.allMarkedId.length; i++ ) {

@@ -23,12 +23,23 @@
       <b>Description:</b> {{ item.description }}<br>
       <b>Available:</b> {{ item.quantity }}<br>
       <b>Price:</b> {{ item.price }}<br>
+      <p class="" v-if="item.option">
+        <span class="select">
+          <select>
+            <option value="" selected>Options</option>
+            <option v-for="(optionVal, index) in item.option">{{optionVal}}</option>
+          </select>
+        </span>
+      </p>
       <b>Quantity:</b> <input type="number" min="1" :max="item.quantity" v-model="item.order_quantity"><br>
       <a href="javascript:" class="button is-info" @click="addToCart(item)" title="Add to cart"> <i class="fa fa-shopping-cart"></i> </a>
     </div>
   </section>
 </template>
 <style scoped>
+  .select select {
+    width: 100px;
+  }
   .storeitem {
     border-radius: 2px;
     text-align: center;
