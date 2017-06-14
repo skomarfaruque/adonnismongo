@@ -10,7 +10,7 @@
     <div class="columns">
       <div class="column is-1"></div>
       <div class="column is-4" >
-        <label><b>Date:</b> {{ getHumanDate(invoice.invoice_date) }}</label><br>
+        <label><b>Date:</b> {{ getHumanDate(invoice.start_time) }}</label><br>
         <label><b>Invoice:</b> {{invoice._id}}</label><br>
         <label><b>Phostorian name:</b> {{invoice.agent.name}}</label>
       </div>
