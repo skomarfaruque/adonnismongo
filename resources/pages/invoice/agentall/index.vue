@@ -115,7 +115,7 @@ export default {
     store.commit('SET_HEAD', ['Invoice all', 'View report.'])
   },
   async asyncData ({ store, axios, query }) {
-     let { data } =  await axios.get(`invoice/invoiceinfoall`) //in future it will be "me"
+     let { data } =  await axios.get(`invoice/info/all`) //in future it will be "me"
       console.log(data)
      var info = data
     return {
