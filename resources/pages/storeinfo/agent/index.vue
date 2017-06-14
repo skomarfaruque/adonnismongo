@@ -25,7 +25,7 @@
       <b>Price:</b> {{ item.price }}<br>
       <p class="" v-if="item.option">
         <span class="select">
-          <select>
+          <select v-model="item.optionVal">
             <option value="" selected>Options</option>
             <option v-for="(optionVal, index) in item.option">{{optionVal}}</option>
           </select>
