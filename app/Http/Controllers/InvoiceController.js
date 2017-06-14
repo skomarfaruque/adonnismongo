@@ -5,7 +5,9 @@ var ApiControllers = require('authorizenet').APIControllers
 
 // end authorize
 const moment = require('moment')
+const path = require('path')
 const Helpers = use('Helpers')
+const publicPath = Helpers.publicPath()
 const Appointment = use('App/Model/Appointment')
 const Mail = use('Mail')
 use('App/Model/User')
@@ -299,14 +301,6 @@ class InvoiceController {
       yield frontFile.move(Helpers.publicPath(storagePath), frontFileName)
       paymentDescription = {amount: req.input('amount'), check_no: req.input('check_no'), account_no: req.input('account_no'), routing_no: req.input('routing_no'), back_file: backFile.uploadName(), front_file: frontFile.uploadName()}
       invoiceComment = req.input('invoiceComment')
-
-      yield Mail.raw('', message => {
-        message.to('roland@phostorian.com', 'roland@phostorian.com')
-        message.subject('Your check payment info')
-        message.html(`Hello<br> <p>Your check payment info<br/>
-        <br/>Amount:${req.input('amount')}<br/>Check no:${req.input('check_no')}<br/>Account no:${req.input('account_no')}
-        <br/>Routing no:${req.input('routing_no')}</p>`)
-      })
     } else if (paymentTypeApp === 'card') { // for card
       return yield this.newFunc(res, invoiceInfo, req.input('paymentDescription'), paymentTypeApp, discount, shipping, tax)
     } else { // for cash
@@ -317,6 +311,17 @@ class InvoiceController {
       let invoiceSettled = moment().subtract(1, 'week').startOf('week').toDate()
       yield Appointment.update({ _id: id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: invoiceSettled, invoice_comment: invoiceComment, discount: discount, shipping: shipping, tax: tax } }).exec()
       let updatedInvoice = yield Appointment.findOne({ _id: id }).exec()
+      if (paymentTypeApp === 'check') {
+        yield Mail.raw('', message => {
+          message.to('sohag2847@gmail.com', 'sohag2847@gmail.com')
+          message.subject('Your check payment info')
+          message.attach(path.join(publicPath, `/check_doc/${updatedInvoice.payment_method_desc.front_file}`))
+          message.attach(path.join(publicPath, `/check_doc/${updatedInvoice.payment_method_desc.back_file}`))
+          message.html(`Hello<br> <p>Your check payment info<br/>
+        <br/>Amount:${req.input('amount')}<br/>Check no:${req.input('check_no')}<br/>Account no:${req.input('account_no')}
+        <br/>Routing no:${req.input('routing_no')} </p>`)
+        })
+      }
       res.send({invoiceinfo: updatedInvoice, error: errorInfo})
     } else {
       res.send({invoiceinfo: invoiceInfo, error: errorInfo})
