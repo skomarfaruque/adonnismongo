@@ -3,10 +3,13 @@
     <div class="columns">
       <div class="column is-12">
         <div class="columns">
-          <div class="column is-3 is-offset-2">
+          <div class="column is-2 is-offset-2">
           </div>
           <div class="column is-3">
             Description
+          </div>
+          <div class="column is-1">
+            Option
           </div>
           <div class="column is-1">
             Price
@@ -23,11 +26,15 @@
     <div class="columns" v-for="(item, ind) in list">
       <div class="column is-12">
         <div class="columns">
-          <div class="column is-3 is-offset-2">
+          <div class="column is-2 is-offset-2">
             <img :src="`/item_image/${item.image}`"  alt="" style="max-width: 150px;height: 150px;">
           </div>
           <div class="column is-3 shopitem">
             <span>{{item.description}}</span>
+          </div>
+          <div class="column is-1 shopitem">
+            <span v-if="item.optionVal">{{item.optionVal}}</span>
+            <span v-else>NA</span>
           </div>
           <div class="column is-1 shopitem">
             <span>${{item.order_price}}</span>

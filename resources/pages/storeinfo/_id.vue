@@ -74,9 +74,9 @@ export default {
   },
   async asyncData ({ store, axios, params }) {
     let { data } = await axios.get(`storeinfo/${params.id}`)
-    // if (!data.option) {
-    //   data.option = []
-    // }
+    if (!data.option) {
+      data.option = []
+    }
     return {
       storeinfo: {
         option: data.option,
