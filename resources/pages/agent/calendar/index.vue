@@ -82,7 +82,7 @@
             <span v-show="watchStatus !== 3">
             <button class="button is-large is-info" @click="startWatch" v-show="watchStatus === 0 ">Start</button>
             <div v-show="watchStatus !== 0 && this.isFinished !== true" class="block">
-              <button class="button is-large is-info space-btn" @click="pauseWatch" ><span v-if="watchStatus === 2" id="r">Resume</span><span id="p" v-else>Pause</span></button>
+              <button class="button is-large is-info space-btn" @click="pauseWatch" :disabled="pauseAction"><span v-if="watchStatus === 2" id="r">Resume</span><span id="p" v-else>Pause</span></button>
               <button class="button is-large is-danger" @click="stopWatch">Stop</button>
             </div>
             </span>
@@ -353,6 +353,7 @@
         isEdit: true,
         timer: '00:00:00',
         stopButton: false,
+        pauseAction: false,
         id: agent.data._id,
         states,
         events: event.data,
@@ -740,9 +741,7 @@
             break;
           }
         }
-        console.log(this.block_time)
         let b = this.block_time[d.getDay()]
-        console.log(b)
         let off
         if (typeof b.day === 'number') {
           off = {
@@ -842,7 +841,7 @@
 
       },
       async pauseWatch (e) {
-
+        this.pauseAction = true
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
         if (ev.watchStatus === 1) {
@@ -858,6 +857,7 @@
 
 
         await this.startWatch()
+        this.pauseAction = false
       },
       async stopWatch () {
         clearInterval(this.sw)
