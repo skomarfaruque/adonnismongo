@@ -327,7 +327,6 @@
   import Calendar from '~components/Scheduler.vue'
   import MaskedInput from 'vue-text-mask'
   import helper from '~/plugins/helper'
-  import moment from 'moment'
   export default {
     middleware: 'auth',
     components: {
