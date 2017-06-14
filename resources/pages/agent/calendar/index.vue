@@ -637,8 +637,8 @@
             }
           }
           this.isAdded = false
-          console.log(this.personal)
-
+          this.personal.blockDate = new Date(this.personal.blockDate)
+          this.personal.endDate = new Date(this.personal.endDate)
           this.personal.blockDate.setHours(0, 0, 0)
           
           this.personal.endDate.setHours(24, 0, 0)
