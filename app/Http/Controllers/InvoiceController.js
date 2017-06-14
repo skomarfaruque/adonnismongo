@@ -314,6 +314,7 @@ class InvoiceController {
       if (paymentTypeApp === 'check') {
         yield Mail.raw('', message => {
           message.to('sohag2847@gmail.com', 'sohag2847@gmail.com')
+          // message.to('phostoriantest@gmail.com', 'phostoriantest@gmail.com')
           message.subject('Your check payment info')
           message.attach(path.join(publicPath, `/check_doc/${updatedInvoice.payment_method_desc.front_file}`))
           message.attach(path.join(publicPath, `/check_doc/${updatedInvoice.payment_method_desc.back_file}`))
