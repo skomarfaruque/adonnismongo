@@ -467,7 +467,7 @@
                     </div>
                     <div class="level-right">
                       <div class="level-item">
-                        <span><input class="input"  name="check_no" type="number" v-model="check.check_no" placeholder="Enter Check Number">
+                        <span><input class="input"  name="check_no" type="text" v-model="check.check_no" placeholder="Enter Check Number">
                         <input class="input"  name="paymentType" type="hidden" value="check" placeholder="Enter Check Number">
                         <input class="input"  name="id" type="hidden" v-bind:value="invoice._id" placeholder="Enter Check Number">
                         <input class="input"  name="invoiceComment" type="hidden" v-model="invoice.invoice_comment" placeholder="">
@@ -486,7 +486,7 @@
                     </div>
                     <div class="level-right">
                       <div class="level-item">
-                        <span><input class="input" name="account_no" type="number" v-model="check.account_no" placeholder="Account Number"></span>
+                        <span><input class="input" name="account_no" type="text" v-model="check.account_no" placeholder="Account Number"></span>
                       </div>
                     </div>
                   </nav><br>
@@ -498,7 +498,7 @@
                     </div>
                     <div class="level-right">
                       <div class="level-item">
-                        <span><input class="input" id ="routing_no" name="routing_no" type="number" v-model="check.routing_no" placeholder="Routing Number"></span>
+                        <span><input class="input" id ="routing_no" name="routing_no" type="text" v-model="check.routing_no" placeholder="Routing Number"></span>
                       </div>
                     </div>
                   </nav><br>
