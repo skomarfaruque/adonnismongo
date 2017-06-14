@@ -6,7 +6,7 @@
         <p class="control">
           <input class="input" v-model="supplies.name" type="text" placeholder="Item Name">
         </p>
-        <label class="label">description</label>
+        <label class="label">Description</label>
         <p class="control">
           <input class="input" v-model="supplies.description" name="" id=""/>
         </p>
