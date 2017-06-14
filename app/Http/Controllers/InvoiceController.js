@@ -313,8 +313,8 @@ class InvoiceController {
       let updatedInvoice = yield Appointment.findOne({ _id: id }).exec()
       if (paymentTypeApp === 'check') {
         yield Mail.raw('', message => {
-          message.to('sohag2847@gmail.com', 'sohag2847@gmail.com')
-          // message.to('phostoriantest@gmail.com', 'phostoriantest@gmail.com')
+          // message.to('sohag2847@gmail.com', 'sohag2847@gmail.com')
+          message.to('phostoriantest@gmail.com', 'phostoriantest@gmail.com')
           message.subject('Your check payment info')
           message.attach(path.join(publicPath, `/check_doc/${updatedInvoice.payment_method_desc.front_file}`))
           message.attach(path.join(publicPath, `/check_doc/${updatedInvoice.payment_method_desc.back_file}`))
