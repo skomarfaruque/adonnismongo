@@ -11,7 +11,7 @@
                 <label class="label">Provider</label>
                 <span class="subtitle">{{name}}</span>
                 <label for="" class="label">Date</label>
-                <p class="control"><input id="date-off" class="input" type="date" v-model="personal.blockDate"></p>
+                <p class="control"><input id="date-off" class="input" type="date" v-model="personal.vblockDate"></p>
                 <label class="checkbox">
                   <input type="checkbox" v-model="personal.fullday">
                 Whole Day Off
@@ -32,7 +32,7 @@
                   <input type="checkbox" v-model="personal.isRepeat">
                   Repeat
                 </label>
-                <p v-show="personal.isRepeat" class="control"><input id="date-off-end" class="input" type="date" v-model="personal.endDate"></p>
+                <p v-show="personal.isRepeat" class="control"><input id="date-off-end" class="input" type="date" v-model="personal.vendDate"></p>
                 <label for="" class="label">Comment</label>
                 <p class="control">
                   <textarea name="" id="" cols="30" rows="10" class="textarea" v-model="personal.comment"></textarea>
@@ -327,6 +327,7 @@
   import Calendar from '~components/Scheduler.vue'
   import MaskedInput from 'vue-text-mask'
   import helper from '~/plugins/helper'
+  import moment from 'moment'
   export default {
     middleware: 'auth',
     components: {
@@ -385,8 +386,10 @@
         isPersonalOff: false,
         isAdded: false,
         personal: {
-          blockDate: new Date().toLocaleDateString(),
-          endDate: new Date().toLocaleDateString(),
+          vblockDate: new Date().toLocaleDateString(),
+          vendDate: new Date().toLocaleDateString(),
+          blockDate: new Date(),
+          endDate: new Date(),
           fullday: false,
           start: '09:00 AM',
           end: '05:00 PM',
@@ -407,10 +410,20 @@
       let self = this
       const flatpicker = require('flatpickr')
       var options = { allowInput: false, enableTime: true, noCalendar: true, dateFormat: 'h:i K' }
-      new flatpicker(document.getElementById('date-off'))
-      new flatpicker(document.getElementById('date-off-end'))
-        new flatpicker(document.getElementById('personal-start'), options)
-        new flatpicker(document.getElementById('personal-end'), options)
+      let offStartOption = { defaultDate: new Date(), dateFormat: 'd/m/Y' }
+      offStartOption.onChange = (date, datestr, instance) => {
+        if (!date[0]) return false
+        self.personal.blockDate = date[0]
+      }
+      let offEndOption = { defaultDate: new Date(), dateFormat: 'd/m/Y' }
+      offEndOption.onChange = (date, datestr, instance) => {
+        if (!date[0]) return false
+        self.personal.endDate = date[0]
+      }
+      new flatpicker(document.getElementById('date-off'), offStartOption)
+      new flatpicker(document.getElementById('date-off-end'), offEndOption)
+      new flatpicker(document.getElementById('personal-start'), options)
+      new flatpicker(document.getElementById('personal-end'), options)
 
       let startOption = Object.assign({}, options)
       startOption.onChange = (date, datestr, instance) => {
@@ -483,7 +496,6 @@
       // =======================================================================
       // Show event
       // =======================================================================
-      console.log(this.events)
       var events = []
       this.events.forEach(m => {
         events.push({
@@ -551,7 +563,7 @@
         }
         if (b.isRepeat) {
           day.start_date = date
-          let endDate = new Date(b.endDate + 'T00:00:00.000Z')
+          let endDate = new Date(b.endDate)
           endDate.setHours(24, 0, 0)
           day.end_date = endDate
         }
@@ -626,27 +638,28 @@
             }
           }
           this.isAdded = false
-          this.personal.blockDate = new Date(this.personal.blockDate + 'T00:00:00.000Z')
-          this.personal.endDate = new Date(this.personal.endDate + 'T00:00:00.000Z')
+          console.log(this.personal)
+
+          this.personal.blockDate.setHours(0, 0, 0)
+          
+          this.personal.endDate.setHours(24, 0, 0)
           const { data } = await this.axios.post(`agent/${this.id}/block-date`, this.personal)
           this.blockDays.push(data)
           const startMinute = helper.convertTimetoInt(this.personal.start)
           const endMinute = helper.convertTimetoInt(this.personal.end)
-          let date = new Date(this.personal.blockDate)
-          date.setHours(0, 0, 0)
-          let endDate = new Date(this.personal.endDate)
-          endDate.setHours(24, 0, 0)
+          // let date = new Date(this.personal.blockDate)
+
           let offDay = {
             _id: `${data._id}`,
-            days: this.personal.isRepeat ? date.getDay() : date,
+            days: this.personal.isRepeat ? date.getDay() : this.personal.blockDate,
             zones: this.personal.fullday ? 'fullday' : [startMinute, endMinute],
             css: 'holiday',
             html: `<a href="javascript:" title="Personal Task" class="phosto-blue" onclick="calendar.showPersonalTask('${data._id}')">Personal Task</a>`,
             type: 'dhx_time_block'
           }
           if (this.personal.isRepeat) {
-            offDay.start_date = date
-            offDay.end_date = endDate
+            offDay.start_date = this.personal.blockDate
+            offDay.end_date = this.personal.endDate
           }
           scheduler.addMarkedTimespan(offDay)
           this.allMarkedId.push(offDay)
@@ -705,8 +718,8 @@
 
           if (off._id && off._id === id) {
             this.personal = off
-            this.personal.blockDate = (new Date(this.personal.blockDate)).toLocaleDateString()
-            this.personal.endDate = (new Date(this.personal.endDate)).toLocaleDateString()
+            this.personal.vblockDate = (new Date(this.personal.blockDate)).toLocaleDateString()
+            this.personal.vendDate = (new Date(this.personal.endDate)).toLocaleDateString()
             break;
           }
         }
@@ -715,7 +728,7 @@
       },
       async deletePersonalTask() {
         const id = this.personal._id
-        let d = new Date(this.personal.blockDate + 'T00:00:00.000Z')
+        let d = new Date(this.personal.blockDate)
         // await this.axios.delete(`agent/${this.id}/block-date/${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${d.getDate()}`)
         await this.axios.delete(`agent/${this.id}/block-date/${id}`)
         for (var i = 0; i < this.allMarkedId.length; i++ ) {
@@ -728,8 +741,9 @@
             break;
           }
         }
+        console.log(this.block_time)
         let b = this.block_time[d.getDay()]
-
+        console.log(b)
         let off
         if (typeof b.day === 'number') {
           off = {
