@@ -75,7 +75,7 @@ module.exports = {
    * Vendors
    */
   build: {
-    vendor: ['axios', 'vee-validate', 'vue-text-mask', 'flatpickr', 'vue-toasted']
+    vendor: ['axios', 'vee-validate', 'vue-text-mask', 'flatpickr', 'vue-toasted', 'moment']
   },
   plugins: ['~/plugins/cookie', { src: '~/plugins/axios', injectAs: 'axios' }, '~/plugins/veelidate', { src: '~/plugins/notification', ssr: false }, '~/plugins/helper']
 }
