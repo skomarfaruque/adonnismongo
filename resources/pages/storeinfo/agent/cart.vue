@@ -32,13 +32,15 @@
           <div class="column is-2 shopitem">
             <span>{{item.description}}</span>
           </div>
-          <div class="column is-2 shopitemoption">
-            <ul v-if="item.optionVal.length">
-             <li v-for="(optionAll, index) in item.optionVal">
-                <span>{{optionAll.option}}-{{optionAll.quantity}}</span><br>
-              </li>
-            </ul>
-            <span v-else><br>NA</span>
+          <div class="column is-2">
+            <div v-if="item.optionVal.length" class="column is-2 shopitemoption">
+              <ul>
+              <li v-for="(optionAll, index) in item.optionVal">
+                  <span>{{optionAll.option}}-{{optionAll.quantity}}</span><br>
+                </li>
+              </ul>
+            </div>
+            <div v-else class="shopitem"><span>NA</span></div>
           </div>
           <div class="column is-1 shopitem">
             <span>${{item.order_price}}</span>
