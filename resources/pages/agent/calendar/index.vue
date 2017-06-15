@@ -94,6 +94,14 @@
         <!--===========================================================
           Start Creating Appointment
         ============================================================-->
+<div v-bind:class="{ modal: true, 'is-active': processing }">
+  <div class="modal-background"></div>
+  <div class="modal-content has-text-centered">
+    <p class="image is-64x64 has-text-centered" style="margin:auto">
+     <img src="~assets/img/loading.gif" alt="Bulma logo">
+    </p>
+  </div>
+</div>
         <div class="box" v-show="!isCustomer && isEdit">
           <h1 class="title">Create Appointment for {{name}}</h1>
           <div class="box">
@@ -397,7 +405,8 @@
           isRepeat: false
         },
         isDeletePersonalOff: false,
-        isModal: false
+        isModal: false,
+        processing: false,
       }
     },
     data () {
@@ -592,6 +601,7 @@
       // Save Appointment
       // =======================================================================
       async save () {
+        this.processing = true// processing image load active
         let id = scheduler.getState().lightbox_id
         let ev = scheduler.getEvent(id)
         if (this.errors.any()) {
@@ -602,6 +612,7 @@
         ev.start_date.setMinutes(startMinute)
         const obj = { _id: ev._id, agent: this.email, description: this.title, customer: this.customer, start: ev.start_date, comment: this.comment}
         let { data } = await this.axios.post('appointment', obj)
+        this.processing = false// processing image loading deactive
         ev.customer = data.customer
         ev.text = data.description
         ev.comment = data.comment
@@ -641,7 +652,7 @@
           this.personal.blockDate = new Date(this.personal.blockDate)
           this.personal.endDate = new Date(this.personal.endDate)
           this.personal.blockDate.setHours(0, 0, 0)
-          
+
           this.personal.endDate.setHours(24, 0, 0)
           const { data } = await this.axios.post(`agent/${this.id}/block-date`, this.personal)
           this.blockDays.push(data)
