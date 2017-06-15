@@ -1011,7 +1011,7 @@ watch: {
     },
 
     dateFormated (date) {
-      return moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY');
+      return moment(date, 'YYYY-MM-DD').format('MM/DD/YYYY');
     },
     twoDigitFormat (value) {
       return value.toFixed(2);
