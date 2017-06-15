@@ -33,7 +33,12 @@
             <span>{{item.description}}</span>
           </div>
           <div class="column is-1 shopitem">
-            <span v-if="item.optionVal">{{item.optionVal}}</span>
+            <ul v-if="item.optionVal.length">
+             <li v-for="(optionAll, index) in item.optionVal">
+              
+                {{optionAll.option}}-{{optionAll.quantity}}
+              </li>
+            </ul>
             <span v-else>NA</span>
           </div>
           <div class="column is-1 shopitem">

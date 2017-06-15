@@ -82,8 +82,59 @@ class InvoiceController {
     res.send({year: year, weeks: weeks})
   }
   * getAllAgent (req, res) {
-    const invoices = yield Appointment.find({ invoice_settled: false }).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
-    res.ok(invoices)
+    var lastYear = moment().subtract(1, 'year').toDate()
+    var today = moment().toDate()
+    let userId = req.param('id')
+    if (userId === 'me') {
+      userId = req.currentUser._id
+    }
+    const invoices = yield Appointment.find({invoice_settled: true, invoice_date: {$gte: lastYear, $lt: today}}).exec()
+    var weeks = []
+    var year = {}
+    year.item = {}
+    year.totalPrice = 0
+    if (invoices.length) {
+      invoices.forEach(function (invoiceVal, key) {
+        if (invoiceVal.items.length) {
+          invoiceVal.items.forEach(function (supplyVal, newKey) {
+            let price = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
+            year.totalPrice += price
+            if (!year.item[supplyVal.description]) {
+              year.item[supplyVal.description] = 0
+            }
+            year.item[supplyVal.description] += price
+          })
+        }
+      })
+    }
+    for (var i = 0; i < 4; i++) {
+      var weekData = {}
+      weekData.item = {}
+      var date = moment().subtract(i, 'week').startOf('week').toDate()
+      var datePrevious = moment().subtract(i + 1, 'week').startOf('week').toDate()
+      weekData.date = moment(date).format('MMMM Do YYYY')
+      weekData.totalPrice = 0
+      if (invoices.length) {
+        invoices.forEach(function (invoiceVal, key) {
+          if (datePrevious <= invoiceVal.invoice_date && invoiceVal.invoice_date < date) {
+          // if (datePrevious) {
+            if (invoiceVal.items.length) {
+              invoiceVal.items.forEach(function (supplyVal, newKey) {
+                let price = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
+                weekData.totalPrice += price
+                if (!weekData.item[supplyVal.description]) {
+                  weekData.item[supplyVal.description] = 0
+                }
+                weekData.item[supplyVal.description] += price
+              })
+            }
+          }
+        })
+      }
+      weeks.push(weekData)
+    }
+    console.log(year)
+    res.send({year: year, weeks: weeks})
   }
 
   * addItem (req, res) {

@@ -58,7 +58,17 @@ class StoreinfoController {
   * updateItemCartModification (req, res) {
     let cartItems = []
     let originalItem = req.input('item')
+    console.log(originalItem)
     let orderQuantity = parseInt(req.input('order_quantity'))
+    let orderOptionTitle = originalItem.optionVal
+    originalItem.optionVal = []
+    let optionVal = {option: orderOptionTitle, quantity: orderQuantity}
+    if (orderOptionTitle){
+      originalItem.optionVal.push(optionVal)
+    } else {
+      originalItem.optionVal = []
+    }
+    
     originalItem.order_quantity = orderQuantity
     originalItem.order_price = orderQuantity * originalItem.price
     cartItems.push(originalItem)
@@ -72,6 +82,9 @@ class StoreinfoController {
         return data._id === originalItem._id
       })
       if (checkData) {
+        originalItem.optionVal.forEach(function (val) {
+          checkData.optionVal.push(val)
+        })
         // remove the element
         checkCartExists.items = checkCartExists.items.filter(function (objVal) {
           return objVal._id !== originalItem._id
