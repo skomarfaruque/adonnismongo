@@ -1011,7 +1011,11 @@ watch: {
     },
 
     dateFormated (date) {
+<<<<<<< HEAD
       return moment(date, 'YYYY-MM-DD').format('MM/DD/YYYY');
+=======
+      return moment(date, 'YYYY-MM-DD').format('MM/DD/YYYY')
+>>>>>>> 351e8a4ae7c3cccd7c1237785c007783284d5fb6
     },
     twoDigitFormat (value) {
       return value.toFixed(2);
