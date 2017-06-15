@@ -5,10 +5,10 @@
         <div class="columns">
           <div class="column is-2 is-offset-2">
           </div>
-          <div class="column is-3">
+          <div class="column is-2">
             Description
           </div>
-          <div class="column is-1">
+          <div class="column is-2">
             Option
           </div>
           <div class="column is-1">
@@ -29,17 +29,16 @@
           <div class="column is-2 is-offset-2">
             <img :src="`/item_image/${item.image}`"  alt="" style="max-width: 150px;height: 150px;">
           </div>
-          <div class="column is-3 shopitem">
+          <div class="column is-2 shopitem">
             <span>{{item.description}}</span>
           </div>
-          <div class="column is-1 shopitem">
+          <div class="column is-2 shopitemoption">
             <ul v-if="item.optionVal.length">
              <li v-for="(optionAll, index) in item.optionVal">
-              
-                {{optionAll.option}}-{{optionAll.quantity}}
+                <span>{{optionAll.option}}-{{optionAll.quantity}}</span><br>
               </li>
             </ul>
-            <span v-else>NA</span>
+            <span v-else><br>NA</span>
           </div>
           <div class="column is-1 shopitem">
             <span>${{item.order_price}}</span>
@@ -397,6 +396,10 @@
 <style scoped>
   .float-right {
     text-align: right;
+  }
+  .shopitemoption span {
+    margin-top: 4%;
+    position: absolute;
   }
   .shopitem span {
     margin-top: 5%;
