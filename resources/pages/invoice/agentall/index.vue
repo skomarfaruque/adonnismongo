@@ -1,85 +1,24 @@
 <template>
   <section>
-<span  v-for="(dataVal, i) in list.weeks">
+
     <div  class="columns invoice-week">
       <div class="column is-12">
-        <label class="invoice-head">Week of {{dataVal.date}}</label>
+        <label class="invoice-head">Week of {{list.date}}</label>
       </div>
     </div>
-    <div class="columns invoice-label">
-      <div class="column is-1"></div>
-      <div class="column is-6">
-        <nav class="level" v-for="(itemVal, j) in dataVal.item">
-          <div class="level-left">
-            <div class="level-item">
-              <span>{{j}}</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>${{twoDigitFormat(itemVal)}}</span><br/>
-            </div>
-          </div>
-        </nav>
 
-
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span class="invoice-head">Total</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span class="invoice-head">${{twoDigitFormat(dataVal.totalPrice)}}</span>
-            </div>
-          </div>
-        </nav>
-      </div>
-      <div class="column is-5"></div>
-    </div>
-</span>
+<div v-if="list.weeks.length">
+<div v-for="info in list.weeks">
+<li>Agent name:{{info.agentName}} , Appointment total:{{info.totalPrice}}, Agents commission amount: {{info.totalCommissionPrice}}, invoice id: {{info.invoiceId}}</li>
+</div>
 
 
 
-    <hr>
-    <div class="columns invoice-year">
-      <div class="column is-1"></div>
-      <div class="column is-11">
-        <label class="invoice-head">Year to Date Earnings</label>
-      </div>
-    </div>
-    <div class="columns invoice-label">
-      <div class="column is-2"></div>
-      <div class="column is-5">
-        <nav class="level" v-for="(dataYearVal, k) in list.year.item">
-          <div class="level-left">
-            <div class="level-item">
-              <span>{{k}}</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span>${{twoDigitFormat(dataYearVal)}}</span><br/>
-            </div>
-          </div>
-        </nav>
+</div>
+<button @click="previous()">Previous</button>
+<button v-show="flag !== 0" @click="next()">Next</button>
 
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span class="invoice-head">Total</span><br/>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <span class="invoice-head">${{twoDigitFormat(list.year.totalPrice)}}</span>
-            </div>
-          </div>
-        </nav>
-      </div>
-      <div class="column is-5"></div>
-    </div>
+
   </section>
 </template>
 
@@ -115,11 +54,12 @@ export default {
     store.commit('SET_HEAD', ['Invoice all', 'View report.'])
   },
   async asyncData ({ store, axios, query }) {
-     let { data } =  await axios.get(`invoice/info/all`) //in future it will be "me"
-      console.log(data)
+     let { data } =  await axios.get(`invoice/info/all/0`) //in future it will be "me"
+     console.log(data)
      var info = data
     return {
       list: data,
+      flag: parseInt(data.flag),
       search: '',
       confirmation: false
     }
@@ -143,8 +83,20 @@ computed: {
     remove (item, ind) {
 
     },
-    twoDigitFormat (value) {
-      return value.toFixed(2);
+    async previous () {
+      this.flag += 1
+      let self = this
+      let { data } =  await this.axios.get(`invoice/info/all/${this.flag}`)
+      // console.log(data)
+      self.list = data
+      
+    },
+    async next () {
+      this.flag -= 1
+      let self = this
+      let { data } =  await this.axios.get(`invoice/info/all/${this.flag}`)
+      self.list = data
+      
     },
   }
 }
