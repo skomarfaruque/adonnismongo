@@ -23,7 +23,7 @@
       </div>
       <div class="column is-1"></div>
     </div>
-    <div class="columns">
+    <div class="columns itemselect">
       <div class="column is-1"></div>
       <div class="column is-10 box">
         <div class="level">
@@ -875,6 +875,9 @@
   }
   .block a.button {
     margin: 10px;
+  }
+  .itemselect .input {
+    width: 50%;
   }
 </style>
 <script>
