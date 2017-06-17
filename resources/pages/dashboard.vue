@@ -39,6 +39,10 @@
             <p class="title">Invoice</p>
             <p class="subtitle">Show agents report.</p>
           </nuxt-link>
+          <nuxt-link class="tile is-child notification is-info" to="/invoice/agentall" v-if="usertype ==='Admin'">
+            <p class="title">Discount</p>
+            <p class="subtitle">Show discount code.</p>
+          </nuxt-link>
         </div>
 
       </div>
