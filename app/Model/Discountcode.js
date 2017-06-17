@@ -2,20 +2,12 @@
 
 const mongoose = use('Mongoose')
 
-const storeinfoSchema = mongoose.Schema({
-  name: String,
-  description: String,
-  price: Number,
-  quantity: Number,
-  option: [],
-  image: String,
+const discountcodeSchema = mongoose.Schema({
+  discount_code: String,
+  percentage: Number,
   synced: {
     type: Boolean,
     default: false
-  },
-  refillDate: {
-    type: Date,
-    default: Date.now
   },
   created: {
     type: Date,
@@ -23,6 +15,6 @@ const storeinfoSchema = mongoose.Schema({
   }
 })
 
-const Storeinfo = mongoose.model('Storeinfo', storeinfoSchema)
+const Discountcode = mongoose.model('Discountcode', discountcodeSchema)
 
-module.exports = Storeinfo
+module.exports = Discountcode

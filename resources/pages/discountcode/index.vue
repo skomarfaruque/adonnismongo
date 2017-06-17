@@ -5,7 +5,7 @@
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <input class="input" type="search" placeholder="Search by Name, Price, Description" v-model="search" @keyup.enter="searchStoreinfo">
+              <input class="input" type="search" placeholder="Search by Discount code, Percentage" v-model="search" @keyup.enter="searchStoreinfo">
             </p>
             <p class="control">
               <button class="button" @click="searchStoreinfo">
@@ -26,22 +26,10 @@
         <thead>
           <tr>
             <th>
-              Name
+              Discount code
             </th>
             <th>
-              Description
-            </th>
-            <th>
-              Price
-            </th>
-            <th>
-              Quantity
-            </th>
-            <th>
-              Option
-            </th>
-            <th>
-              Image
+              Percentage
             </th>
             <th>
               Action
@@ -50,17 +38,8 @@
         </thead>
         <tbody>
           <tr v-for="(item, ind) in list">
-            <td>{{ item.name }}</td>
-            <td>{{ item.description }}</td>
-            <td>${{ item.price }}</td>
-            <td>{{ item.quantity }}</td>
-            <td v-if="item.option ">
-              <span v-for="(optionVal, index) in item.option">
-                <span>{{optionVal}}</span><span v-if="index+1 < item.option.length">, </span>
-              </span>
-            </td>
-            <td v-else>NA</td>
-            <td><img style="max-width: 200px;" :src="`item_image/${item.image}`" alt=""></td>
+            <td>{{ item.discount_code }}</td>
+            <td>{{ item.percentage }}</td>
             <td class="action">
               <section v-show="confirmation === false">
                 <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
@@ -91,8 +70,8 @@ export default {
     }
   },
   async asyncData ({ store, axios }) {
-    store.commit('SET_HEAD', ['Store', 'View all Store items.'])
-    let { data } = await axios.get('storeinfo')
+    store.commit('SET_HEAD', ['Discount', 'View all Discount code.'])
+    let { data } = await axios.get('discountcode')
     return {
       list: data,
       search: '',

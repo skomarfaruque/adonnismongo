@@ -84,4 +84,8 @@ Route.group('storeinfo', () => {
   Route.post('storeinfo/payment', 'StoreinfoController.payment')
 }).prefix('api').middleware('auth')
 
+Route.group('discountcode', () => {
+  Route.resource('discountcode', 'DiscountcodeController').except('create', 'edit')
+}).prefix('api').middleware('auth')
+
 Route.any('*', 'NuxtController.render')
