@@ -18,20 +18,10 @@ class DiscountcodeController {
    * Create Supply
    */
   * store (req, res) {
-    const name = req.input('name')
-    const description = req.input('description')
-    const price = req.input('price')
-    const quantity = req.input('quantity')
-    const option = req.input('option')
-    const image = req.file('image', {
-      maxSize: '2mb',
-      allowedExtensions: ['jpg', 'png', 'jpeg']
-    })
-    const fileName = `${name}_back.${image.extension()}`
-    yield image.move(Helpers.publicPath('item_image'), fileName)
-    const obj = {name: name, description: description, price: price, quantity: quantity, option: option, image: image.uploadName()}
-    let Discountcode = yield Discountcode.create(obj)
-    res.send(Discountcode)
+    let obj = req.only('discount_code', 'percentage')
+    console.log(obj)
+    let discountInfo = yield Discountcode.create(obj)
+    res.send(discountInfo)
   }
 
   * update (req, res) {

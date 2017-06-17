@@ -17,7 +17,7 @@
       </div>
       <div class="level-right">
         <div class="level-item">
-          <nuxt-link href="javascript:" class="button is-info" title="Add New" to="/storeinfo/new"> <i class="fa fa-plus"></i> </nuxt-link>
+          <nuxt-link href="javascript:" class="button is-info" title="Add New" to="/discountcode/new"> <i class="fa fa-plus"></i> </nuxt-link>
         </div>
       </div>
     </nav>
