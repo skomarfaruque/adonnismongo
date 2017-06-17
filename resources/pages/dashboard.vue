@@ -25,8 +25,8 @@
           </nuxt-link>
       
           <nuxt-link class="tile is-child notification is-info" to="/invoice?agentId=me" v-if="isInvoice && usertype ==='Agent'">
-            <p class="title">Invoice</p>
-            <p class="subtitle">Create and print invoices.</p>
+            <p class="title">Commission</p>
+            <p class="subtitle">Create and print Commission.</p>
           </nuxt-link>
         </div>
 

@@ -54,7 +54,7 @@
                 <nuxt-link class="button is-info" :to="`/agent/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
                 <nuxt-link class="button is-info" :to="`/agent/calendar?id=${item._id}`" title="Calender"><i class="fa fa-calendar"></i> </nuxt-link>
                 <nuxt-link class="button is-info" :to="`/agent/customers?id=${item._id}`" title="View Customers"><i class="fa fa-users"></i> </nuxt-link>
-                <nuxt-link class="button is-info" :to="`invoice?agentId=${item._id}`" title="View Comissoin"><i class="fa fa-money"></i> </nuxt-link>
+                <nuxt-link class="button is-info" :to="`invoice?agentId=${item._id}`" title="View Commission"><i class="fa fa-money"></i> </nuxt-link>
               </section>
               <section v-show="confirmation">
                 <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>
