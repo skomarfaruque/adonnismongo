@@ -3,21 +3,46 @@
 
     <div  class="columns invoice-week">
       <div class="column is-12">
-        <label class="invoice-head">Week of {{list.date}}</label>
+        <h2>Week of {{list.date}}</h2>
       </div>
     </div>
-
-<div v-if="list.weeks.length">
-<div v-for="info in list.weeks">
-<li>Agent name:{{info.agentName}} , Appointment total:{{info.totalPrice}}, Agents commission amount: {{info.totalCommissionPrice}}, invoice id: {{info.invoiceId}}</li>
-</div>
-
-
-
-</div>
-<button @click="previous()">Previous</button>
-<button v-show="flag !== 0" @click="next()">Next</button>
-
+    
+    <div class="columns" v-if="list.weeks.length">
+      <table class="table is-striped">
+        <thead>
+          <tr>
+            <th>
+              Agent name
+            </th>
+            <th>
+              Appointment total
+            </th>
+            <th>
+              Agents commission amount
+            </th>
+            <th>
+              invoice id
+            </th>
+            <th>
+              Action
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="info in list.weeks">
+            <td>{{ info.agentName }}</td>
+            <td>{{ info.totalPrice }}</td>
+            <td>{{ info.totalCommissionPrice }}</td>
+            <td>{{ info.invoiceId }}</td>
+            <td><nuxt-link :to="`/invoice/paid/${info.invoiceId}`" class="button is-info">View Invoice</nuxt-link></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <nav class="pagination is-centered">
+      <a @click="previous()" class="pagination-previous">Previous</a>
+      <a v-show="flag !== 0" @click="next()" class="pagination-next">Next</a>
+    </nav>
 
   </section>
 </template>
@@ -26,8 +51,8 @@
   .invoice-label .level:not(:last-child) {
      margin-bottom: 0rem;
   }
-  .invoice-week .invoice-head, .invoice-year .invoice-head {
-    padding-left: 5%;
+  .invoice-week h2 {
+    font-size: 20px;
   }
   .invoice-head {
     font-size: 20px;
