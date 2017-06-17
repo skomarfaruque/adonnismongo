@@ -1032,9 +1032,14 @@ watch: {
         quantity: this.quantity,
         commission: this.newItem.commission
       })
-      location.reload()
-      await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
-    },
+      let self = this
+      this.price = 0
+      this.newItem = ''
+      this.quantity = 1
+      // location.reload()
+      let { data } = await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
+      
+   },
     async removeItem (index) {
       this.invoice.items.splice(index, 1)
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
