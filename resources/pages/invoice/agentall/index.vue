@@ -39,6 +39,11 @@
         </tbody>
       </table>
     </div>
+    <div class="columns" v-else>
+      <div class="column is-12">
+        <h2>No Invoice Found !</h2>
+      </div>
+    </div>
     <nav class="pagination is-centered">
       <a @click="previous()" class="pagination-previous">Previous</a>
       <a v-show="flag !== 0" @click="next()" class="pagination-next">Next</a>
