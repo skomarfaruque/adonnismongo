@@ -112,7 +112,10 @@
               <td></td>
               <td></td>
               <td><label class="label">Discount Saving</label></td>
-              <td>${{parseFloat(!discount_final?0:twoDigitFormat(discount_final))}}</td>
+              <td>
+              <!-- ${{parseFloat(!discount_final?0:twoDigitFormat(discount_final))}} -->
+              <span @mouseover ="mouseOver" v-if="showInput === false">${{twoDigitFormat(parseFloat(!discount_final?0:discount_final))}}</span><span v-if="showInput === true">$<input @mouseleave="mouseLeave"  type="text" v-model="discount_final"/></span>
+              </td>
             </tr>
             <tr>
               <td></td>
@@ -954,6 +957,7 @@ export default {
       isCashOff: false,
       isCheckOff: false,
       isCreditOff: false,
+      showInput:false
     }
   },
   data () {
@@ -1110,6 +1114,13 @@ watch: {
             this.$router.push(`/invoice/paid/${this.invoice._id}`)
           }
       },
+       mouseOver (){
+            this.showInput = true
+        },
+       mouseLeave (){
+         console.log('leave')
+            this.showInput = false
+        },
     changePrice () {
         this.price = 0
         if(this.newItem.price){
