@@ -86,6 +86,7 @@ Route.group('storeinfo', () => {
 
 Route.group('discountcode', () => {
   Route.resource('discountcode', 'DiscountcodeController').except('create', 'edit')
+  Route.get('discount/search', 'DiscountcodeController.search')
 }).prefix('api').middleware('auth')
 
 Route.any('*', 'NuxtController.render')

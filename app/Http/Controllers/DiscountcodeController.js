@@ -26,18 +26,9 @@ class DiscountcodeController {
 
   * update (req, res) {
     const id = req.param('id')
-    let obj = req.only('name', 'description', 'price', 'quantity', 'image', 'option')
-    const image = req.file('image', {
-      maxSize: '2mb',
-      allowedExtensions: ['jpg', 'png', 'jpeg']
-    })
-    if (image.extension()) {
-      const fileName = `${obj.name}_image.${image.extension()}`
-      yield image.move(Helpers.publicPath('item_image'), fileName)
-      obj.image = image.uploadName()
-    }
-    const Discountcode = yield Discountcode.update({ _id: id }, {name: obj.name, description: obj.description, price: obj.price, quantity: obj.quantity, option: obj.option, image: obj.image}).exec()
-    res.send(Discountcode)
+    const obj = req.only('discount_code', 'percentage')
+    const discountcode = yield Discountcode.update({ _id: id }, { discount_code: obj.discount_code, percentage: obj.percentage }).exec()
+    res.send(discountcode)
   }
   * destroy (req, res) {
     const DiscountcodeId = req.param('id')
@@ -52,22 +43,23 @@ class DiscountcodeController {
   /**
    * Search Discountcode by Name, description, price
    */
+  
   * search (req, res) {
     if (req.input('key') !== '') {
       let regex = req.input('key')
-      let price = parseInt(regex)
+      let percentage = parseInt(regex)
       if (!parseInt(regex)) {
-        price = -1
+        percentage = -1
       }
-      const Discountcode = yield Discountcode
-        .find({ $or: [{ name: regex }, { price: price }, { description: regex }] })
+      const discountcode = yield Discountcode
+        .find({ $or: [{ discount_code: regex }, { percentage: percentage }] })
         .exec()
-      res.ok(Discountcode)
+      res.ok(discountcode)
     } else {
-      const Discountcode = yield Discountcode
+      const discountcode = yield Discountcode
         .find({})
         .exec()
-      res.ok(Discountcode)
+      res.ok(discountcode)
     }
   }
 }
