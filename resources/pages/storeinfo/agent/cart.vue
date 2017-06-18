@@ -36,7 +36,7 @@
             <div v-if="item.optionVal.length" class="column is-2 shopitemoption">
               <ul>
               <li v-for="(optionAll, index) in item.optionVal">
-                  <span>{{optionAll.option}}-{{optionAll.quantity}}</span><br>
+                  <span>{{optionAll.option}} ({{optionAll.quantity}} pcs)</span><br>
                 </li>
               </ul>
             </div>
