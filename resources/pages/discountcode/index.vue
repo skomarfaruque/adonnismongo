@@ -5,10 +5,10 @@
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <input class="input" type="search" placeholder="Search by Discount code, Percentage" v-model="search" @keyup.enter="searchStoreinfo">
+              <input class="input" type="search" placeholder="Search by Discount code, Percentage" v-model="search" @keyup.enter="searchDiscount">
             </p>
             <p class="control">
-              <button class="button" @click="searchStoreinfo">
+              <button class="button" @click="searchDiscount">
                 <i class="fa fa-search"></i>
               </button>
             </p>
@@ -43,7 +43,7 @@
             <td class="action">
               <section v-show="confirmation === false">
                 <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
-                <nuxt-link class="button is-info" :to="`/storeinfo/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
+                <nuxt-link class="button is-info" :to="`/discountcode/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
               </section>
               <section v-show="confirmation">
                 <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>
@@ -89,13 +89,13 @@ export default {
   },
   methods: {
     async remove (item, ind) {
-      await this.axios.delete(`storeinfo/${item._id}`)
+      await this.axios.delete(`discountcode/${item._id}`)
       this.list.splice(ind, 1)
       this.confirmation = false
       return this.$toasted.show('Successfully deleted', { duration: 4500 })
     },
-    async searchStoreinfo () {
-      let { data } = await this.axios.get(`storein/search?key=${this.search}`)
+    async searchDiscount () {
+      let { data } = await this.axios.get(`discount/search?key=${this.search}`)
       this.list = data
     }
   }

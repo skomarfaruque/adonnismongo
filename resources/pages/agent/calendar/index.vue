@@ -329,6 +329,9 @@
   .space-btn {
     margin-right: 10px;
   }
+  ul.options-list {
+    width: 74%;
+  }
 </style>
 <script>
 
