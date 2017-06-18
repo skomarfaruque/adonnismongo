@@ -112,7 +112,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Discount Saving</label></td>
-              <td>${{parseFloat(!discount?0:discount)}}</td>
+              <td>${{parseFloat(!discount_final?0:discount_final)}}</td>
             </tr>
             <tr>
               <td></td>
@@ -136,7 +136,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Total</label></td>
-              <td>${{twoDigitFormat(total - parseFloat(discount < 0 || !discount ? 0: discount) + parseFloat(shipping < 0 || !shipping  ? 0:shipping)) }}</td>
+              <td>${{twoDigitFormat(total - parseFloat(discount_final < 0 || !discount_final ? 0: discount_final) + parseFloat(shipping < 0 || !shipping  ? 0:shipping)) }}</td>
             </tr>
             <tr>
               <td></td>
@@ -248,9 +248,9 @@
               <div class="card-content">
                 <div class="content">
                     Total: <b>${{ total }}</b><br>
-                    Discount: <b>${{ parseFloat(discount) }}</b><br>
+                    Discount: <b>${{ parseFloat(discount_final) }}</b><br>
                     Shipping: <b>${{ parseFloat(shipping) }}</b><hr>
-                    Amount: <b>${{total - parseFloat(discount) + parseFloat(shipping)}}</b>
+                    Amount: <b>${{total - parseFloat(discount_final) + parseFloat(shipping)}}</b>
                 </div>
               </div>
             </div>
@@ -360,7 +360,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{parseFloat(!discount?0:discount)}}</span><br/>
+                      <span>${{parseFloat(!discount_final?0:discount_final)}}</span><br/>
                     </div>
                   </div>
                 </nav>
@@ -410,7 +410,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>{{returnAmount}}<input type="hidden" v-model="returnAmount"></span><br/>
+                      <span>${{returnAmount}}<input type="hidden" v-model="returnAmount"></span><br/>
                     </div>
                   </div>
                 </nav>
@@ -474,7 +474,7 @@
                         <input class="input"  name="paymentType" type="hidden" value="check" placeholder="Enter Check Number">
                         <input class="input"  name="id" type="hidden" v-bind:value="invoice._id" placeholder="Enter Check Number">
                         <input class="input"  name="invoiceComment" type="hidden" v-model="invoice.invoice_comment" placeholder="">
-                        <input class="input"  name="discount" type="hidden" v-model="discount" placeholder="">
+                        <input class="input"  name="discount" type="hidden" v-model="discount_final" placeholder="">
                         <input class="input"  name="shipping" type="hidden" v-model="shipping" placeholder="">
                         <input class="input"  name="tax" type="hidden" v-model="totalTax" placeholder="">
                         </span>
@@ -942,9 +942,10 @@ export default {
       cash: {
         return_amount:0.00
       },
-      paid_amount:0.00,
+      paid_amount:'',
       products,
       discount: '',
+      discount_final: '',
       shipping: '',
       totalTax: '',
       newItem: '',
@@ -965,12 +966,6 @@ watch: {
       if(newValue < 0 ){
         this.shipping =''
         this.$toasted.show('Shipping can not be less than 0.', { duration: 4500 })
-      }
-    },
-    discount: function (newValue) {
-      if(newValue < 0){
-        this.discount = ''
-        this.$toasted.show('Discount can not be less than 0.', { duration: 4500 })
       }
     },
     totalTax: function (newValue) {
@@ -997,11 +992,11 @@ watch: {
       return total
     },
     taxCal(){
-      return (parseFloat(this.total) - parseFloat(!this.discount || this.discount<0?0:this.discount) + parseFloat(!this.shipping || this.shipping<0?0:this.shipping))*parseFloat(!this.totalTax || this.totalTax<0?0:this.totalTax)/100
+      return (parseFloat(this.total) - parseFloat(!this.discount_final || this.discount_final<0?0:this.discount_final) + parseFloat(!this.shipping || this.shipping<0?0:this.shipping))*parseFloat(!this.totalTax || this.totalTax<0?0:this.totalTax)/100
     },
     priceDisShipTax(){
-      let tax = (this.total - parseFloat(!this.discount || this.discount<0?0:this.discount) + parseFloat(!this.shipping || this.shipping<0?0:this.shipping))*parseFloat(!this.totalTax || this.totalTax<0?0:this.totalTax)/100
-      let price = (this.total - parseFloat(!this.discount || this.discount<0?0:this.discount) + parseFloat(!this.shipping || this.shipping<0?0:this.shipping))
+      let tax = (this.total - parseFloat(!this.discount_final || this.discount_final<0?0:this.discount_final) + parseFloat(!this.shipping || this.shipping<0?0:this.shipping))*parseFloat(!this.totalTax || this.totalTax<0?0:this.totalTax)/100
+      let price = (this.total - parseFloat(!this.discount_final || this.discount_final<0?0:this.discount_final) + parseFloat(!this.shipping || this.shipping<0?0:this.shipping))
       let grandTotal = tax + price
       return grandTotal
     },
@@ -1045,7 +1040,10 @@ watch: {
     async discountapply () {
       if(this.discount){
         let {data} = await this.axios.post(`invoice/discountcode/info`, { discount_code: this.discount})
-        console.log(data)
+        if(!data){
+          return this.$toasted.show('Discount code is invalid', { duration: 4500 })
+        }
+        this.discount_final = this.total * data.percentage/100
       }else{
         return this.$toasted.show('Discount code is empty', { duration: 4500 })
       }
@@ -1062,7 +1060,7 @@ watch: {
           }
           paymentDescription = {customer_paid:this.paid_amount, return_amount: this.cash.return_amount}
       }
-      var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice, discount: this.discount, shipping: this.shipping, tax: this.totalTax })
+      var result = await this.axios.post(`invoice/payment`, { id: this.invoice._id, paymentType: type, paymentDescription: paymentDescription, invoice: this.invoice, discount: this.discount_final, shipping: this.shipping, tax: this.totalTax })
       if(type === 'cash'){
         if (result.data.error !=='no'){
         return this.$toasted.show(result.data.error, { duration: 4500 })
