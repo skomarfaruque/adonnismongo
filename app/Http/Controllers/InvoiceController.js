@@ -9,6 +9,7 @@ const path = require('path')
 const Helpers = use('Helpers')
 const publicPath = Helpers.publicPath()
 const Appointment = use('App/Model/Appointment')
+const Discountcode = use('App/Model/Discountcode')
 const Mail = use('Mail')
 use('App/Model/User')
 use('App/Model/Customer')
@@ -24,6 +25,11 @@ class InvoiceController {
     const id = req.param('id')
     const invoice = yield Appointment.findOne({ _id: id }).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
     res.ok(invoice)
+  }
+  * discountCodeInfo (req, res) {
+    const discountCode = req.input('discount_code')
+    const discountInfo = yield Discountcode.findOne({ discount_code: discountCode }).exec()
+    res.ok(discountInfo)
   }
 
   * getByAgent (req, res) {

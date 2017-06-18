@@ -191,14 +191,14 @@
             <div class="columns">
 
               <div class="column is-3">
-                <label class="label">Discount</label>
+                <label class="label">Discount code</label>
 
               </div>
               <div class="column is-5">
                 <input class="input" type="text" v-model="discount">
               </div>
               <div class="column is-4">
-                <a class="button is-info"> Apply </a>
+                <a class="button is-info" @click="discountapply"> Apply </a>
               </div>
               <!--<div class="column is-2">
                 <a class="button">Apply</a>
@@ -1041,6 +1041,15 @@ watch: {
     async removeItem (index) {
       this.invoice.items.splice(index, 1)
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
+    },
+    async discountapply () {
+      if(this.discount){
+        let {data} = await this.axios.post(`invoice/discountcode/info`, { discount_code: this.discount})
+        console.log(data)
+      }else{
+        return this.$toasted.show('Discount code is empty', { duration: 4500 })
+      }
+     
     },
     async payment (type) {
       var paymentDescription ={}
