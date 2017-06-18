@@ -112,7 +112,7 @@
               <td></td>
               <td></td>
               <td><label class="label">Discount Saving</label></td>
-              <td>${{parseFloat(!discount_final?0:discount_final)}}</td>
+              <td>${{parseFloat(!discount_final?0:twoDigitFormat(discount_final))}}</td>
             </tr>
             <tr>
               <td></td>
