@@ -34,7 +34,6 @@
             </select>
           </span>
         </p>
-        <span> deta: {{item.optionVal}}</span>
         <b>Quantity:</b> <input type="number" min="1" :max="item.quantity" v-model="item.order_quantity"><br>
         <a v-if="item.quantity > 0" href="javascript:" class="button is-info" @click="addToCart(item)" title="Add to cart"> <i class="fa fa-shopping-cart"></i> </a>
         <span v-else  class="button is-danger"><i class="fa fa-shopping-cart"></i></span>
