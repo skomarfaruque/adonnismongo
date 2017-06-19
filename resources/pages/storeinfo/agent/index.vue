@@ -24,18 +24,19 @@
       <div class="zinfo">
         <b>Name:</b> {{ item.name }}<br>
         <b>Description:</b> {{ item.description }}<br>
-        <b>Available:</b> {{ item.quantity }}<br>
+        <span v-if="item.quantity > 0"><b>Available:</b> {{ item.quantity }}</span><span v-else>Out of stock</span><br>
         <b>Price:</b> ${{ item.price }}<br>
         <p class="" v-if="item.option">
           <span class="select">
             <select v-model="item.optionVal">
-              <option value="Options" selected>Options</option>
+              <option value="undefined" selected>Options</option>
               <option v-for="(optionVal, index) in item.option">{{optionVal}}</option>
             </select>
           </span>
         </p>
         <b>Quantity:</b> <input type="number" min="1" :max="item.quantity" v-model="item.order_quantity"><br>
-        <a href="javascript:" class="button is-info" @click="addToCart(item)" title="Add to cart"> <i class="fa fa-shopping-cart"></i> </a>
+        <a v-if="item.quantity > 0" href="javascript:" class="button is-info" @click="addToCart(item)" title="Add to cart"> <i class="fa fa-shopping-cart"></i> </a>
+        <span v-else  class="button is-danger"><i class="fa fa-shopping-cart"></i></span>
       </div>
     </div>
   </section>

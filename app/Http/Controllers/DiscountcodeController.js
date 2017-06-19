@@ -19,7 +19,6 @@ class DiscountcodeController {
    */
   * store (req, res) {
     let obj = req.only('discount_code', 'percentage')
-    console.log(obj)
     let discountInfo = yield Discountcode.create(obj)
     res.send(discountInfo)
   }
