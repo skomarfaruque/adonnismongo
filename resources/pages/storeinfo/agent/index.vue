@@ -29,11 +29,12 @@
         <p class="" v-if="item.option">
           <span class="select">
             <select v-model="item.optionVal">
-              <option value="" selected>Options</option>
+              <option value="undefined" selected>Options</option>
               <option v-for="(optionVal, index) in item.option">{{optionVal}}</option>
             </select>
           </span>
         </p>
+        <span> deta: {{item.optionVal}}</span>
         <b>Quantity:</b> <input type="number" min="1" :max="item.quantity" v-model="item.order_quantity"><br>
         <a v-if="item.quantity > 0" href="javascript:" class="button is-info" @click="addToCart(item)" title="Add to cart"> <i class="fa fa-shopping-cart"></i> </a>
         <span v-else  class="button is-danger"><i class="fa fa-shopping-cart"></i></span>
@@ -106,9 +107,6 @@ export default {
     return {
       list: data,
       search: '',
-       item : {
-        optionVal:'kk'
-      },
       confirmation: false
     }
   },
