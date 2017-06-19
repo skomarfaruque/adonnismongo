@@ -78,13 +78,11 @@ class InvoiceController {
       }
       weeks.push(weekData)
     }
-    console.log(year)
     res.send({year: year, weeks: weeks})
   }
   * getAllAgent (req, res) {
     let flag = req.param('id')
     // let flag = req.all()
-    console.log(flag)
     const invoices = yield Appointment.find({invoice_settled: true}).populate('agent').exec()
     var weeks = []
     var weekData = {}
