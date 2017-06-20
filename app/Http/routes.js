@@ -63,7 +63,7 @@ Route.group('invoice', () => {
   Route.get('/:id', 'InvoiceController.show')
   Route.get('/invoice/paid/:id', 'InvoiceController.show')
   Route.get('agent/:id', 'InvoiceController.getByAgent')
-  Route.get('/info/all', 'InvoiceController.getAllAgent')
+  Route.get('/info/all/:id', 'InvoiceController.getAllAgent')
   Route.post('/item-add', 'InvoiceController.addItem')
   Route.get('/get/all', 'InvoiceController.getInvoices')
   Route.post('/payment', 'InvoiceController.payment')

@@ -61,7 +61,7 @@ import { mapState } from 'vuex'
           self.cart = obj.data.items.length
         })
         .catch(function (err) {
-          console.log(err)
+          // console.log(err)
         })
     },
 computed: mapState(['heading','cartItem']),

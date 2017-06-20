@@ -78,63 +78,40 @@ class InvoiceController {
       }
       weeks.push(weekData)
     }
-    console.log(year)
     res.send({year: year, weeks: weeks})
   }
   * getAllAgent (req, res) {
-    var lastYear = moment().subtract(1, 'year').toDate()
-    var today = moment().toDate()
-    let userId = req.param('id')
-    if (userId === 'me') {
-      userId = req.currentUser._id
-    }
-    const invoices = yield Appointment.find({invoice_settled: true, invoice_date: {$gte: lastYear, $lt: today}}).exec()
+    let flag = req.param('id')
+    // let flag = req.all()
+    const invoices = yield Appointment.find({invoice_settled: true}).populate('agent').exec()
     var weeks = []
-    var year = {}
-    year.item = {}
-    year.totalPrice = 0
+    var weekData = {}
+    var date = moment().subtract(flag, 'week').startOf('week').toDate()
+    let dateFormat = moment(date).format('MMMM Do YYYY')
+    var datePrevious = moment().subtract(flag + 1, 'week').startOf('week').toDate()
+
     if (invoices.length) {
       invoices.forEach(function (invoiceVal, key) {
-        if (invoiceVal.items.length) {
-          invoiceVal.items.forEach(function (supplyVal, newKey) {
-            let price = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
-            year.totalPrice += price
-            if (!year.item[supplyVal.description]) {
-              year.item[supplyVal.description] = 0
-            }
-            year.item[supplyVal.description] += price
-          })
+        if (datePrevious <= invoiceVal.invoice_date && invoiceVal.invoice_date < date) {
+          weekData.invoiceId = invoiceVal._id
+          weekData.agentName = invoiceVal.agent.name
+          weekData.totalPrice = 0
+          weekData.totalCommissionPrice = 0
+          // if (datePrevious) {
+          if (invoiceVal.items.length) {
+            invoiceVal.items.forEach(function (supplyVal, newKey) {
+              let commissionPrice = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
+              let price = supplyVal.price * supplyVal.quantity
+              weekData.totalCommissionPrice += commissionPrice
+              weekData.totalPrice += price
+            })
+          }
+          weeks.push(weekData)
+          weekData = {}
         }
       })
     }
-    for (var i = 0; i < 4; i++) {
-      var weekData = {}
-      weekData.item = {}
-      var date = moment().subtract(i, 'week').startOf('week').toDate()
-      var datePrevious = moment().subtract(i + 1, 'week').startOf('week').toDate()
-      weekData.date = moment(date).format('MMMM Do YYYY')
-      weekData.totalPrice = 0
-      if (invoices.length) {
-        invoices.forEach(function (invoiceVal, key) {
-          if (datePrevious <= invoiceVal.invoice_date && invoiceVal.invoice_date < date) {
-          // if (datePrevious) {
-            if (invoiceVal.items.length) {
-              invoiceVal.items.forEach(function (supplyVal, newKey) {
-                let price = supplyVal.price * supplyVal.quantity * supplyVal.commission / 100
-                weekData.totalPrice += price
-                if (!weekData.item[supplyVal.description]) {
-                  weekData.item[supplyVal.description] = 0
-                }
-                weekData.item[supplyVal.description] += price
-              })
-            }
-          }
-        })
-      }
-      weeks.push(weekData)
-    }
-    console.log(year)
-    res.send({year: year, weeks: weeks})
+    res.send({weeks: weeks, date: dateFormat, flag: flag})
   }
 
   * addItem (req, res) {

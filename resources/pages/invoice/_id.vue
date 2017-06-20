@@ -190,12 +190,15 @@
           <div class="column is-4">
             <div class="columns">
 
-              <div class="column is-4">
+              <div class="column is-3">
                 <label class="label">Discount</label>
 
               </div>
-              <div class="column is-8">
-                <input class="input" type="number" min="0" v-model="discount">
+              <div class="column is-5">
+                <input class="input" type="text" v-model="discount">
+              </div>
+              <div class="column is-4">
+                <a class="button is-info"> Apply </a>
               </div>
               <!--<div class="column is-2">
                 <a class="button">Apply</a>
