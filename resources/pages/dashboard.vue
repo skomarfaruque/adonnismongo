@@ -23,7 +23,14 @@
             <p class="title">Supplies</p>
             <p class="subtitle">View all your supply items.</p>
           </nuxt-link>
-      
+          <nuxt-link class="tile is-child notification is-info" to="/storeinfo" v-if="isAdmin">
+            <p class="title">Store</p>
+            <p class="subtitle">View all store items.</p>
+          </nuxt-link>
+          <nuxt-link class="tile is-child notification is-info" to="/storeinfo/agent" v-if="usertype ==='Agent'">
+            <p class="title">Store</p>
+            <p class="subtitle">View all store items.</p>
+          </nuxt-link>
           <nuxt-link class="tile is-child notification is-info" to="/invoice?agentId=me" v-if="isInvoice && usertype ==='Agent'">
             <p class="title">Commission</p>
             <p class="subtitle">Create and print Commission.</p>
