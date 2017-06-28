@@ -29,7 +29,7 @@ class UserController {
   * update (req, res) {
     const userId = req.param('id')
     const obj = req.only('name', 'email', 'phone', 'address', 'city', 'state', 'zipCode', 'block_time')
-    let user = yield User.update({ _id: userId }, { name: obj.name, email: obj.email, phone: obj.phone, address: obj.address, city: obj.city, zipCode: obj.zipCode, block_time: obj.block_time })
+    let user = yield User.update({ _id: userId }, { name: obj.name, email: obj.email, phone: obj.phone, address: obj.address, city: obj.city, state: obj.state, zipCode: obj.zipCode, block_time: obj.block_time })
     res.send(user.name)
   }
 

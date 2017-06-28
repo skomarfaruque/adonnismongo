@@ -385,7 +385,7 @@
           address1: '',
           zipCode: '',
           city: '',
-          country: '',
+          country: 'United States',
           state: ''
         },
         isCustomer: false,
