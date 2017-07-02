@@ -50,7 +50,7 @@
             <td>{{ item.city }}</td>
             <td class="action">
               <section v-show="confirmation === false">
-                <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
+                <a v-show="usertype ==='Admin'" href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
                 <nuxt-link class="button is-info" :to="`/customer/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
                 <nuxt-link class="button is-info" :to="`/customer/appointment?id=${item._id}`" title="View Appointments"><i class="fa fa-list-ul"></i> </nuxt-link>
               </section>
@@ -89,12 +89,14 @@ export default {
   },
   async asyncData ({ store, axios }) {
     store.commit('SET_HEAD', ['Your Customer', 'View list of the customers.'])
-    
+      const per = store.state.permissions
+    const usertype = store.state.role
     let { data } = store.state.role === 'Agent' ? await axios.get('agent/me/customer') : await axios.get('customers')
     return {
       list: data,
       search: '',
-      confirmation: false
+      confirmation: false,
+      usertype: usertype
     }
   },
   data () {
