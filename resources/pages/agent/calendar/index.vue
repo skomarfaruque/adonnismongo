@@ -713,6 +713,10 @@
           this.isAdded = true
           this.isCustomer = false
           this.customerData = {}
+          this.customerData.address1 = data.address1
+          this.customerData.city = data.city
+          this.customerData.state = data.state
+          this.customerData.zipCode = data.zipCode
         }
       },
       async searchCustomer (value) {
