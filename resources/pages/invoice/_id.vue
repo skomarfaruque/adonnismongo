@@ -581,7 +581,7 @@
                     </div>
                   </div>
                 </nav><br>
-                <nav class="level">
+                <!--<nav class="level">
                   <div class="level-left">
                     <div class="level-item">
                       <span>Tax</span><br>
@@ -590,6 +590,18 @@
                   <div class="level-right">
                     <div class="level-item">
                       <span><input class="input" v-model="card.tax" type="text"></span><br>
+                    </div>
+                  </div>
+                </nav><br>-->
+                 <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Card Code</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" v-model="card.card_code" type="number" placeholder="Credit Card Code"></span>
                     </div>
                   </div>
                 </nav><br>
@@ -723,22 +735,11 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="Number" v-model="card.card_no" placeholder="Credit Card No"></span>
+                      <span><input class="input" type="text" v-model="card.card_no" placeholder="Credit Card No"></span>
                     </div>
                   </div>
                 </nav><br>
-                <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Card Code</span>
-                    </div>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input class="input" v-model="card.card_code" type="number" placeholder="Credit Card Code"></span>
-                    </div>
-                  </div>
-                </nav><br>
+               
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
@@ -747,6 +748,18 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
+                    </div>
+                  </div>
+                </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span><b>Copy billing</b></span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                     <span><input class="" @click="copyBillingToShip" type="checkbox"></span><br>
                     </div>
                   </div>
                 </nav><br>
@@ -1120,6 +1133,17 @@ watch: {
       if (!files.length)
         return;
       this.createImage(files[0], targetId);
+    },
+    copyBillingToShip() {
+    
+        this.card.ship_first_name = this.card.bill_first_name
+        this.card.ship_last_name = this.card.bill_last_name
+        this.card.ship_company = this.card.bill_company
+        this.card.ship_address = this.card.bill_address
+        this.card.ship_city = this.card.bill_city
+        this.card.ship_state = this.card.bill_state
+        this.card.ship_zip = this.card.bill_zip
+        this.card.ship_country = this.card.bill_country
     },
     createImage(file, targetId) {
       this.check.check_back_file =file
