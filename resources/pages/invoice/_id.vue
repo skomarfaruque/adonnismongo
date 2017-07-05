@@ -560,15 +560,16 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Amount</span>
+                      <span>Credit Card No</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{twoDigitFormat(priceDisShipTax) }}</span>
+                      <span><input class="input" type="text" v-model="card.card_no" placeholder="Credit Card No"></span>
                     </div>
                   </div>
                 </nav><br>
+                
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
@@ -577,7 +578,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input size="5" class="input is-2" v-model="card.exp_month" type="text" placeholder="Month"></span>
+                      <span><input size="5" class="input is-2" v-model="card.exp_month" type="text" placeholder="Month"></span>&nbsp;&nbsp;&nbsp;
                       <span><input size="5" class="input is-2" v-model="card.exp_year" type="text" placeholder="Year"></span>
                       
                     </div>
@@ -595,18 +596,7 @@
                     </div>
                   </div>
                 </nav><br>-->
-                 <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Card Code</span>
-                    </div>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input class="input" v-model="card.card_code" type="text" placeholder="Credit Card Code"></span>
-                    </div>
-                  </div>
-                </nav><br>
+                
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
@@ -717,7 +707,7 @@
 
               </div>
               <div class="column is-6">
-                <nav class="level">
+                <!--<nav class="level">
                   <div class="level-left">
                     <div class="level-item">
                       <span>Shipping</span>
@@ -728,19 +718,32 @@
                       <span>${{parseFloat(!shipping?0:shipping)}}</span>
                     </div>
                   </div>
-                </nav><br>
+                </nav><br>-->
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Credit Card No</span>
+                      <span>Amount</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="text" v-model="card.card_no" placeholder="Credit Card No"></span>
+                      <span>${{twoDigitFormat(priceDisShipTax) }}</span>
                     </div>
                   </div>
                 </nav><br>
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span>Card Code</span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <span><input class="input" v-model="card.card_code" type="text" placeholder="Credit Card Code"></span>
+                    </div>
+                  </div>
+                </nav><br>
+                
                
                 <nav class="level">
                   <div class="level-left">
@@ -750,10 +753,11 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
+                     <span><b>Copy billing</b> &nbsp;&nbsp;&nbsp;<input class="" @click="copyBillingToShip" type="checkbox"></span><br>
                     </div>
                   </div>
                 </nav><br>
-                <nav class="level">
+                <!--<nav class="level">
                   <div class="level-left">
                     <div class="level-item">
                       <span><b>Copy billing</b></span>
@@ -764,7 +768,7 @@
                      <span><input class="" @click="copyBillingToShip" type="checkbox"></span><br>
                     </div>
                   </div>
-                </nav><br>
+                </nav><br>-->
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
