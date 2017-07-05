@@ -603,7 +603,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" v-model="card.card_code" type="number" placeholder="Credit Card Code"></span>
+                      <span><input class="input" v-model="card.card_code" type="text" placeholder="Credit Card Code"></span>
                     </div>
                   </div>
                 </nav><br>
