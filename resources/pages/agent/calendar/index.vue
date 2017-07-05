@@ -80,9 +80,9 @@
           <div class="box has-text-centered">
             <h1 style="font-size:64px;">{{timer}}</h1>
             <span v-show="watchStatus !== 3">
-            <button class="button is-large is-info" @click="startWatch" v-show="watchStatus === 0 ">Start</button>
+            <button v-if="usertype ==='Agent'" class="button is-large is-info" @click="startWatch" v-show="watchStatus === 0 ">Start</button>
             <div v-show="watchStatus !== 0 && this.isFinished !== true" class="block">
-              <button class="button is-large is-info space-btn" @click="pauseWatch" :disabled="pauseAction"><span v-if="watchStatus === 2" id="r">Resume</span><span id="p" v-else>Pause</span></button>
+              <button v-if="usertype ==='Agent'" class="button is-large is-info space-btn" @click="pauseWatch" :disabled="pauseAction"><span v-if="watchStatus === 2" id="r">Resume</span><span id="p" v-else>Pause</span></button>
               <button class="button is-large is-danger" @click="stopWatch">Stop</button>
             </div>
             </span>
@@ -353,6 +353,8 @@
       const id = query.id || 'me'
       let agent = await axios.get(`users/${id}`)
       let event = await axios.get(`appointment/agent/${agent.data._id}`)
+      const per = store.state.permissions
+    const usertype = store.state.role
 
       let blockDays = await axios.get(`agent/${agent.data._id}/block-dates`)
       store.commit('SET_HEAD', [`Agent Calendar`, `View appointments of ${agent.data.name}.`])
@@ -361,6 +363,7 @@
       let tomorrow = new Date()
       tomorrow.setHours(24)
       return {
+        usertype: usertype,
         isEdit: true,
         timer: '00:00:00',
         stopButton: false,
