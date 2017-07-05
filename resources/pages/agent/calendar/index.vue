@@ -248,7 +248,7 @@
                 <label for="" class="label">City</label>
                 <p class="control"><input class="input" type="text" v-model="customerData.city"></p>
                 <label for="" class="label">Country</label>
-                <p class="control"><input class="input" type="text" v-model="customerData.country"></p>
+                <p class="control"><input class="input" type="text" value="United States"></p>
                 <label for="" class="label">State</label>
                 <p class="control">
                   <span class="select">
@@ -712,6 +712,7 @@
         if (this.customer && !this.errors.has('customer')) {
           this.customerData.email = this.customer
           const { data } = await this.axios.post('customers', this.customerData)
+          console.log(data)
           await this.axios.get(`agent/${this.id}/assign-customer/${data._id}`)
           this.isAdded = true
           this.isCustomer = false
@@ -809,6 +810,7 @@
         this.customerData.state = this.searchedCustomers[this.highlightedPosition].state
         this.customerData.zipCode = this.searchedCustomers[this.highlightedPosition].zipCode
         this.isOpen = false
+        console.log(this.customerData)
       },
       async startWatch () {
         let self = this
