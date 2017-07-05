@@ -36,7 +36,7 @@
   .cardicon i {
     font-size: 25px;
   }
-  .cardicon span[data-v-e7863304] {
+  .cardicon span {
     border-radius: 50%;
     padding: 0px 4px;
     font-size: 11px;
