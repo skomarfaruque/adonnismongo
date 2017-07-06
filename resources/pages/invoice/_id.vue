@@ -741,7 +741,7 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                     <span><b>Copy billing</b> &nbsp;&nbsp;&nbsp;<input class="" @click="copyBillingToShip" type="checkbox"></span><br>
+                     <span><b>Same as  billing</b> &nbsp;&nbsp;&nbsp;<input class="" @click="copyBillingToShip" type="checkbox"></span><br>
                     </div>
                   </div>
                 </nav><br>
