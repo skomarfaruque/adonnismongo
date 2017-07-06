@@ -584,19 +584,7 @@
                     </div>
                   </div>
                 </nav><br>
-                <!--<nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Tax</span><br>
-                    </div>
-                  </div><br>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input class="input" v-model="card.tax" type="text"></span><br>
-                    </div>
-                  </div>
-                </nav><br>-->
-                
+               
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
