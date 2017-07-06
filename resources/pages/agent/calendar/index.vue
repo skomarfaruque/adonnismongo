@@ -158,7 +158,7 @@
                     </span>
                     <span class="help is-success" v-if="isAdded">Customer with this email has added to your profile!</span>
                     <span class="help is-danger" v-show="errors.has('customer')" >{{ errors.first('customer') }}</span>-->
-                    <div v-if="customer"><b>Address 1: </b>{{customerData.address1}}, <b>Address 2: </b> {{customerData.address2}}, <b>City:</b> {{customerData.city}}, <b>State:</b> {{customerData.state}}, <b>Zip Code:</b> {{customerData.zipCode}}</div>
+                    <div v-if="customer"><b>Address 1: </b>{{customerDataShowOnly.address1}}, <b>Address 2: </b> {{customerDataShowOnly.address2}}, <b>City:</b> {{customerDataShowOnly.city}}, <b>State:</b> {{customerDataShowOnly.state}}, <b>Zip Code:</b> {{customerDataShowOnly.zipCode}}</div>
                   </p>
                   <!--<p class="control">
                     <button class="button" @click="isCustomer=true">
@@ -382,6 +382,16 @@
         searchedCustomers: [],
         customer: '',
         customerData: {
+          name: '',
+          email: '',
+          phone: '',
+          address1: '',
+          zipCode: '',
+          city: '',
+          country: 'United States',
+          state: ''
+        },
+        customerDataShowOnly: {
           name: '',
           email: '',
           phone: '',
@@ -717,11 +727,12 @@
           this.isAdded = true
           this.isCustomer = false
           this.customerData = {}
-          this.customerData.address1 = data.address1
-          this.customerData.city = data.city
-          this.customerData.state = data.state
-          this.customerData.country = data.country || 'United States'
-          this.customerData.zipCode = data.zipCode
+          this.customerDataShowOnly.address1 = data.address1
+          this.customerDataShowOnly.city = data.city
+          this.customerDataShowOnly.state = data.state
+          this.customerDataShowOnly.country = 'United States'
+          this.customerDataShowOnly.zipCode = data.zipCode
+          this.customerData.country = 'United States'
         }
       },
       async searchCustomer (value) {
