@@ -20,7 +20,8 @@ class CustomerController {
    * Create Customer
    */
   * store (req, res) {
-    const obj = req.only('name', 'email', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state')
+    const obj = req.only('name', 'email', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state', 'country')
+    console.log(obj)
     let customer = yield Customer.findOne({ email: obj.email }).exec()
     if (!customer) {
       customer = yield Customer.create(obj)

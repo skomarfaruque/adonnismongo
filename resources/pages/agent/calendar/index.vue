@@ -248,7 +248,7 @@
                 <label for="" class="label">City</label>
                 <p class="control"><input class="input" type="text" v-model="customerData.city"></p>
                 <label for="" class="label">Country</label>
-                <p class="control"><input class="input" type="text" value="United States"></p>
+                <p class="control"><input class="input" type="text" v-model="customerData.country"></p>
                 <label for="" class="label">State</label>
                 <p class="control">
                   <span class="select">
@@ -720,6 +720,7 @@
           this.customerData.address1 = data.address1
           this.customerData.city = data.city
           this.customerData.state = data.state
+          this.customerData.country = data.country || 'United States'
           this.customerData.zipCode = data.zipCode
         }
       },
@@ -809,6 +810,7 @@
         this.customerData.city = this.searchedCustomers[this.highlightedPosition].city
         this.customerData.state = this.searchedCustomers[this.highlightedPosition].state
         this.customerData.zipCode = this.searchedCustomers[this.highlightedPosition].zipCode
+        this.customerData.country = this.searchedCustomers[this.highlightedPosition].country
         this.isOpen = false
         console.log(this.customerData)
       },
