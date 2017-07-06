@@ -20,7 +20,7 @@ class AppointmentController {
     if (agentId === 'me') {
       agentId = req.currentUser._id
     }
-    const appointments = yield Appointment.find({ agent: agentId }).populate('agent', 'name email').populate('customer', 'name email address1 address2 city state zipCode').exec()
+    const appointments = yield Appointment.find({ agent: agentId }).populate('agent', 'name email').populate('customer', 'name email address1 address2 city state zipCode country').exec()
     res.send(appointments)
   }
   /**
@@ -28,7 +28,7 @@ class AppointmentController {
    */
   * byCustomer (req, res) {
     const customerId = req.param('id')
-    const appointments = yield Appointment.find({ customer: customerId }).populate('agent', 'name email').populate('customer', 'name email address1 address2 city state zipCode').exec()
+    const appointments = yield Appointment.find({ customer: customerId }).populate('agent', 'name email').populate('customer', 'name email address1 address2 city state zipCode country').exec()
     res.send(appointments)
   }
 

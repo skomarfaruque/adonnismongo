@@ -21,7 +21,6 @@ class CustomerController {
    */
   * store (req, res) {
     const obj = req.only('name', 'email', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state', 'country')
-    console.log(obj)
     let customer = yield Customer.findOne({ email: obj.email }).exec()
     if (!customer) {
       customer = yield Customer.create(obj)
@@ -31,7 +30,7 @@ class CustomerController {
 
   * update (req, res) {
     const id = req.param('id')
-    const obj = req.only('name', 'email', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state')
+    const obj = req.only('name', 'email', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state', 'country')
     const customer = yield Customer.update({ _id: id }, { name: obj.name, email: obj.email, phone: obj.phone, address1: obj.address1, address2: obj.address2, city: obj.city, zipCode: obj.zipCode, state: obj.state }).exec()
     res.send(customer)
   }
