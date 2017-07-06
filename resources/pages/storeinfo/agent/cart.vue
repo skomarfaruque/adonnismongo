@@ -510,6 +510,12 @@ export default {
        this.card.exp_date = this.card.exp_month + this.card.exp_year
        console.log(this.card)
        const card = await this.axios.post(`storeinfo/payment`, { id: this.cart_id, card:this.card })
+       if(card.statusText ==='OK'){
+         this.$store.commit('SET_CART_ITEM',0)
+         this.$toasted.show('Successfully purchased', { duration: 4500 })
+       }else{
+         this.$toasted.show('There is an error', { duration: 4500 })
+       }
        this.$router.push(`/dashboard`)
       //  const card = await this.axios.post('storeinfo/payment/cart_id')
       //  this.card._id = this.cart_id
