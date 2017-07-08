@@ -60,7 +60,7 @@
     position: relative;
     box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
-  .button.is-info {
+  .button.is-info, .button.is-danger {
     padding: 5px 50px;
     margin-top: 5px;
     margin-bottom: 10px;

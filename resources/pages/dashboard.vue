@@ -19,7 +19,7 @@
             <p class="title">Admin</p>
             <p class="subtitle">Manage administrative tasks.</p>
           </nuxt-link>
-          <nuxt-link class="tile is-child notification is-info" to="/supplies" v-if="isSupply">
+          <nuxt-link class="tile is-child notification is-info" to="/supplies" v-if="isAdmin">
             <p class="title">Purchasable Goods</p>
             <p class="subtitle">View all your supply items.</p>
           </nuxt-link>

@@ -2,10 +2,10 @@
   <section>
     <div class="columns">
       <div class="column is-12">
-        <div class="columns">
-          <div class="column is-2 is-offset-2">
+        <div class="columns title-div">
+          <div class="column is-2 is-offset-1">
           </div>
-          <div class="column is-2">
+          <div class="column is-3">
             Description
           </div>
           <div class="column is-2">
@@ -24,21 +24,19 @@
       </div>
     </div>
     <div class="columns" v-for="(item, ind) in list">
-      <div class="column is-12">
+      <div class="column is-12 title-div">
         <div class="columns">
-          <div class="column is-2 is-offset-2">
-            <img :src="`/item_image/${item.image}`"  alt="" style="max-width: 150px;height: 150px;">
+          <div class="column is-2 is-offset-1">
+            <img :src="`/item_image/${item.image}`"  alt="" class="cartImg">
           </div>
           <div class="column is-2 shopitem">
             <span>{{item.description}}</span>
           </div>
-          <div class="column is-2">
-            <div v-if="item.optionVal.length" class="column is-2 shopitemoption">
-              <ul>
-              <li v-for="(optionAll, index) in item.optionVal">
-                  <span>{{optionAll.option}} ({{optionAll.quantity}} pcs)</span><br>
-                </li>
-              </ul>
+          <div class="column is-3">
+            <div v-if="item.optionVal.length" class="shopitemoption">
+              <p v-for="(optionAll, index) in item.optionVal">
+                <span>{{optionAll.option}} ({{optionAll.quantity}} pcs)</span><br>
+              </p>
             </div>
             <div v-else class="shopitem"><span>NA</span></div>
           </div>
@@ -407,25 +405,28 @@
   .float-right {
     text-align: right;
   }
-  .shopitemoption span {
-    margin-top: 4%;
-    position: absolute;
-  }
-  .shopitem span {
-    margin-top: 5%;
-    position: absolute;
-  }
-  .shopitems a {
-    margin-top: 53px;
-    margin-right: 5px;
-  }
-  .shopitem a {
-    margin-top: 4%;
-    position: absolute;
-  }
   .block a {
     margin-right: 10px;
   }
+  .shopitem span {
+    top: 30%;
+  }
+  .title-div {
+    margin-bottom: 45px;
+  }
+  .cartImg {
+    max-width: 150px;
+    height: 150px;
+    margin-top:-45px
+  }
+  @media only screen and (max-width: 992px) {
+  .cartImg {
+      max-width: 100px;
+      height: 100px;
+      margin-top:-25px
+    }
+  }
+
 </style>
 <script>
 
