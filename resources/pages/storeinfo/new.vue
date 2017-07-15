@@ -47,6 +47,14 @@
           <a href="javascript:" class="button is-info" @click="save">Save Information</a>
         </form>
       </div>
+      <div v-bind:class="{ modal: true, 'is-active': processing }">
+  <div class="modal-background"></div>
+  <div class="modal-content has-text-centered">
+    <p class="image is-64x64 has-text-centered" style="margin:auto">
+     <img src="~assets/img/loading.gif" alt="Bulma logo">
+    </p>
+  </div>
+</div>
     </div>
   </section>
 </template>
@@ -71,7 +79,8 @@ export default {
       storeinfo: {
         image: '',
         option: []
-      }
+      },
+      processing:false
     }
   },
   data () {
@@ -81,13 +90,16 @@ export default {
   },
   methods: {
     async save () {
+      this.processing = true
       var myForm = document.getElementById('myForm')
       let formData = new FormData(myForm)
       let newinfo= await this.axios.post(`storeinfo`, formData)
       console.log(newinfo)
       if(newinfo){
+        self.processing = false
        this.$router.push('/storeinfo') 
       }else{
+        self.processing = false
         return this.$toasted.show('Sorry.Unable to add item', { duration: 4500 })
       }
       
