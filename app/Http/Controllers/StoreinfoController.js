@@ -33,7 +33,8 @@ class StoreinfoController {
       maxSize: '2mb',
       allowedExtensions: ['jpg', 'png', 'jpeg']
     })
-    const fileName = `${name}_back.${image.extension()}`
+    var uniqueId = Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36)
+    const fileName = `${uniqueId}_item_${name}.${image.extension()}`
     yield image.move(Helpers.publicPath('item_image'), fileName)
     const obj = {name: name, description: description, price: price, quantity: quantity, option: option, image: image.uploadName()}
     let storeinfo = yield Storeinfo.create(obj)
