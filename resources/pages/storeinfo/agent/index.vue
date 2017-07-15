@@ -34,7 +34,7 @@
             </select>
           </span>
         </p>
-        <b>Quantity:</b> <input type="number" min="1" :max="item.quantity" v-model="item.order_quantity"><br>
+        <!--<b>Quantity:</b> <input type="number" min="1" :max="item.quantity" v-model="item.order_quantity"><br>-->
         <a v-if="item.quantity > 0" href="javascript:" class="button is-info" @click="addToCart(item)" title="Add to cart"> <i class="fa fa-shopping-cart"></i> </a>
         <span v-else  class="button is-danger"><i class="fa fa-shopping-cart"></i></span>
       </div>
@@ -129,7 +129,7 @@ export default {
       this.list = data
     },
     async addToCart (item){
-      console.log(item)
+      item.order_quantity = 1 // item quantity is fixed to one
       self = this
       if(item.order_quantity > item.quantity){
         return this.$toasted.show('You must select quantity equal or less than available quantity', { duration: 4500 })
