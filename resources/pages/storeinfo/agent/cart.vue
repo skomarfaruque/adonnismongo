@@ -29,10 +29,10 @@
           <div class="column is-2 is-offset-1">
             <img :src="`/item_image/${item.image}`"  alt="" class="cartImg">
           </div>
-          <div class="column is-2 shopitem">
+          <div class="column is-3 shopitem">
             <span>{{item.description}}</span>
           </div>
-          <div class="column is-3">
+          <div class="column is-2">
             <div v-if="item.optionVal.length" class="shopitemoption">
               <p v-for="(optionAll, index) in item.optionVal">
                 <span>{{optionAll.option}} ({{optionAll.quantity}} pcs)</span><br>
