@@ -63,7 +63,7 @@ class CustomerController {
     search = search || ''
     const role = req.currentUser.role.name
     let existingCustomer = {}
-    if (agent || role === 'Agent') {
+    if (agent && role === 'Agent') {
       const id = agent || req.currentUser._id
       const agents = yield AgentCustomer.find({ agent: id }, 'customer').exec()
       const cids = agents.map((c) => {
@@ -75,6 +75,7 @@ class CustomerController {
         existingCustomer = { _id: { $in: cids } }
       }
     }
+    console.log(existingCustomer)
 
     let regex = new RegExp(search, 'i')
     const customers = yield Customer
