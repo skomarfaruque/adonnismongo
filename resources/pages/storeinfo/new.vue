@@ -83,8 +83,15 @@ export default {
     async save () {
       var myForm = document.getElementById('myForm')
       let formData = new FormData(myForm)
-      let newinfo = await this.axios.post(`storeinfo`, formData)
-      this.$router.push('/storeinfo')
+      let newinfo= await this.axios.post(`storeinfo`, formData)
+      console.log(newinfo)
+      if(newinfo){
+       this.$router.push('/storeinfo') 
+      }else{
+        return this.$toasted.show('Sorry.Unable to add item', { duration: 4500 })
+      }
+      
+      
     },
     onFileChange(e) {
       var targetId = e.target.id
