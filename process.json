@@ -1,15 +1,9 @@
 {
-  "apps" : [
-  {
-    "name"        : "build",
-    "script"      : "npm",
-    "args"        : "run build"       
-  },    
+  "apps" : [    
   {
     "name"        : "backportal",
-    "script"      : "npm",
+    "script"      : "npm run build && npm start",
     "watch"       : true,
-    "args"        : "start",
     "env": {
       "NODE_ENV": "production",
       "BASE_URL": "http://partnerportal.phostorian.com"
