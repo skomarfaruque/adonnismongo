@@ -91,6 +91,7 @@ export default {
   methods: {
     async save () {
       this.processing = true
+      var self = this
       var myForm = document.getElementById('myForm')
       let formData = new FormData(myForm)
       let newinfo= await this.axios.post(`storeinfo`, formData)
