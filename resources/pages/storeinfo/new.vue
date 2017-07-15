@@ -97,7 +97,7 @@ export default {
       console.log(newinfo)
       if(newinfo){
         self.processing = false
-       this.$router.push('/storeinfo') 
+       self.$router.push('/storeinfo') 
       }else{
         self.processing = false
         return this.$toasted.show('Sorry.Unable to add item', { duration: 4500 })
