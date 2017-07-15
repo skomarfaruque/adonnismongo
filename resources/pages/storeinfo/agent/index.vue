@@ -19,7 +19,17 @@
     </nav>
     <div class="storeitem" v-for="(item, ind) in list">
       <div class="rsizeimg">
-        <img :src="`/item_image/${item.image}`" alt=""><br>
+        <a href="javascript:"  @click="modalShow(item)"> <img :src="`/item_image/${item.image}`" alt=""> </a>
+        <br>
+        <div v-bind:class="{ modal: true, 'is-active': isShow }">
+          <div class="modal-background"></div>
+          <div class="modal-content">
+            <p class="image is-4by3">
+              <img :src="`/item_image/${modalImg}`">
+            </p>
+          </div>
+          <button class="modal-close is-large" @click="isShow=false"></button>
+        </div>
       </div>
       <div class="zinfo">
         <b>Name:</b> {{ item.name }}<br>
@@ -39,6 +49,7 @@
         <span v-else  class="button is-danger"><i class="fa fa-shopping-cart"></i></span>
       </div>
     </div>
+
   </section>
 </template>
 <style scoped>
@@ -70,7 +81,7 @@
   }
   .zinfo {
     background-color: #fff;
-    z-index: 99999;
+    z-index: 12;
     position: absolute;
     width: 100%;
   }
@@ -106,7 +117,9 @@ export default {
     return {
       list: data,
       search: '',
-      confirmation: false
+      confirmation: false,
+      isShow: false,
+      modalImg: ''
     }
   },
   data () {
@@ -140,6 +153,10 @@ export default {
       let presentQuantity = await this.axios.get('store/cart')
       self.$store.commit('SET_CART_ITEM', presentQuantity.data.items.length)
       return this.$toasted.show('Successfully added to cart', { duration: 4500 })
+    },
+    async modalShow (item) {
+      this.isShow = true,
+      this.modalImg = item.image
     }
   }
 
