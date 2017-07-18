@@ -435,12 +435,12 @@
       let self = this
       const flatpicker = require('flatpickr')
       var options = { allowInput: false, enableTime: true, noCalendar: true, dateFormat: 'h:i K' }
-      let offStartOption = { defaultDate: new Date(), dateFormat: 'd/m/Y' }
+      let offStartOption = { defaultDate: new Date(), dateFormat: 'm/d/Y' }
       offStartOption.onChange = (date, datestr, instance) => {
         if (!date[0]) return false
         self.personal.blockDate = date[0]
       }
-      let offEndOption = { defaultDate: new Date(), dateFormat: 'd/m/Y' }
+      let offEndOption = { defaultDate: new Date(), dateFormat: 'm/d/Y' }
       offEndOption.onChange = (date, datestr, instance) => {
         if (!date[0]) return false
         self.personal.endDate = date[0]
