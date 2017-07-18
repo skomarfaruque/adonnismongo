@@ -670,16 +670,19 @@
           this.personal.endDate = new Date(this.personal.endDate)
           this.personal.blockDate.setHours(0, 0, 0)
 
-          this.personal.endDate.setHours(24, 0, 0)
+          
+          console.log(this.personal)
           const { data } = await this.axios.post(`agent/${this.id}/block-date`, this.personal)
+          this.personal.endDate.setHours(24, 0, 0)
           this.blockDays.push(data)
           const startMinute = helper.convertTimetoInt(this.personal.start)
           const endMinute = helper.convertTimetoInt(this.personal.end)
-          // let date = new Date(this.personal.blockDate)
+          let date = new Date(this.personal.blockDate)
+           date =  date.setHours(0, 0, 0)
 
           let offDay = {
             _id: `${data._id}`,
-            days: this.personal.isRepeat ? date.getDay() : this.personal.blockDate,
+            days: this.personal.isRepeat ? this.personal.blockDate.getDay() : this.personal.blockDate,
             zones: this.personal.fullday ? 'fullday' : [startMinute, endMinute],
             css: 'holiday',
             html: `<a href="javascript:" title="Personal Task" class="phosto-blue" onclick="calendar.showPersonalTask('${data._id}')">Personal Task</a>`,
