@@ -14,9 +14,9 @@
           <div class="column is-1">
             Price
           </div>
-          <!--<div class="column is-1">
+          <div class="column is-1">
             Quantity
-          </div>-->
+          </div>
           <div class="column is-2">
             Action
           </div>
@@ -43,10 +43,10 @@
           <div class="column is-1 shopitem">
             <span>${{item.order_price}}</span>
           </div>
-          <!--
+          
           <div class="column is-1 shopitem">
             <span>{{item.order_quantity}}</span>
-          </div> -->
+          </div> 
           <div class="column is-2">
             <section v-show="confirmation === false" class="shopitems">
               <a href="javascript:" class="button is-danger" title="Delete" @click="confirmation = true"> <i class="fa fa-trash"></i> </a>
