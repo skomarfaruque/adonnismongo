@@ -65,7 +65,6 @@ class UserController {
     const user = yield User.create({ name: name, email: email, reset_token: resetToken, role: role })
 
     const resetUrl = `http://${Env.get('DOMAIN')}/signup/confirmation?token=${user.reset_token}`
-    // const resetUrl = `http://${Env.get('DOMAIN')}:${Env.get('PORT')}/signup/confirmation?token=${user.reset_token}`
     yield Mail.raw('', message => {
       message.to(email, email)
       message.from('no-reply@backportal.com')
@@ -108,7 +107,6 @@ class UserController {
     date.setDate(date.getDate() + 7)
     user.reset_exp = date
     yield user.save()
-    // const resetUrl = `http://${Env.get('DOMAIN')}:${Env.get('PORT')}/reset?re=${user.reset_token}`
     const resetUrl = `http://${Env.get('DOMAIN')}/reset?re=${user.reset_token}`
     yield Mail.raw('', message => {
       message.to(email, email)
