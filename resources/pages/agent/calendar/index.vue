@@ -766,11 +766,11 @@
       async deletePersonalTask() {
         const id = this.personal._id
         let d = new Date(this.personal.blockDate)
+        console.log(id)
         // await this.axios.delete(`agent/${this.id}/block-date/${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${d.getDate()}`)
         await this.axios.delete(`agent/${this.id}/block-date/${id}`)
         for (var i = 0; i < this.allMarkedId.length; i++ ) {
           let off = this.allMarkedId[i]
-
           if (off._id && off._id === id) {
             scheduler.deleteMarkedTimespan(off)
             scheduler.updateView()
@@ -781,6 +781,7 @@
         let b = this.block_time[d.getDay()]
         let off
         if (typeof b.day === 'number') {
+          
           off = {
             days: d,
             zones: 'fullday',
@@ -789,21 +790,45 @@
             type: 'dhx_time_block'
           }
         } else {
-          const startMinute = helper.convertTimetoInt(b.start)
-          const endMinute = helper.convertTimetoInt(b.end)
-          off = {
-            days: d,
-            zones: [startMinute, endMinute],
-            invert_zones: true,
-            type: 'dhx_time_block',
-            css: 'fat_lines_section'
-          }
-        }
-        scheduler.addMarkedTimespan(off)
-        scheduler.updateView()
-        this.allMarkedId.push(off)
-        this.isPersonalOff = false
+          this.blockDays.forEach((b) => {
+
+            const startMinute = helper.convertTimetoInt(b.start)
+            const endMinute = helper.convertTimetoInt(b.end)
+            let date = new Date(b.blockDate)
+            date.setHours(0, 0, 0)
+            let day = {
+              days: date,
+              zones: [startMinute, endMinute],
+              css: 'fat_lines_section',
+              type: 'dhx_time_block'
+            }
+            if (b.isRepeat) {
+              day.start_date = date
+              let endDate = new Date(b.endDate)
+              endDate.setHours(24, 0, 0)
+              day.end_date = endDate
+            }
+            scheduler.addMarkedTimespan(day)
+            scheduler.updateView()
+            this.allMarkedId.push(day)
+            this.isPersonalOff = false
         this.isDeletePersonalOff = false
+          })
+          // const startMinute = helper.convertTimetoInt(b.start)
+          // const endMinute = helper.convertTimetoInt(b.end)
+          // off = {
+          //   days: d,
+          //   zones: [startMinute, endMinute],
+          //   invert_zones: true,
+          //   type: 'dhx_time_block',
+          //   css: 'fat_lines_section'
+          // }
+        }
+        // scheduler.addMarkedTimespan(off)
+        // scheduler.updateView()
+        // this.allMarkedId.push(off)
+        // this.isPersonalOff = false
+        // this.isDeletePersonalOff = false
       },
       moveDown () {
         if (!this.isOpen) {
