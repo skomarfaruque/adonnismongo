@@ -3,7 +3,7 @@
     <div class="columns">
       <div class="column is-12">
         <div class="columns title-div">
-          <div class="column is-1 is-offset-1">
+          <div class="column is-1 is-offset-2">
           </div>
           <div class="column is-3">
             Description
