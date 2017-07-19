@@ -767,6 +767,7 @@
         var self = this
         const id = this.personal._id
         let d = new Date(this.personal.blockDate)
+        console.log(this.personal.blockDate)
         await this.axios.delete(`agent/${this.id}/block-date/${id}`)
         for (var i = 0; i < this.allMarkedId.length; i++ ) {
           let off = this.allMarkedId[i]
@@ -778,9 +779,13 @@
           }
         }
         let b = this.block_time[d.getDay()]
+        if(!b){
+          self.isPersonalOff = false
+        self.isDeletePersonalOff = false
+        return false
+        }
         var off = []
         if (typeof b.day === 'number') {
-          
           off.push({
             days: d,
             zones: 'fullday',
@@ -789,7 +794,6 @@
             type: 'dhx_time_block'
           })
         } else {
-          
           function setBlockTime (dt) {
             let bT = self.block_time[dt.getDay()]
             const startMinute = helper.convertTimetoInt(bT.start)
@@ -811,18 +815,13 @@
             }
           } else {
            setBlockTime(d)
-           
           }
-          
-          
         }
-        
         off.forEach(function(offVal){
           scheduler.addMarkedTimespan(offVal)
           scheduler.updateView()
           self.allMarkedId.push(offVal)
         })
-       
         self.isPersonalOff = false
         self.isDeletePersonalOff = false
       },
