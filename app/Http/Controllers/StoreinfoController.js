@@ -63,22 +63,17 @@ class StoreinfoController {
     console.log(orderQuantity)
     console.log(itemId)
     console.log(objectId)
-    const cartQuantity = yield Cart.update({ _id: objectId, "items._id": "itemId" }, {order_quantity: orderQuantity}).exec()
+    const cartQuantity = yield Cart.update({_id: objectId, 'items._id': itemId}, {$inc: {'items.$.order_quantity': orderQuantity}}).exec()
     res.send(cartQuantity)
   }
 
   * updateItemCartModification (req, res) {
     let cartItems = []
     let originalItem = req.input('item')
-    let orderQuantity = parseInt(req.input('order_quantity'))
-    let orderOptionTitle = originalItem.optionVal
-    originalItem.optionVal = []
-    let optionVal = {option: orderOptionTitle, quantity: orderQuantity}
-    if (orderOptionTitle) {
-      originalItem.optionVal.push(optionVal)
-    } else {
-      originalItem.optionVal = []
+    if (!originalItem.optionVal) {
+      originalItem.optionVal = ''
     }
+    let orderQuantity = parseInt(req.input('order_quantity'))
     originalItem.order_quantity = orderQuantity
     originalItem.order_price = orderQuantity * originalItem.price
     cartItems.push(originalItem)
@@ -89,24 +84,14 @@ class StoreinfoController {
     let checkCartExists = yield Cart.findOne({agentId: agentId, is_paid: false}).exec()
     if (checkCartExists) { // unpaid cart exisits
       let checkData = checkCartExists.items.find(function (data) {
-        return data._id === originalItem._id
+        return data._id === originalItem._id && data.optionVal === originalItem.optionVal
       })
       if (checkData) {
-        // marge option value
-        originalItem.optionVal.forEach(function (supplyVal, newKey) {
-          let checkOption = checkData.optionVal.find(function (data) {
-            return data.option === supplyVal.option
-          })
-          if (checkOption) {
-            checkOption.quantity += supplyVal.quantity
-          } else {
-            checkData.optionVal.push({option: supplyVal.option, quantity: supplyVal.quantity})
-          }
-        })
-        // remove the element
+        console.log(checkData)
         checkCartExists.items = checkCartExists.items.filter(function (objVal) {
-          return objVal._id !== originalItem._id
+          return objVal.optionVal !== originalItem.optionVal && objVal._id !== originalItem._id
         })
+        console.log(checkCartExists.items)
         checkData.order_quantity += originalItem.order_quantity
         checkData.order_price += originalItem.order_price
         checkCartExists.items.push(checkData)
@@ -116,7 +101,6 @@ class StoreinfoController {
       yield Cart.update({ agentId: agentId }, { $set: {items: checkCartExists.items} }).exec()
     } else { // new insert in cart table
       let obj = {agentId: agentId, items: cartItems}
-     // console.log(obj)
       yield Cart.create(obj)
     }
     res.ok('ok')

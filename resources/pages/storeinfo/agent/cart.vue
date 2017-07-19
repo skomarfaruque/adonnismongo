@@ -33,10 +33,10 @@
             <span>{{item.description}}</span>
           </div>
           <div class="column is-2">
-            <div v-if="item.optionVal.length" class="shopitemoption">
-              <p v-for="(optionAll, index) in item.optionVal">
-                <span>{{optionAll.option}} ({{optionAll.quantity}} pcs)</span><br>
-              </p>
+            <div v-if="item.optionVal" class="shopitemoption">
+              
+                <span>{{item.optionVal}}</span><br>
+              
             </div>
             <div v-else class="shopitem"><span>NA</span></div>
           </div>
@@ -526,8 +526,9 @@ export default {
     },
     async updateCart (item, ind){
       self = this
-      let updateQuantity  = await this.axios.post(`storeinfo/updateCart/${item._id}`,{objectId: this.cart_id, order_quantity: item.order_quantity})
-      console.log(this.cart_id)
+      
+      // let updateQuantity  = await this.axios.post(`storeinfo/updateCart/${item._id}`,{objectId: this.cart_id, order_quantity: item.order_quantity})
+      let chk  = await this.axios.post(`storeinfo/cartupdate/${item._id}`,{order_quantity: item.order_quantity, item: item})
       return this.$toasted.show('Successfully updated to cart', { duration: 4500 })
     },
     copyBillingToShip() {
