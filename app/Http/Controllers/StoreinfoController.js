@@ -58,10 +58,7 @@ class StoreinfoController {
 
   * updateCart (req, res) {
     const itemId = req.param('id')
-    console.log(itemId)
     let items = req.input('items')
-    const cart = yield Cart.findOne({ _id: itemId }).exec()
-    console.log(cart)
     const cartInfo = yield Cart.update({ _id: itemId }, { $set: { items: items } }).exec()
     res.send(cartInfo)
   }
