@@ -532,6 +532,7 @@ export default {
     async updateCart (item, ind){
       self = this
       item.order_price = item.price * parseInt(item.order_quantity)
+      item.order_price.toFixed(2)
       // let updateQuantity  = await this.axios.post(`storeinfo/updateCart/${item._id}`,{objectId: this.cart_id, order_quantity: item.order_quantity})
       let {chk}  = await this.axios.post(`storeinfo/updateCart/${self.cart_id}`,{items: self.list})
       
