@@ -68,6 +68,7 @@ class StoreinfoController {
   }
 
   * updateItemCartModification (req, res) {
+    var resultInfo
     let cartItems = []
     let originalItem = req.input('item')
     if (!originalItem.optionVal) {
@@ -88,11 +89,9 @@ class StoreinfoController {
         return data._id === originalItem._id && data.optionVal === originalItem.optionVal
       })
       if (checkData) {
-        console.log(checkData)
         checkCartExists.items = checkCartExists.items.filter(function (objVal) {
           return objVal.optionVal !== originalItem.optionVal && objVal._id !== originalItem._id
         })
-        console.log(checkCartExists.items)
         if (actiontype === 1) {
           checkData.order_quantity = originalItem.order_quantity
           checkData.order_price = originalItem.order_price
@@ -105,12 +104,12 @@ class StoreinfoController {
       } else {
         checkCartExists.items.push(originalItem)
       }
-      yield Cart.update({ agentId: agentId }, { $set: {items: checkCartExists.items} }).exec()
+      resultInfo = yield Cart.update({ agentId: agentId }, { $set: {items: checkCartExists.items} }).exec()
     } else { // new insert in cart table
       let obj = {agentId: agentId, items: cartItems}
-      yield Cart.create(obj)
+      resultInfo = yield Cart.create(obj)
     }
-    res.ok('ok')
+    res.send(resultInfo)
   }
 
   * destroy (req, res) {

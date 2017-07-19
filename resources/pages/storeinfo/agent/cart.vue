@@ -45,7 +45,7 @@
           </div>
           
           <div class="column is-1 shopitem">
-            <span><input type="number" v-bind:value="item.order_quantity" v-model="item.order_quantity" @click="updateCart(item, ind)"></span>
+            <span><input type="number" min="1" v-bind:value="item.order_quantity" v-model="item.order_quantity" @click="updateCart(item, ind)"></span>
           </div> 
           <div class="column is-2">
             <section v-show="confirmation === false" class="shopitems">
@@ -528,8 +528,11 @@ export default {
       self = this
       
       // let updateQuantity  = await this.axios.post(`storeinfo/updateCart/${item._id}`,{objectId: this.cart_id, order_quantity: item.order_quantity})
-      let chk  = await this.axios.post(`storeinfo/update/${item._id}`,{order_quantity: item.order_quantity, item: item, type: 1})
+      let {chk}  = await this.axios.post(`storeinfo/update/${item._id}`,{order_quantity: item.order_quantity, item: item, type: 1})
+      let presentQuantity = await this.axios.get('store/cart')
+      self.list = presentQuantity.data.items
       return this.$toasted.show('Successfully updated to cart', { duration: 4500 })
+      console.log(chk)
     },
     copyBillingToShip() {
     
