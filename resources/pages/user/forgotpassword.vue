@@ -41,7 +41,7 @@
     asyncData () {
       return {
         formError: null,
-        email: 'admin@email.com'
+        email: ''
       }
     },
     methods: {
