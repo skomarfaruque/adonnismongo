@@ -764,10 +764,9 @@
 
       },
       async deletePersonalTask() {
+        var self = this
         const id = this.personal._id
         let d = new Date(this.personal.blockDate)
-        console.log(id)
-        // await this.axios.delete(`agent/${this.id}/block-date/${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${d.getDate()}`)
         await this.axios.delete(`agent/${this.id}/block-date/${id}`)
         for (var i = 0; i < this.allMarkedId.length; i++ ) {
           let off = this.allMarkedId[i]
@@ -779,56 +778,53 @@
           }
         }
         let b = this.block_time[d.getDay()]
-        let off
+        var off = []
         if (typeof b.day === 'number') {
           
-          off = {
+          off.push({
             days: d,
             zones: 'fullday',
             css: 'holiday',
             html: 'Off Day',
             type: 'dhx_time_block'
-          }
-        } else {
-          this.blockDays.forEach((b) => {
-
-            const startMinute = helper.convertTimetoInt(b.start)
-            const endMinute = helper.convertTimetoInt(b.end)
-            let date = new Date(b.blockDate)
-            date.setHours(0, 0, 0)
-            let day = {
-              days: date,
-              zones: [startMinute, endMinute],
-              css: 'fat_lines_section',
-              type: 'dhx_time_block'
-            }
-            if (b.isRepeat) {
-              day.start_date = date
-              let endDate = new Date(b.endDate)
-              endDate.setHours(24, 0, 0)
-              day.end_date = endDate
-            }
-            scheduler.addMarkedTimespan(day)
-            scheduler.updateView()
-            this.allMarkedId.push(day)
-            this.isPersonalOff = false
-        this.isDeletePersonalOff = false
           })
-          // const startMinute = helper.convertTimetoInt(b.start)
-          // const endMinute = helper.convertTimetoInt(b.end)
-          // off = {
-          //   days: d,
-          //   zones: [startMinute, endMinute],
-          //   invert_zones: true,
-          //   type: 'dhx_time_block',
-          //   css: 'fat_lines_section'
-          // }
+        } else {
+          
+          function setBlockTime (dt) {
+            let bT = self.block_time[dt.getDay()]
+            const startMinute = helper.convertTimetoInt(bT.start)
+            const endMinute = helper.convertTimetoInt(bT.end)
+            off.push({
+              days: new Date(dt),
+              zones: [startMinute, endMinute],
+              invert_zones: true,
+              type: 'dhx_time_block',
+              css: 'fat_lines_section'
+            })
+          }
+          if (this.personal.isRepeat) {
+            let sd = new Date(this.personal.blockDate)
+            let ed = new Date(this.personal.vendDate)
+            while (sd <= ed) {
+              setBlockTime(sd)
+              sd.setHours(24,0,0)
+            }
+          } else {
+           setBlockTime(d)
+           
+          }
+          
+          
         }
-        // scheduler.addMarkedTimespan(off)
-        // scheduler.updateView()
-        // this.allMarkedId.push(off)
-        // this.isPersonalOff = false
-        // this.isDeletePersonalOff = false
+        
+        off.forEach(function(offVal){
+          scheduler.addMarkedTimespan(offVal)
+          scheduler.updateView()
+          self.allMarkedId.push(offVal)
+        })
+       
+        self.isPersonalOff = false
+        self.isDeletePersonalOff = false
       },
       moveDown () {
         if (!this.isOpen) {
