@@ -528,7 +528,7 @@ export default {
       self = this
       
       // let updateQuantity  = await this.axios.post(`storeinfo/updateCart/${item._id}`,{objectId: this.cart_id, order_quantity: item.order_quantity})
-      let chk  = await this.axios.post(`storeinfo/cartupdate/${item._id}`,{order_quantity: item.order_quantity, item: item})
+      let chk  = await this.axios.post(`storeinfo/update/${item._id}`,{order_quantity: item.order_quantity, item: item, type: 1})
       return this.$toasted.show('Successfully updated to cart', { duration: 4500 })
     },
     copyBillingToShip() {

@@ -74,6 +74,7 @@ class StoreinfoController {
       originalItem.optionVal = ''
     }
     let orderQuantity = parseInt(req.input('order_quantity'))
+    let actiontype = parseInt(req.input('type')) // type 1 means from cart
     originalItem.order_quantity = orderQuantity
     originalItem.order_price = orderQuantity * originalItem.price
     cartItems.push(originalItem)
@@ -92,8 +93,14 @@ class StoreinfoController {
           return objVal.optionVal !== originalItem.optionVal && objVal._id !== originalItem._id
         })
         console.log(checkCartExists.items)
-        checkData.order_quantity += originalItem.order_quantity
-        checkData.order_price += originalItem.order_price
+        if (actiontype === 1) {
+          checkData.order_quantity = originalItem.order_quantity
+          checkData.order_price = originalItem.order_price
+        } else {
+          checkData.order_quantity += originalItem.order_quantity
+          checkData.order_price += originalItem.order_price
+        }
+        
         checkCartExists.items.push(checkData)
       } else {
         checkCartExists.items.push(originalItem)
