@@ -444,7 +444,7 @@ export default {
     store.commit('SET_HEAD', ['Cart', 'Finalize Purchase'])
     let {data} = await axios.get('store/cart')
     return {
-      list: data.items?data.items:'',
+      list: data.items ? data.items : '',
       cart_id: data._id,
       isCreditOff: false,
       confirmation: false,
@@ -526,11 +526,10 @@ export default {
     },
     async updateCart (item, ind){
       self = this
-      
+      item.order_price = item.price * parseInt(item.order_quantity)
       // let updateQuantity  = await this.axios.post(`storeinfo/updateCart/${item._id}`,{objectId: this.cart_id, order_quantity: item.order_quantity})
-      let {chk}  = await this.axios.post(`storeinfo/update/${item._id}`,{order_quantity: item.order_quantity, item: item, type: 1})
-      let presentQuantity = await this.axios.get('store/cart')
-      self.list = presentQuantity.data.items
+      let {chk}  = await this.axios.post(`storeinfo/updateCart/${self.cart_id}`,{items: self.list})
+      
       return this.$toasted.show('Successfully updated to cart', { duration: 4500 })
       console.log(chk)
     },

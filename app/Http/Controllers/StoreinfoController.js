@@ -58,13 +58,12 @@ class StoreinfoController {
 
   * updateCart (req, res) {
     const itemId = req.param('id')
-    let orderQuantity = parseInt(req.input('order_quantity'))
-    let objectId = req.input('objectId')
-    console.log(orderQuantity)
     console.log(itemId)
-    console.log(objectId)
-    const cartQuantity = yield Cart.update({_id: objectId, 'items._id': itemId}, {$inc: {'items.$.order_quantity': orderQuantity}}).exec()
-    res.send(cartQuantity)
+    let items = req.input('items')
+    const cart = yield Cart.findOne({ _id: itemId }).exec()
+    console.log(cart)
+    const cartInfo = yield Cart.update({ _id: itemId }, { $set: { items: items } }).exec()
+    res.send(cartInfo)
   }
 
   * updateItemCartModification (req, res) {
@@ -75,7 +74,6 @@ class StoreinfoController {
       originalItem.optionVal = ''
     }
     let orderQuantity = parseInt(req.input('order_quantity'))
-    let actiontype = parseInt(req.input('type')) // type 1 means from cart
     originalItem.order_quantity = orderQuantity
     originalItem.order_price = orderQuantity * originalItem.price
     cartItems.push(originalItem)
@@ -92,13 +90,8 @@ class StoreinfoController {
         checkCartExists.items = checkCartExists.items.filter(function (objVal) {
           return objVal.optionVal !== originalItem.optionVal && objVal._id !== originalItem._id
         })
-        if (actiontype === 1) {
-          checkData.order_quantity = originalItem.order_quantity
-          checkData.order_price = originalItem.order_price
-        } else {
-          checkData.order_quantity += originalItem.order_quantity
-          checkData.order_price += originalItem.order_price
-        }
+        checkData.order_quantity += originalItem.order_quantity
+        checkData.order_price += originalItem.order_price
         
         checkCartExists.items.push(checkData)
       } else {
