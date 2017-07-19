@@ -3,7 +3,7 @@
     <div class="columns">
       <div class="column is-12">
         <div class="columns title-div">
-          <div class="column is-2 is-offset-1">
+          <div class="column is-1 is-offset-1">
           </div>
           <div class="column is-3">
             Description
@@ -12,10 +12,13 @@
             Option
           </div>
           <div class="column is-1">
-            Price
+            Unit Price
           </div>
           <div class="column is-1">
             Quantity
+          </div>
+          <div class="column is-1">
+            Price
           </div>
           <div class="column is-2">
             Action
@@ -41,12 +44,14 @@
             <div v-else class="shopitem"><span>NA</span></div>
           </div>
           <div class="column is-1 shopitem">
+            <span>${{item.price}}</span>
+          </div>
+          <div class="column is-1 shopitem">
+            <span><input class="input" type="number" min="1" v-bind:value="item.order_quantity" v-model="item.order_quantity" @change="updateCart(item, ind)"></span>
+          </div> 
+          <div class="column is-1 shopitem">
             <span>${{item.order_price}}</span>
           </div>
-          
-          <div class="column is-1 shopitem">
-            <span><input type="number" min="1" v-bind:value="item.order_quantity" v-model="item.order_quantity" @click="updateCart(item, ind)"></span>
-          </div> 
           <div class="column is-2">
             <section v-show="confirmation === false" class="shopitems">
               <a href="javascript:" class="button is-danger" title="Delete" @click="confirmation = true"> <i class="fa fa-trash"></i> </a>
