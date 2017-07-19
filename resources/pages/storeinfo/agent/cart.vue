@@ -45,7 +45,7 @@
           </div>
           
           <div class="column is-1 shopitem">
-            <span>{{item.order_quantity}}</span>
+            <span><input type="number" v-bind:value="item.order_quantity"></span>
           </div> 
           <div class="column is-2">
             <section v-show="confirmation === false" class="shopitems">
@@ -411,6 +411,9 @@
   }
   .shopitem span {
     top: 30%;
+  }
+  .shopitem input {
+    width: 50px;
   }
   .title-div {
     margin-bottom: 45px;
