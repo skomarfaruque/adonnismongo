@@ -45,7 +45,7 @@
           </div>
           
           <div class="column is-1 shopitem">
-            <span><input type="number" v-bind:value="item.order_quantity"></span>
+            <span><input type="number" v-bind:value="item.order_quantity" v-model="item.order_quantity" @click="updateCart(item, ind)"></span>
           </div> 
           <div class="column is-2">
             <section v-show="confirmation === false" class="shopitems">
@@ -108,8 +108,7 @@
                   <div class="level-right">
                     <div class="level-item">
                       <span><input size="5" class="input is-2" v-model="card.exp_month" type="text" placeholder="Month"></span>&nbsp;&nbsp;&nbsp;
-                      <span><input size="5" class="input is-2" v-model="card.exp_year" type="text" placeholder="Year"></span>
-                      
+                      <span><input size="5" class="input is-2" v-model="card.exp_year" type="text" placeholder="Year"></span>                      
                     </div>
                   </div>
                 </nav><br>
@@ -525,7 +524,13 @@ export default {
       //  const card = await this.axios.post('storeinfo/payment/cart_id')
       //  this.card._id = this.cart_id
     },
-     copyBillingToShip() {
+    async updateCart (item, ind){
+      self = this
+      let updateQuantity  = await this.axios.post(`storeinfo/updateCart/${item._id}`,{objectId: this.cart_id, order_quantity: item.order_quantity})
+      console.log(this.cart_id)
+      return this.$toasted.show('Successfully updated to cart', { duration: 4500 })
+    },
+    copyBillingToShip() {
     
         this.card.ship_first_name = this.card.bill_first_name
         this.card.ship_last_name = this.card.bill_last_name

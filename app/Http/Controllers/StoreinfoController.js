@@ -9,12 +9,11 @@ class StoreinfoController {
   * index (req, res) {
     const stores = yield Storeinfo.find().exec()
     res.send(stores)
-  }
+  } 
   * cartInfo (req, res) {
     const cartinfo = yield Cart.findOne({agentId: req.currentUser._id, is_paid: false}).exec()
     res.send(cartinfo)
   }
-
   * show (req, res) {
     const id = req.param('id')
     const supplies = yield Storeinfo.findOne({ _id: id }).exec()
@@ -56,6 +55,18 @@ class StoreinfoController {
     const storeinfo = yield Storeinfo.update({ _id: id }, {name: obj.name, description: obj.description, price: obj.price, quantity: obj.quantity, option: obj.option, image: obj.image}).exec()
     res.send(storeinfo)
   }
+
+  * updateCart (req, res) {
+    const itemId = req.param('id')
+    let orderQuantity = parseInt(req.input('order_quantity'))
+    let objectId = req.input('objectId')
+    console.log(orderQuantity)
+    console.log(itemId)
+    console.log(objectId)
+    const cartQuantity = yield Cart.update({ _id: objectId, "items._id": "itemId" }, {order_quantity: orderQuantity}).exec()
+    res.send(cartQuantity)
+  }
+
   * updateItemCartModification (req, res) {
     let cartItems = []
     let originalItem = req.input('item')
