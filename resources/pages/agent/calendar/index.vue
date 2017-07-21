@@ -80,9 +80,9 @@
           <div class="box has-text-centered">
             <h1 style="font-size:64px;">{{timer}}</h1>
             <span v-show="watchStatus !== 3">
-            <button class="button is-large is-info" @click="startWatch" v-show="watchStatus === 0 ">Start</button>
+            <button v-if="usertype ==='Agent'" class="button is-large is-info" @click="startWatch" v-show="watchStatus === 0 ">Start</button>
             <div v-show="watchStatus !== 0 && this.isFinished !== true" class="block">
-              <button class="button is-large is-info space-btn" @click="pauseWatch" :disabled="pauseAction"><span v-if="watchStatus === 2" id="r">Resume</span><span id="p" v-else>Pause</span></button>
+              <button v-if="usertype ==='Agent'" class="button is-large is-info space-btn" @click="pauseWatch" :disabled="pauseAction"><span v-if="watchStatus === 2" id="r">Resume</span><span id="p" v-else>Pause</span></button>
               <button class="button is-large is-danger" @click="stopWatch">Stop</button>
             </div>
             </span>
@@ -158,7 +158,7 @@
                     </span>
                     <span class="help is-success" v-if="isAdded">Customer with this email has added to your profile!</span>
                     <span class="help is-danger" v-show="errors.has('customer')" >{{ errors.first('customer') }}</span>-->
-                    <div v-if="customer"><b>Address 1: </b>{{customerData.address1}}, <b>Address 2: </b> {{customerData.address2}}, <b>City:</b> {{customerData.city}}, <b>State:</b> {{customerData.state}}, <b>Zip Code:</b> {{customerData.zipCode}}</div>
+                    <div v-if="customer"><b>Address 1: </b>{{customerDataShow.address1}}, <b>Address 2: </b> {{customerDataShow.address2}}, <b>City:</b> {{customerDataShow.city}}, <b>State:</b> {{customerDataShow.state}}, <b>Zip Code:</b> {{customerDataShow.zipCode}}</div>
                   </p>
                   <!--<p class="control">
                     <button class="button" @click="isCustomer=true">
@@ -204,7 +204,7 @@
               <div class="block">
                 <a class="button is-info" name="save" value="Save" id="" @click="save"> Save </a>
                 <a class="button is-info" name="close" value="Close" id="" @click="closeForm">Close</a>
-                <a class="button is-primary" @click="isEdit = false" v-if="invoice && (invoice_settled == null || invoice_settled === false) ">Start Appointment</a>
+                <a class="button is-primary" @click="isEdit = false" v-if="invoice && (invoice_settled == null || invoice_settled === false) && usertype ==='Agent' ">Start Appointment</a>
                 <a class=""  v-if="invoice_settled"> <span @click="closeForm"> <nuxt-link class="phosto-blue button is-primary" @click="closeForm" :to="`/invoice/paid/${invoice}`" title="Edit"> View invoice</nuxt-link></span></a>
               </div>
             </div>
@@ -353,6 +353,8 @@
       const id = query.id || 'me'
       let agent = await axios.get(`users/${id}`)
       let event = await axios.get(`appointment/agent/${agent.data._id}`)
+      const per = store.state.permissions
+    const usertype = store.state.role
 
       let blockDays = await axios.get(`agent/${agent.data._id}/block-dates`)
       store.commit('SET_HEAD', [`Agent Calendar`, `View appointments of ${agent.data.name}.`])
@@ -361,6 +363,7 @@
       let tomorrow = new Date()
       tomorrow.setHours(24)
       return {
+        usertype: usertype,
         isEdit: true,
         timer: '00:00:00',
         stopButton: false,
@@ -385,7 +388,17 @@
           address1: '',
           zipCode: '',
           city: '',
-          country: '',
+          country: 'United States',
+          state: ''
+        },
+        customerDataShow: {
+          name: '',
+          email: '',
+          phone: '',
+          address1: '',
+          zipCode: '',
+          city: '',
+          country: 'United States',
           state: ''
         },
         isCustomer: false,
@@ -422,12 +435,12 @@
       let self = this
       const flatpicker = require('flatpickr')
       var options = { allowInput: false, enableTime: true, noCalendar: true, dateFormat: 'h:i K' }
-      let offStartOption = { defaultDate: new Date(), dateFormat: 'd/m/Y' }
+      let offStartOption = { defaultDate: new Date(), dateFormat: 'm/d/Y' }
       offStartOption.onChange = (date, datestr, instance) => {
         if (!date[0]) return false
         self.personal.blockDate = date[0]
       }
-      let offEndOption = { defaultDate: new Date(), dateFormat: 'd/m/Y' }
+      let offEndOption = { defaultDate: new Date(), dateFormat: 'm/d/Y' }
       offEndOption.onChange = (date, datestr, instance) => {
         if (!date[0]) return false
         self.personal.endDate = date[0]
@@ -473,6 +486,7 @@
         self.comment = ev.comment
         if(ev.customer){
           self.customerData = ev.customer
+          self.customerDataShow = ev.customer
         }
 
         startTime.setDate(ev.start_date)
@@ -656,16 +670,19 @@
           this.personal.endDate = new Date(this.personal.endDate)
           this.personal.blockDate.setHours(0, 0, 0)
 
-          this.personal.endDate.setHours(24, 0, 0)
+          
+          console.log(this.personal)
           const { data } = await this.axios.post(`agent/${this.id}/block-date`, this.personal)
+          this.personal.endDate.setHours(24, 0, 0)
           this.blockDays.push(data)
           const startMinute = helper.convertTimetoInt(this.personal.start)
           const endMinute = helper.convertTimetoInt(this.personal.end)
-          // let date = new Date(this.personal.blockDate)
+          let date = new Date(this.personal.blockDate)
+           date =  date.setHours(0, 0, 0)
 
           let offDay = {
             _id: `${data._id}`,
-            days: this.personal.isRepeat ? date.getDay() : this.personal.blockDate,
+            days: this.personal.isRepeat ? this.personal.blockDate.getDay() : this.personal.blockDate,
             zones: this.personal.fullday ? 'fullday' : [startMinute, endMinute],
             css: 'holiday',
             html: `<a href="javascript:" title="Personal Task" class="phosto-blue" onclick="calendar.showPersonalTask('${data._id}')">Personal Task</a>`,
@@ -709,10 +726,16 @@
         if (this.customer && !this.errors.has('customer')) {
           this.customerData.email = this.customer
           const { data } = await this.axios.post('customers', this.customerData)
+          console.log(data)
           await this.axios.get(`agent/${this.id}/assign-customer/${data._id}`)
           this.isAdded = true
           this.isCustomer = false
           this.customerData = {}
+          this.customerDataShow.address1 = data.address1
+          this.customerDataShow.city = data.city
+          this.customerDataShow.state = data.state
+          this.customerData.country = 'United States'
+          this.customerDataShow.zipCode = data.zipCode
         }
       },
       async searchCustomer (value) {
@@ -741,13 +764,13 @@
 
       },
       async deletePersonalTask() {
+        var self = this
         const id = this.personal._id
         let d = new Date(this.personal.blockDate)
-        // await this.axios.delete(`agent/${this.id}/block-date/${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${d.getDate()}`)
+        console.log(this.personal.blockDate)
         await this.axios.delete(`agent/${this.id}/block-date/${id}`)
         for (var i = 0; i < this.allMarkedId.length; i++ ) {
           let off = this.allMarkedId[i]
-
           if (off._id && off._id === id) {
             scheduler.deleteMarkedTimespan(off)
             scheduler.updateView()
@@ -756,31 +779,51 @@
           }
         }
         let b = this.block_time[d.getDay()]
-        let off
+        if(!b){
+          self.isPersonalOff = false
+        self.isDeletePersonalOff = false
+        return false
+        }
+        var off = []
         if (typeof b.day === 'number') {
-          off = {
+          off.push({
             days: d,
             zones: 'fullday',
             css: 'holiday',
             html: 'Off Day',
             type: 'dhx_time_block'
-          }
+          })
         } else {
-          const startMinute = helper.convertTimetoInt(b.start)
-          const endMinute = helper.convertTimetoInt(b.end)
-          off = {
-            days: d,
-            zones: [startMinute, endMinute],
-            invert_zones: true,
-            type: 'dhx_time_block',
-            css: 'fat_lines_section'
+          function setBlockTime (dt) {
+            let bT = self.block_time[dt.getDay()]
+            const startMinute = helper.convertTimetoInt(bT.start)
+            const endMinute = helper.convertTimetoInt(bT.end)
+            off.push({
+              days: new Date(dt),
+              zones: [startMinute, endMinute],
+              invert_zones: true,
+              type: 'dhx_time_block',
+              css: 'fat_lines_section'
+            })
+          }
+          if (this.personal.isRepeat) {
+            let sd = new Date(this.personal.blockDate)
+            let ed = new Date(this.personal.vendDate)
+            while (sd <= ed) {
+              setBlockTime(sd)
+              sd.setHours(24,0,0)
+            }
+          } else {
+           setBlockTime(d)
           }
         }
-        scheduler.addMarkedTimespan(off)
-        scheduler.updateView()
-        this.allMarkedId.push(off)
-        this.isPersonalOff = false
-        this.isDeletePersonalOff = false
+        off.forEach(function(offVal){
+          scheduler.addMarkedTimespan(offVal)
+          scheduler.updateView()
+          self.allMarkedId.push(offVal)
+        })
+        self.isPersonalOff = false
+        self.isDeletePersonalOff = false
       },
       moveDown () {
         if (!this.isOpen) {
@@ -801,7 +844,9 @@
         this.customerData.city = this.searchedCustomers[this.highlightedPosition].city
         this.customerData.state = this.searchedCustomers[this.highlightedPosition].state
         this.customerData.zipCode = this.searchedCustomers[this.highlightedPosition].zipCode
+        this.customerData.country = this.searchedCustomers[this.highlightedPosition].country
         this.isOpen = false
+        console.log(this.customerData)
       },
       async startWatch () {
         let self = this

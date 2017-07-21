@@ -79,6 +79,8 @@ Route.group('storeinfo', () => {
   Route.get('storein/search', 'StoreinfoController.search')
   Route.get('storeall/search', 'StoreinfoController.search')
   Route.post('storeinfo/update/:id', 'StoreinfoController.updateItemCartModification')
+  Route.post('storeinfo/cartupdate/:id', 'StoreinfoController.cartModification')
+  Route.post('storeinfo/updateCart/:id', 'StoreinfoController.updateCart')
   Route.get('store/cart', 'StoreinfoController.cartInfo')
   Route.post('storeinfo/removecartitem/:id', 'StoreinfoController.removecart')
   Route.post('storeinfo/payment', 'StoreinfoController.payment')

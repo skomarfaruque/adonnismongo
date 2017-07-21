@@ -12,7 +12,7 @@
             <p class="control has-icon has-icon-right">
               <input class="input" type="email" placeholder="Email input" v-model="email">
               <span class="icon is-small">
-                <i class="fa material-icons">email</i>
+                <i class="fa fa-envelope" aria-hidden="true"></i>  
               </span>
               <span class="help is-danger is-hidden">This email is invalid</span>
             </p>
@@ -41,7 +41,7 @@
     asyncData () {
       return {
         formError: null,
-        email: 'admin@email.com'
+        email: ''
       }
     },
     methods: {

@@ -74,11 +74,11 @@ export default {
   middleware: 'auth',
   head () {
     return {
-      title: `Supplies Page`
+      title: `Purchasable Goods`
     }
   },
   async asyncData ({ store, axios }) {
-    store.commit('SET_HEAD', ['Supplies', 'View all your supply items.'])
+    store.commit('SET_HEAD', ['Purchasable Goods', 'View all your purchasable goods items.'])
     let { data } = await axios.get('supplies')
     return {
       list: data,

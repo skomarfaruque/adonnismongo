@@ -17,6 +17,14 @@ module.exports = {
         content: 'width=device-width, initial-scale=1'
       },
       {
+        name: 'google',
+        content: 'notranslate'
+      },
+      {
+        'http-equiv': 'Content-Language',
+        content: 'en'
+      },
+      {
         hid: 'description',
         name: 'description',
         content: 'Adonuxt project'

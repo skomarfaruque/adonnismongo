@@ -21,7 +21,7 @@
               <span class="icon is-small">
                 <i class="fa fa-lock"></i>
               </span>
-              <span class="help is-danger is-hidden">Email aSnd Password do not match!</span>
+              <span class="help is-danger is-hidden">Email and Password do not match!</span>
             </p>
           </div>
         </div>

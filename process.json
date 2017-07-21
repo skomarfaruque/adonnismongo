@@ -1,0 +1,14 @@
+{
+  "apps" : [    
+  {
+    "name"        : "backportal",
+    "script"      : "npm",
+    "watch"       : true,
+    "ignore_watch": ["node_modules", "public", "storage", ".nuxt"],
+    "args"        : "run serve:build",
+    "env": {
+      "NODE_ENV": "production",
+      "BASE_URL": "http://partnerportal.phostorian.com"
+    }
+  }]
+}
