@@ -51,6 +51,8 @@
       async sendInvitation () {
         let { data } = await this.axios.post('user/invitation', this.$data)
         this.confirmation = data
+        this.email = ''
+        this.name = ''
       }
     }
   }
