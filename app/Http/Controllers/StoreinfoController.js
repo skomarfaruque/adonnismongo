@@ -9,12 +9,11 @@ class StoreinfoController {
   * index (req, res) {
     const stores = yield Storeinfo.find().exec()
     res.send(stores)
-  }
+  } 
   * cartInfo (req, res) {
     const cartinfo = yield Cart.findOne({agentId: req.currentUser._id, is_paid: false}).exec()
     res.send(cartinfo)
   }
-
   * show (req, res) {
     const id = req.param('id')
     const supplies = yield Storeinfo.findOne({ _id: id }).exec()
@@ -33,7 +32,8 @@ class StoreinfoController {
       maxSize: '2mb',
       allowedExtensions: ['jpg', 'png', 'jpeg']
     })
-    const fileName = `${name}_back.${image.extension()}`
+    var uniqueId = Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36)
+    const fileName = `${uniqueId}_item_${name}.${image.extension()}`
     yield image.move(Helpers.publicPath('item_image'), fileName)
     const obj = {name: name, description: description, price: price, quantity: quantity, option: option, image: image.uploadName()}
     let storeinfo = yield Storeinfo.create(obj)
@@ -55,18 +55,22 @@ class StoreinfoController {
     const storeinfo = yield Storeinfo.update({ _id: id }, {name: obj.name, description: obj.description, price: obj.price, quantity: obj.quantity, option: obj.option, image: obj.image}).exec()
     res.send(storeinfo)
   }
+
+  * updateCart (req, res) {
+    const itemId = req.param('id')
+    let items = req.input('items')
+    const cartInfo = yield Cart.update({ _id: itemId }, { $set: { items: items } }).exec()
+    res.send(cartInfo)
+  }
+
   * updateItemCartModification (req, res) {
+    var resultInfo
     let cartItems = []
     let originalItem = req.input('item')
-    let orderQuantity = parseInt(req.input('order_quantity'))
-    let orderOptionTitle = originalItem.optionVal
-    originalItem.optionVal = []
-    let optionVal = {option: orderOptionTitle, quantity: orderQuantity}
-    if (orderOptionTitle) {
-      originalItem.optionVal.push(optionVal)
-    } else {
-      originalItem.optionVal = []
+    if (!originalItem.optionVal) {
+      originalItem.optionVal = ''
     }
+    let orderQuantity = parseInt(req.input('order_quantity'))
     originalItem.order_quantity = orderQuantity
     originalItem.order_price = orderQuantity * originalItem.price
     cartItems.push(originalItem)
@@ -77,37 +81,25 @@ class StoreinfoController {
     let checkCartExists = yield Cart.findOne({agentId: agentId, is_paid: false}).exec()
     if (checkCartExists) { // unpaid cart exisits
       let checkData = checkCartExists.items.find(function (data) {
-        return data._id === originalItem._id
+        return data._id === originalItem._id && data.optionVal === originalItem.optionVal
       })
       if (checkData) {
-        // marge option value
-        originalItem.optionVal.forEach(function (supplyVal, newKey) {
-          let checkOption = checkData.optionVal.find(function (data) {
-            return data.option === supplyVal.option
-          })
-          if (checkOption) {
-            checkOption.quantity += supplyVal.quantity
-          } else {
-            checkData.optionVal.push({option: supplyVal.option, quantity: supplyVal.quantity})
-          }
-        })
-        // remove the element
         checkCartExists.items = checkCartExists.items.filter(function (objVal) {
-          return objVal._id !== originalItem._id
+          return objVal.optionVal !== originalItem.optionVal && objVal._id !== originalItem._id
         })
         checkData.order_quantity += originalItem.order_quantity
         checkData.order_price += originalItem.order_price
+        
         checkCartExists.items.push(checkData)
       } else {
         checkCartExists.items.push(originalItem)
       }
-      yield Cart.update({ agentId: agentId }, { $set: {items: checkCartExists.items} }).exec()
+      resultInfo = yield Cart.update({ agentId: agentId }, { $set: {items: checkCartExists.items} }).exec()
     } else { // new insert in cart table
       let obj = {agentId: agentId, items: cartItems}
-     // console.log(obj)
-      yield Cart.create(obj)
+      resultInfo = yield Cart.create(obj)
     }
-    res.ok('ok')
+    res.send(resultInfo)
   }
 
   * destroy (req, res) {

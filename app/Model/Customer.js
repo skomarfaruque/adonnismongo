@@ -11,6 +11,10 @@ const customerSchema = mongoose.Schema({
   city: String,
   state: String,
   zipCode: String,
+  country: {
+    type: String,
+    default: 'United States'
+  },
   synced: {
     type: Boolean,
     default: false

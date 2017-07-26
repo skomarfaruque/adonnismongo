@@ -556,22 +556,23 @@
       <div class="modal-background"></div>
       <div class="modal-content">
         <div class="box">
-          <h1 class="title">Pay Via Credit Card</h1>
+          <h1 class="title">Pay Via Credit Card</h1>{{card.exp_date}}
           <div class="box">
             <div class="columns invoice-label">
               <div class="column is-6">
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Amount</span>
+                      <span>Credit Card No</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span>${{twoDigitFormat(priceDisShipTax) }}</span>
+                      <span><input class="input" type="text" v-model="card.card_no" placeholder="Credit Card No"></span>
                     </div>
                   </div>
                 </nav><br>
+                
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
@@ -580,22 +581,13 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" v-model="card.exp_date" type="text" placeholder="Date"></span>
+                      <span><input size="5" class="input is-2" v-model="card.exp_month" type="text" placeholder="Month"></span>&nbsp;&nbsp;&nbsp;
+                      <span><input size="5" class="input is-2" v-model="card.exp_year" type="text" placeholder="Year"></span>
+                      
                     </div>
                   </div>
                 </nav><br>
-                <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Tax</span><br>
-                    </div>
-                  </div><br>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input class="input" v-model="card.tax" type="text"></span><br>
-                    </div>
-                  </div>
-                </nav><br>
+               
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
@@ -706,7 +698,7 @@
 
               </div>
               <div class="column is-6">
-                <nav class="level">
+                <!--<nav class="level">
                   <div class="level-left">
                     <div class="level-item">
                       <span>Shipping</span>
@@ -717,16 +709,16 @@
                       <span>${{parseFloat(!shipping?0:shipping)}}</span>
                     </div>
                   </div>
-                </nav><br>
+                </nav><br>-->
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Credit Card No</span>
+                      <span>Amount</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="Number" v-model="card.card_no" placeholder="Credit Card No"></span>
+                      <span>${{twoDigitFormat(priceDisShipTax) }}</span>
                     </div>
                   </div>
                 </nav><br>
@@ -738,10 +730,12 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" v-model="card.card_code" type="number" placeholder="Credit Card Code"></span>
+                      <span><input class="input" v-model="card.card_code" type="text" placeholder="Credit Card Code"></span>
                     </div>
                   </div>
                 </nav><br>
+                
+               
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
@@ -750,9 +744,22 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
+                     <span><b>Same as  billing</b> &nbsp;&nbsp;&nbsp;<input class="" @click="copyBillingToShip" type="checkbox"></span><br>
                     </div>
                   </div>
                 </nav><br>
+                <!--<nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span><b>Copy billing</b></span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                     <span><input class="" @click="copyBillingToShip" type="checkbox"></span><br>
+                    </div>
+                  </div>
+                </nav><br>-->
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
@@ -913,7 +920,9 @@ export default {
       card: {
         card_no:'4242424242424242',
         tax:'',
-        exp_date:'0822',
+        exp_date:'',
+        exp_month:'08',
+        exp_year:'22',
         ship_first_name:'',
         ship_last_name:'',
         ship_company:'',
@@ -1034,9 +1043,14 @@ watch: {
         quantity: this.quantity,
         commission: this.newItem.commission
       })
-      location.reload()
-      await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
-    },
+      let self = this
+      this.price = 0
+      this.newItem = ''
+      this.quantity = 1
+      // location.reload()
+      let { data } = await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
+      
+   },
     async removeItem (index) {
       this.invoice.items.splice(index, 1)
       await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
@@ -1057,7 +1071,9 @@ watch: {
       var paymentDescription ={}
       var self = this
       if (type === 'card') {
+        this.card.exp_date = this.card.exp_month + this.card.exp_year
         paymentDescription = this.card
+        console.log(paymentDescription)
       }  else {
           if (this.paid_amount < this.priceDisShipTax){
             return this.$toasted.show('Sorry amount is low', { duration: 4500 })
@@ -1133,6 +1149,17 @@ watch: {
       if (!files.length)
         return;
       this.createImage(files[0], targetId);
+    },
+    copyBillingToShip() {
+    
+        this.card.ship_first_name = this.card.bill_first_name
+        this.card.ship_last_name = this.card.bill_last_name
+        this.card.ship_company = this.card.bill_company
+        this.card.ship_address = this.card.bill_address
+        this.card.ship_city = this.card.bill_city
+        this.card.ship_state = this.card.bill_state
+        this.card.ship_zip = this.card.bill_zip
+        this.card.ship_country = this.card.bill_country
     },
     createImage(file, targetId) {
       this.check.check_back_file =file

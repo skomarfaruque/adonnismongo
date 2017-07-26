@@ -19,12 +19,21 @@
     </nav>
     <div class="storeitem" v-for="(item, ind) in list">
       <div class="rsizeimg">
-        <img :src="`/item_image/${item.image}`" alt=""><br>
+        <a href="javascript:"  @click="modalShow(item)"> <img :src="`/item_image/${item.image}`" alt=""> </a>
+        <br>
+        <div v-bind:class="{ modal: true, 'is-active': isShow }">
+          <div class="modal-background"></div>
+          <div class="modal-content">
+            <p class="image is-4by3">
+              <img :src="`/item_image/${modalImg}`">
+            </p>
+          </div>
+          <button class="modal-close is-large" @click="isShow=false"></button>
+        </div>
       </div>
       <div class="zinfo">
         <b>Name:</b> {{ item.name }}<br>
         <b>Description:</b> {{ item.description }}<br>
-        <span v-if="item.quantity > 0"><b>Available:</b> {{ item.quantity }}</span><span v-else>Out of stock</span><br>
         <b>Price:</b> ${{ item.price }}<br>
         <p class="" v-if="item.option">
           <span class="select">
@@ -39,6 +48,7 @@
         <span v-else  class="button is-danger"><i class="fa fa-shopping-cart"></i></span>
       </div>
     </div>
+
   </section>
 </template>
 <style scoped>
@@ -60,7 +70,7 @@
     position: relative;
     box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
-  .button.is-info {
+  .button.is-info, .button.is-danger {
     padding: 5px 50px;
     margin-top: 5px;
     margin-bottom: 10px;
@@ -70,7 +80,11 @@
   }
   .zinfo {
     background-color: #fff;
+<<<<<<< HEAD
     z-index: 99999;
+=======
+    z-index: 12;
+>>>>>>> master
     position: absolute;
     width: 100%;
   }
@@ -106,7 +120,9 @@ export default {
     return {
       list: data,
       search: '',
-      confirmation: false
+      confirmation: false,
+      isShow: false,
+      modalImg: ''
     }
   },
   data () {
@@ -139,6 +155,10 @@ export default {
       let presentQuantity = await this.axios.get('store/cart')
       self.$store.commit('SET_CART_ITEM', presentQuantity.data.items.length)
       return this.$toasted.show('Successfully added to cart', { duration: 4500 })
+    },
+    async modalShow (item) {
+      this.isShow = true,
+      this.modalImg = item.image
     }
   }
 

@@ -50,11 +50,11 @@
             <td>{{ item.zipCode.join(', ') }}</td>
             <td class="action">
               <section v-show="confirmation === false">
-                <a href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
+                <a v-show="usertype ==='Admin'" href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>
                 <nuxt-link class="button is-info" :to="`/agent/${item._id}`" title="Edit"><i class="fa fa-pencil"></i> </nuxt-link>
                 <nuxt-link class="button is-info" :to="`/agent/calendar?id=${item._id}`" title="Calender"><i class="fa fa-calendar"></i> </nuxt-link>
                 <nuxt-link class="button is-info" :to="`/agent/customers?id=${item._id}`" title="View Customers"><i class="fa fa-users"></i> </nuxt-link>
-                <nuxt-link class="button is-info" :to="`invoice?agentId=${item._id}`" title="View Comissoin"><i class="fa fa-money"></i> </nuxt-link>
+                <nuxt-link class="button is-info" :to="`invoice?agentId=${item._id}`" title="View Commission"><i class="fa fa-money"></i> </nuxt-link>
               </section>
               <section v-show="confirmation">
                 <a href="javascript:" class="button is-danger" @click="remove(item, ind)" title="Confirm"> <i class="fa fa-check"></i> </a>
@@ -79,12 +79,15 @@
       }
     },
     async asyncData ({ store, axios }) {
+       const per = store.state.permissions
+    const usertype = store.state.role
       store.commit('SET_HEAD', ['Agent', 'View list of the agents.'])
       let { data } = await axios.get('agents')
       return {
         list: data,
         search: '',
-        confirmation: false
+        confirmation: false,
+        usertype: usertype
       }
     },
     data () {

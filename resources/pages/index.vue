@@ -64,8 +64,8 @@
     asyncData () {
       return {
         formError: null,
-        email: 'admin@email.com',
-        password: '123456'
+        email: '',
+        password: ''
       }
     },
     methods: {

@@ -20,7 +20,7 @@ class CustomerController {
    * Create Customer
    */
   * store (req, res) {
-    const obj = req.only('name', 'email', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state')
+    const obj = req.only('name', 'email', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state', 'country')
     let customer = yield Customer.findOne({ email: obj.email }).exec()
     if (!customer) {
       customer = yield Customer.create(obj)
@@ -30,7 +30,7 @@ class CustomerController {
 
   * update (req, res) {
     const id = req.param('id')
-    const obj = req.only('name', 'email', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state')
+    const obj = req.only('name', 'email', 'phone', 'address1', 'address2', 'city', 'zipCode', 'state', 'country')
     const customer = yield Customer.update({ _id: id }, { name: obj.name, email: obj.email, phone: obj.phone, address1: obj.address1, address2: obj.address2, city: obj.city, zipCode: obj.zipCode, state: obj.state }).exec()
     res.send(customer)
   }
@@ -63,7 +63,7 @@ class CustomerController {
     search = search || ''
     const role = req.currentUser.role.name
     let existingCustomer = {}
-    if (agent || role === 'Agent') {
+    if (agent && role === 'Agent') {
       const id = agent || req.currentUser._id
       const agents = yield AgentCustomer.find({ agent: id }, 'customer').exec()
       const cids = agents.map((c) => {
@@ -75,6 +75,7 @@ class CustomerController {
         existingCustomer = { _id: { $in: cids } }
       }
     }
+    console.log(existingCustomer)
 
     let regex = new RegExp(search, 'i')
     const customers = yield Customer

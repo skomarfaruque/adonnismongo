@@ -21,7 +21,7 @@
             Profile
           </nuxt-link>
           <a href="javascript:" class="nav-item is-tab" @click="logout">Log out</a>
-          <span v-if="userType==='Agent'">
+           <span v-if="userType==='Agent'">
           <nuxt-link v-if="cartItem > 0 " class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent/cart"><i class="fa fa-shopping-cart"></i><span>{{cartItem}}</span></nuxt-link>
 <nuxt-link v-else class="button is-info nav-item is-tab cardicon" title="cart" to="/storeinfo/agent"><i class="fa fa-shopping-cart"></i><span>{{cartItem}}</span></nuxt-link></span>
         </div>
@@ -36,7 +36,7 @@
   .cardicon i {
     font-size: 25px;
   }
-  .cardicon span[data-v-e7863304] {
+  .cardicon span {
     border-radius: 50%;
     padding: 0px 4px;
     font-size: 11px;
@@ -64,7 +64,7 @@ import { mapState } from 'vuex'
           self.cart = obj.data.items.length
         })
         .catch(function (err) {
-          console.log(err)
+          // console.log(err)
         })
     },
 computed: mapState(['heading','cartItem']),

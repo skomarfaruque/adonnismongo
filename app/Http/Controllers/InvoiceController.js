@@ -93,13 +93,11 @@ class InvoiceController {
       }
       weeks.push(weekData)
     }
-    console.log(year)
     res.send({year: year, weeks: weeks})
   }
   * getAllAgent (req, res) {
     let flag = req.param('id')
     // let flag = req.all()
-    console.log(flag)
     const invoices = yield Appointment.find({invoice_settled: true}).populate('agent').exec()
     var weeks = []
     var weekData = {}
@@ -358,8 +356,8 @@ class InvoiceController {
       let updatedInvoice = yield Appointment.findOne({ _id: id }).exec()
       if (paymentTypeApp === 'check') {
         yield Mail.raw('', message => {
-          message.to('sohag2847@gmail.com', 'sohag2847@gmail.com')
-          // message.to('phostoriantest@gmail.com', 'phostoriantest@gmail.com')
+          // message.to('sohag2847@gmail.com', 'sohag2847@gmail.com')
+          message.to('roland@phostorian.com', 'roland@phostorian.com')
           message.subject('Your check payment info')
           message.attach(path.join(publicPath, `/check_doc/${updatedInvoice.payment_method_desc.front_file}`))
           message.attach(path.join(publicPath, `/check_doc/${updatedInvoice.payment_method_desc.back_file}`))

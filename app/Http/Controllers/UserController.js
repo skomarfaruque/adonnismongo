@@ -29,7 +29,7 @@ class UserController {
   * update (req, res) {
     const userId = req.param('id')
     const obj = req.only('name', 'email', 'phone', 'address', 'city', 'state', 'zipCode', 'block_time')
-    let user = yield User.update({ _id: userId }, { name: obj.name, email: obj.email, phone: obj.phone, address: obj.address, city: obj.city, zipCode: obj.zipCode, block_time: obj.block_time })
+    let user = yield User.update({ _id: userId }, { name: obj.name, email: obj.email, phone: obj.phone, address: obj.address, city: obj.city, state: obj.state, zipCode: obj.zipCode, block_time: obj.block_time })
     res.send(user.name)
   }
 
@@ -64,7 +64,7 @@ class UserController {
     const role = yield Role.findOne({ name: userRole })
     const user = yield User.create({ name: name, email: email, reset_token: resetToken, role: role })
 
-    const resetUrl = `http://${Env.get('DOMAIN')}:${Env.get('PORT')}/signup/confirmation?token=${user.reset_token}`
+    const resetUrl = `http://${Env.get('DOMAIN')}/signup/confirmation?token=${user.reset_token}`
     yield Mail.raw('', message => {
       message.to(email, email)
       message.from('no-reply@backportal.com')
@@ -107,7 +107,7 @@ class UserController {
     date.setDate(date.getDate() + 7)
     user.reset_exp = date
     yield user.save()
-    const resetUrl = `http://${Env.get('DOMAIN')}:${Env.get('PORT')}/reset?re=${user.reset_token}`
+    const resetUrl = `http://${Env.get('DOMAIN')}/reset?re=${user.reset_token}`
     yield Mail.raw('', message => {
       message.to(email, email)
       message.from('no-reply@backportal.com')

@@ -2,20 +2,23 @@
   <section>
     <div class="columns">
       <div class="column is-12">
-        <div class="columns">
-          <div class="column is-2 is-offset-2">
+        <div class="columns title-div">
+          <div class="column is-1 is-offset-2">
           </div>
-          <div class="column is-2">
+          <div class="column is-3">
             Description
           </div>
           <div class="column is-2">
             Option
           </div>
           <div class="column is-1">
-            Price
+            Unit Price
           </div>
           <div class="column is-1">
             Quantity
+          </div>
+          <div class="column is-1">
+            Price
           </div>
           <div class="column is-2">
             Action
@@ -24,29 +27,28 @@
       </div>
     </div>
     <div class="columns" v-for="(item, ind) in list">
-      <div class="column is-12">
+      <div class="column is-12 title-div">
         <div class="columns">
-          <div class="column is-2 is-offset-2">
-            <img :src="`/item_image/${item.image}`"  alt="" style="max-width: 150px;height: 150px;">
+          <div class="column is-2 is-offset-1">
+            <img :src="`/item_image/${item.image}`"  alt="" class="cartImg">
           </div>
-          <div class="column is-2 shopitem">
+          <div class="column is-3 shopitem">
             <span>{{item.description}}</span>
           </div>
           <div class="column is-2">
-            <div v-if="item.optionVal.length" class="column is-2 shopitemoption">
-              <ul>
-              <li v-for="(optionAll, index) in item.optionVal">
-                  <span>{{optionAll.option}} ({{optionAll.quantity}} pcs)</span><br>
-                </li>
-              </ul>
-            </div>
+            <div v-if="item.optionVal" class="shopitemoption"> 
+                <span>{{item.optionVal}}</span><br>
+             </div>
             <div v-else class="shopitem"><span>NA</span></div>
           </div>
           <div class="column is-1 shopitem">
-            <span>${{item.order_price}}</span>
+            <span>${{item.price}}</span>
           </div>
           <div class="column is-1 shopitem">
-            <span>{{item.order_quantity}}</span>
+            <span><input class="input" type="number" min="1" v-bind:value="item.order_quantity" v-model="item.order_quantity" @change="updateCart(item, ind)"></span>
+          </div> 
+          <div class="column is-1 shopitem">
+            <span>${{item.order_price}}</span>
           </div>
           <div class="column is-2">
             <section v-show="confirmation === false" class="shopitems">
@@ -84,21 +86,22 @@
       <div class="modal-content">
         <div class="box">
           <h1 class="title">Pay Via Credit Card</h1>
-          <div class="box">
+           <div class="box">
             <div class="columns invoice-label">
               <div class="column is-6">
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Amount</span>
+                      <span>Credit Card No</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span></span>
+                      <span><input class="input" type="text" v-model="card.card_no" placeholder="Credit Card No"></span>
                     </div>
                   </div>
                 </nav><br>
+                
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
@@ -107,22 +110,12 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" v-model="card.exp_date" type="text" placeholder="Date"></span>
+                      <span><input size="5" class="input is-2" v-model="card.exp_month" type="text" placeholder="Month"></span>&nbsp;&nbsp;&nbsp;
+                      <span><input size="5" class="input is-2" v-model="card.exp_year" type="text" placeholder="Year"></span>                      
                     </div>
                   </div>
                 </nav><br>
-                <nav class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      <span>Tax</span><br>
-                    </div>
-                  </div><br>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <span><input class="input" v-model="card.tax" type="text"></span><br>
-                    </div>
-                  </div>
-                </nav><br>
+               
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
@@ -233,27 +226,27 @@
 
               </div>
               <div class="column is-6">
-                <nav class="level">
+                <!--<nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>${{total}}</span>
+                      <span>Shipping</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span></span>
+                      <span>${{parseFloat(!shipping?0:shipping)}}</span>
                     </div>
                   </div>
-                </nav><br>
+                </nav><br>-->
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span>Credit Card No</span>
+                      <span>Amount</span>
                     </div>
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" type="Number" v-model="card.card_no" placeholder="Credit Card No"></span>
+                      <span>${{ total }}</span>
                     </div>
                   </div>
                 </nav><br>
@@ -265,10 +258,12 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
-                      <span><input class="input" v-model="card.card_code" type="number" placeholder="Credit Card Code"></span>
+                      <span><input class="input" v-model="card.card_code" type="text" placeholder="Credit Card Code"></span>
                     </div>
                   </div>
                 </nav><br>
+                
+               
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
@@ -277,9 +272,22 @@
                   </div>
                   <div class="level-right">
                     <div class="level-item">
+                     <span><b>Same as billing</b> &nbsp;&nbsp;&nbsp;<input class="" @click="copyBillingToShip" type="checkbox"></span><br>
                     </div>
                   </div>
                 </nav><br>
+                <!--<nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span><b>Copy billing</b></span>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                     <span><input class="" @click="copyBillingToShip" type="checkbox"></span><br>
+                    </div>
+                  </div>
+                </nav><br>-->
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
@@ -380,6 +388,7 @@
               </div>
             </div>
           </div>
+         
           <div class="level">
             <div class="level-left is-6">
 
@@ -399,25 +408,31 @@
   .float-right {
     text-align: right;
   }
-  .shopitemoption span {
-    margin-top: 4%;
-    position: absolute;
-  }
-  .shopitem span {
-    margin-top: 5%;
-    position: absolute;
-  }
-  .shopitems a {
-    margin-top: 53px;
-    margin-right: 5px;
-  }
-  .shopitem a {
-    margin-top: 4%;
-    position: absolute;
-  }
   .block a {
     margin-right: 10px;
   }
+  .shopitem span {
+    top: 30%;
+  }
+  .shopitem input {
+    width: 50px;
+  }
+  .title-div {
+    margin-bottom: 45px;
+  }
+  .cartImg {
+    max-width: 150px;
+    height: 150px;
+    margin-top:-45px
+  }
+  @media only screen and (max-width: 992px) {
+  .cartImg {
+      max-width: 100px;
+      height: 100px;
+      margin-top:-25px
+    }
+  }
+
 </style>
 <script>
 
@@ -432,14 +447,16 @@ export default {
     store.commit('SET_HEAD', ['Cart', 'Finalize Purchase'])
     let {data} = await axios.get('store/cart')
     return {
-      list: data.items?data.items:'',
+      list: data.items ? data.items : '',
       cart_id: data._id,
       isCreditOff: false,
       confirmation: false,
       card: {
-        card_no:'',
+        card_no:'4242424242424242',
         tax:'',
         exp_date:'',
+        exp_month:'08',
+        exp_year:'22',
         ship_first_name:'',
         ship_last_name:'',
         ship_company:'',
@@ -497,10 +514,39 @@ export default {
       return this.$toasted.show('Successfully deleted', { duration: 4500 })
     },
     async payment () {
+       this.card.exp_date = this.card.exp_month + this.card.exp_year
+       console.log(this.card)
        const card = await this.axios.post(`storeinfo/payment`, { id: this.cart_id, card:this.card })
+       if(card.statusText ==='OK'){
+         this.$store.commit('SET_CART_ITEM',0)
+         this.$toasted.show('Successfully purchased', { duration: 4500 })
+       }else{
+         this.$toasted.show('There is an error', { duration: 4500 })
+       }
        this.$router.push(`/dashboard`)
       //  const card = await this.axios.post('storeinfo/payment/cart_id')
       //  this.card._id = this.cart_id
+    },
+    async updateCart (item, ind){
+      self = this
+      item.order_price = item.price * parseInt(item.order_quantity)
+      item.order_price.toFixed(2)
+      // let updateQuantity  = await this.axios.post(`storeinfo/updateCart/${item._id}`,{objectId: this.cart_id, order_quantity: item.order_quantity})
+      let {chk}  = await this.axios.post(`storeinfo/updateCart/${self.cart_id}`,{items: self.list})
+      
+      return this.$toasted.show('Successfully updated to cart', { duration: 4500 })
+      console.log(chk)
+    },
+    copyBillingToShip() {
+    
+        this.card.ship_first_name = this.card.bill_first_name
+        this.card.ship_last_name = this.card.bill_last_name
+        this.card.ship_company = this.card.bill_company
+        this.card.ship_address = this.card.bill_address
+        this.card.ship_city = this.card.bill_city
+        this.card.ship_state = this.card.bill_state
+        this.card.ship_zip = this.card.bill_zip
+        this.card.ship_country = this.card.bill_country
     }
   }
 

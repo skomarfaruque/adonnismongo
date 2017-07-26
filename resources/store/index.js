@@ -65,7 +65,7 @@ export const actions = {
     cookie.set('backend-app', '{}')
   },
   forgotpassword ({ commit }, { email }) {
-    return axios.post('api/user/forgotpassword', {
+    return axios.post(`${process.env.baseUrl}/api/user/forgot-password`, {
       email
     })
     .then((res) => {

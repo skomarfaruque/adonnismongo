@@ -19,8 +19,8 @@
             <p class="title">Admin</p>
             <p class="subtitle">Manage administrative tasks.</p>
           </nuxt-link>
-          <nuxt-link class="tile is-child notification is-info" to="/supplies" v-if="isSupply">
-            <p class="title">Supplies</p>
+          <nuxt-link class="tile is-child notification is-info" to="/supplies" v-if="isAdmin">
+            <p class="title">Purchasable Goods</p>
             <p class="subtitle">View all your supply items.</p>
           </nuxt-link>
           <nuxt-link class="tile is-child notification is-info" to="/storeinfo" v-if="isAdmin">
@@ -32,12 +32,8 @@
             <p class="subtitle">View all store items.</p>
           </nuxt-link>
           <nuxt-link class="tile is-child notification is-info" to="/invoice?agentId=me" v-if="isInvoice && usertype ==='Agent'">
-            <p class="title">Invoice</p>
-            <p class="subtitle">Create and print invoices.</p>
-          </nuxt-link>
-          <nuxt-link class="tile is-child notification is-info" to="/invoice/agentall" v-if="isInvoice && usertype ==='Admin'">
-            <p class="title">Invoice</p>
-            <p class="subtitle">Show agents report.</p>
+            <p class="title">Commission</p>
+            <p class="subtitle">Create and print Commission.</p>
           </nuxt-link>
           <nuxt-link class="tile is-child notification is-info" to="/discountcode" v-if="usertype ==='Admin'">
             <p class="title">Discount</p>
