@@ -107,7 +107,7 @@ class UserController {
     date.setDate(date.getDate() + 7)
     user.reset_exp = date
     yield user.save()
-    const resetUrl = `http://${Env.get('DOMAIN')}/reset?re=${user.reset_token}`
+    const resetUrl = `http://${Env.get('DOMAIN')}/user/passwordreset?re=${user.reset_token}`
     yield Mail.raw('', message => {
       message.to(email, email)
       message.from('no-reply@backportal.com')
