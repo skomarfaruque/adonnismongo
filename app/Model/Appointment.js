@@ -15,6 +15,7 @@ const scheduleSchema = mongoose.Schema({
   end_time: Date,
   description: String,
   comment: String,
+  grouponcode: String,
   /**
    * 0: Not Started, 1: Started, 2: Paused, 3: Stopped
    */
