@@ -70,9 +70,9 @@
         if(data.success === 'success'){
           data.success = 'Your password has been changed.Please login'
         }
-        await this.$toasted.show(data.success, { duration: 4500 })
+        this.$toasted.show(data.success, { duration: 4500 })
         if(this.confirmed === 'success'){
-          this.$router.push('/')
+          setTimeout(function(){ this.$router.push('/') }, 4000)
         }
       }
     }
