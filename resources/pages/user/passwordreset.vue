@@ -47,7 +47,7 @@
     layout: 'header-less',
     asyncData ({ axios, query }) {
       return {
-        re: query.re,
+        token: query.re,
         password: '',
         repass: '',
         confirmed:  false
