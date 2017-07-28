@@ -67,6 +67,7 @@
       async sendConfirmation () {
         let { data } = await this.axios.post('user/reset-password', { re: this.token, password: this.password })
         this.confirmed = data.success
+        return this.$toasted.show(data.success, { duration: 4500 })
       }
     }
   }
