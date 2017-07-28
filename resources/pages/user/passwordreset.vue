@@ -67,7 +67,13 @@
       async sendConfirmation () {
         let { data } = await this.axios.post('user/reset-password', { re: this.token, password: this.password })
         this.confirmed = data.success
-        return this.$toasted.show(data.success, { duration: 4500 })
+        if(data.success === 'success'){
+          data.success = 'Your password has been changed.Please login'
+        }
+        await this.$toasted.show(data.success, { duration: 4500 })
+        if(this.confirmed === 'success'){
+          this.$router.push('/')
+        }
       }
     }
   }
