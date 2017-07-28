@@ -136,7 +136,7 @@ class UserController {
     user.reset_exp = null
     user.save()
 
-    return res.send({ success: true })
+    return res.send({ success: 'Your password has been changed.Please login'})
   }
   /**
    * Assign a role to the user
