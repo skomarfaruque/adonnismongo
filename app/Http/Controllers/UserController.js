@@ -134,7 +134,7 @@ class UserController {
     user.password = newPassword
     user.reset_token = ''
     user.reset_exp = null
-    yield user.save()
+    user.save()
 
     return res.send({ success: true })
   }
