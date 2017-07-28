@@ -39,7 +39,7 @@ const userSchema = mongoose.Schema({
 
 userSchema.pre('save', async function (next) {
   if (this.password) {
-    this.password = await Hash.make(this.password)
+    // this.password = await Hash.make(this.password)
   }
   return next(true)
 })
