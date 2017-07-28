@@ -134,7 +134,7 @@ class UserController {
     user.password = newPassword
     user.reset_token = ''
     user.reset_exp = null
-    yield user.save()
+    user.save()
 
     return res.send({ success: true })
   }
@@ -147,7 +147,7 @@ class UserController {
     const role = yield Role.findOne({ name: roleName })
     const user = yield User.findOne({ email: userEmail })
     user.role = role
-    user.save()
+    yield user.save()
 
     res.send(user)
   }
