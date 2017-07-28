@@ -42,7 +42,7 @@ class UserController {
    */
   * login (req, res) {
     const email = req.input('email')
-    const password = req.input('password')
+    const password = yield Hash.make(req.input('password'))
     const token = yield req.auth.attempt(email, password)
 
     if (token) {
