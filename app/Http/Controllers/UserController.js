@@ -42,7 +42,7 @@ class UserController {
    */
   * login (req, res) {
     const email = req.input('email')
-    const password = yield Hash.make(req.input('password'))
+    const password = req.input('password')
     const token = yield req.auth.attempt(email, password)
 
     if (token) {
@@ -147,7 +147,7 @@ class UserController {
     const role = yield Role.findOne({ name: roleName })
     const user = yield User.findOne({ email: userEmail })
     user.role = role
-    yield user.save()
+    user.save()
 
     res.send(user)
   }
