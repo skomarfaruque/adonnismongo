@@ -52,6 +52,7 @@
         .then(() => {
           this.email = ''
           this.formError = null
+          return this.$toasted.show('Instruction has been sent to your email', { duration: 4500 })
           // this.$router.push('/')
         })
         .catch((e) => {
