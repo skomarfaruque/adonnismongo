@@ -36,11 +36,9 @@
             <span>{{item.description}}</span>
           </div>
           <div class="column is-2">
-            <div v-if="item.optionVal" class="shopitemoption">
-              
+            <div v-if="item.optionVal" class="shopitemoption"> 
                 <span>{{item.optionVal}}</span><br>
-              
-            </div>
+             </div>
             <div v-else class="shopitem"><span>NA</span></div>
           </div>
           <div class="column is-1 shopitem">

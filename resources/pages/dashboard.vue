@@ -35,6 +35,10 @@
             <p class="title">Commission</p>
             <p class="subtitle">Create and print Commission.</p>
           </nuxt-link>
+          <nuxt-link class="tile is-child notification is-info" to="/discountcode" v-if="usertype ==='Admin'">
+            <p class="title">Discount</p>
+            <p class="subtitle">Show discount code.</p>
+          </nuxt-link>
         </div>
 
       </div>

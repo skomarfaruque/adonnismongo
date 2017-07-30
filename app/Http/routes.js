@@ -65,6 +65,7 @@ Route.group('invoice', () => {
   Route.get('agent/:id', 'InvoiceController.getByAgent')
   Route.get('/info/all/:id', 'InvoiceController.getAllAgent')
   Route.post('/item-add', 'InvoiceController.addItem')
+  Route.post('/discountcode/info', 'InvoiceController.discountCodeInfo')
   Route.get('/get/all', 'InvoiceController.getInvoices')
   Route.post('/payment', 'InvoiceController.payment')
 }).prefix('api/invoice')
@@ -84,6 +85,11 @@ Route.group('storeinfo', () => {
   Route.get('store/cart', 'StoreinfoController.cartInfo')
   Route.post('storeinfo/removecartitem/:id', 'StoreinfoController.removecart')
   Route.post('storeinfo/payment', 'StoreinfoController.payment')
+}).prefix('api').middleware('auth')
+
+Route.group('discountcode', () => {
+  Route.resource('discountcode', 'DiscountcodeController').except('create', 'edit')
+  Route.get('discount/search', 'DiscountcodeController.search')
 }).prefix('api').middleware('auth')
 
 Route.any('*', 'NuxtController.render')

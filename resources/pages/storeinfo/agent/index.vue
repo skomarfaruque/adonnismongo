@@ -34,7 +34,6 @@
       <div class="zinfo">
         <b>Name:</b> {{ item.name }}<br>
         <b>Description:</b> {{ item.description }}<br>
-        <!--<span v-if="item.quantity > 0"><b>Available:</b> {{ item.quantity }}</span><span v-else>Out of stock</span><br>-->
         <b>Price:</b> ${{ item.price }}<br>
         <p class="" v-if="item.option">
           <span class="select">
@@ -81,7 +80,11 @@
   }
   .zinfo {
     background-color: #fff;
+<<<<<<< HEAD
+    z-index: 99999;
+=======
     z-index: 12;
+>>>>>>> master
     position: absolute;
     width: 100%;
   }

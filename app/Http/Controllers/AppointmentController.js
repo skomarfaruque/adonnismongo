@@ -44,6 +44,7 @@ class AppointmentController {
     let startDateTime = moment(start).format('MMMM Do YYYY h:mm A')
     const comment = req.input('comment')
     const description = req.input('description')
+    const grouponcode = req.input('grouponcode')
     const id = req.input('_id')
 
     const agent = yield User.findOne({ email: agentId }).exec()
@@ -56,10 +57,10 @@ class AppointmentController {
     }
     let appointment
     if (id) {
-      yield Appointment.update({ _id: id }, { customer, agent, start_time: start, description, comment })
+      yield Appointment.update({ _id: id }, { customer, agent, start_time: start, description, comment, grouponcode })
       appointment = yield Appointment.findOne({ _id: id }).populate('customer').exec()
     } else {
-      appointment = yield Appointment.create({ customer, agent, start_time: start, description, comment })
+      appointment = yield Appointment.create({ customer, agent, grouponcode, start_time: start, description, comment })
       yield Mail.raw('', message => {
         message.to(agentId, agentId)
         message.from('no-reply@backportal.com')

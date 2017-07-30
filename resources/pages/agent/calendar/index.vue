@@ -192,6 +192,14 @@
             </div>
             <div class="columns">
               <div class="column is-2">
+                <label class="label">Groupon</label>
+              </div>
+              <div class="column is-10">
+                <input class="input" type="text" placeholder="Groupon code" v-model="grouponcode">
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column is-2">
                 <label class="label">Comment</label>
               </div>
               <div class="column is-10">
@@ -373,6 +381,7 @@
         events: event.data,
         isFinished: false,
         comment: '',
+        grouponcode: '',
         blockDays: blockDays.data,
         title: 'Scanning Session',
         email: agent.data.email,
@@ -627,7 +636,7 @@
         const startMinute = helper.convertTimetoInt(this.block_time.work_start_time)
         ev.start_date.setHours(0, 0, 0)
         ev.start_date.setMinutes(startMinute)
-        const obj = { _id: ev._id, agent: this.email, description: this.title, customer: this.customer, start: ev.start_date, comment: this.comment}
+        const obj = { _id: ev._id, agent: this.email, description: this.title, grouponcode: this.grouponcode,  customer: this.customer, start: ev.start_date, comment: this.comment}
         let { data } = await this.axios.post('appointment', obj)
         this.processing = false// processing image loading deactive
         ev.customer = data.customer

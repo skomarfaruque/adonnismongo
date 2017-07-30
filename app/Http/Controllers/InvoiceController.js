@@ -9,9 +9,19 @@ const path = require('path')
 const Helpers = use('Helpers')
 const publicPath = Helpers.publicPath()
 const Appointment = use('App/Model/Appointment')
+const Discountcode = use('App/Model/Discountcode')
 const Mail = use('Mail')
 use('App/Model/User')
 use('App/Model/Customer')
+// ups api
+var upsAPI = require('shipping-ups')
+var ups = new upsAPI({
+  environment: 'sandbox', // or live
+  username: 'UPSUSERNAME',
+  password: 'UPSPASSWORD',
+  access_key: 'UPSACCESSTOKEN',
+  imperial: true // set to false for metric
+})
 
 class InvoiceController {
 
@@ -24,6 +34,11 @@ class InvoiceController {
     const id = req.param('id')
     const invoice = yield Appointment.findOne({ _id: id }).populate('agent', 'name email').populate('customer', 'name email phone address1 address2 city state zipCode').exec()
     res.ok(invoice)
+  }
+  * discountCodeInfo (req, res) {
+    const discountCode = req.input('discount_code')
+    const discountInfo = yield Discountcode.findOne({ discount_code: discountCode }).exec()
+    res.ok(discountInfo)
   }
 
   * getByAgent (req, res) {
