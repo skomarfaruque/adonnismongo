@@ -31,9 +31,9 @@
             <th>
               Email
             </th>
-            <th>
+            <!--<th>
               Zip Code
-            </th>
+            </th>-->
             <th>
               City
             </th>
@@ -46,7 +46,7 @@
           <tr v-for="(item, ind) in list">
             <td>{{ item.name }}</td>
             <td>{{ item.email }}</td>
-            <td>{{ item.zipCode }}</td>
+            <!--<td>{{ item.zipCode }}</td>-->
             <td>{{ item.city }}</td>
             <td class="action">
               <section v-show="confirmation === false">
