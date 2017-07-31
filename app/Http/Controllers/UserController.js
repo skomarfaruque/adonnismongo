@@ -98,15 +98,14 @@ class UserController {
    */
   * forgotPassword (req, res) {
     const email = req.input('email')
-    const user = yield User.findOne({ email })
+    let date = new Date()
+    let resetToken = yield Hash.make(date.toISOString())
+    date.setDate(date.getDate() + 7)
+    let resetExp = date
+    const user = yield User.findOneAndUpdate({email: email}, {$set: {reset_token: resetToken, reset_exp: resetExp}}).exec()
     if (!user) {
       return res.send('Email!')
     }
-    let date = new Date()
-    user.reset_token = yield Hash.make(date.toISOString())
-    date.setDate(date.getDate() + 7)
-    user.reset_exp = date
-    yield user.save()
     const resetUrl = `http://${Env.get('DOMAIN')}/user/passwordreset?re=${user.reset_token}`
     yield Mail.raw('', message => {
       message.to(email, email)
