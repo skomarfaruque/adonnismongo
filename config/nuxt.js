@@ -42,6 +42,10 @@ module.exports = {
       },
       {
         rel: 'stylesheet',
+        href: '/balloon.min.css'
+      },
+      {
+        rel: 'stylesheet',
         href: '/calendar/dhtmlxscheduler.css'
       }
     ],

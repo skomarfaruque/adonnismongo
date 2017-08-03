@@ -46,7 +46,7 @@
           <tr v-for="(item, ind) in list">
             <td>{{ item.name }}</td>
             <td>{{ item.email }}</td>
-            <td>{{ item.city }}</td>
+            <td><a :data-balloon="item.city" data-balloon-pos="up">{{ item.city | truncate(20) }}</a></td>
             <!--<td>{{ item.zipCode.join(', ') }}</td>-->
             <td class="action">
               <section v-show="confirmation === false">
@@ -93,6 +93,13 @@
     data () {
       return {
         axios: this.$root.$options.axios
+      }
+    },
+    filters: {
+      truncate (string, value) {
+        if (!string)
+          return ''
+        return string.substring(0, value) + '...';
       }
     },
     destroyed () {
