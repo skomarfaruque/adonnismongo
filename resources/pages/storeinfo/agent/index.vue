@@ -58,6 +58,7 @@
   .rsizeimg {
     height: 150px;
     z-index: 1;
+    overflow: hidden;
   }
   .storeitem {
     border-radius: 2px;
@@ -80,11 +81,7 @@
   }
   .zinfo {
     background-color: #fff;
-<<<<<<< HEAD
     z-index: 99999;
-=======
-    z-index: 12;
->>>>>>> master
     position: absolute;
     width: 100%;
   }
