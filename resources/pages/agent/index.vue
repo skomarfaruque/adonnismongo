@@ -34,9 +34,9 @@
             <th>
               City
             </th>
-            <th>
+            <!--<th>
               Zip Code
-            </th>
+            </th>-->
             <th>
               Action
             </th>
@@ -47,7 +47,7 @@
             <td>{{ item.name }}</td>
             <td>{{ item.email }}</td>
             <td>{{ item.city }}</td>
-            <td>{{ item.zipCode.join(', ') }}</td>
+            <!--<td>{{ item.zipCode.join(', ') }}</td>-->
             <td class="action">
               <section v-show="confirmation === false">
                 <a v-show="usertype ==='Admin'" href="javascript:" class="button is-danger" @click="confirmation = true" title="Delete"> <i class="fa fa-trash"></i> </a>

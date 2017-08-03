@@ -46,12 +46,14 @@
     },
     methods: {
       submit () {
+        var self = this
         this.$store.dispatch('forgotpassword', {
           email: this.email
         })
         .then(() => {
           this.email = ''
           this.formError = null
+          self.$toasted.show('Instruction has been sent to your email', { duration: 4500 })
           // this.$router.push('/')
         })
         .catch((e) => {

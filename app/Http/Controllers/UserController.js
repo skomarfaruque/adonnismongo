@@ -98,16 +98,15 @@ class UserController {
    */
   * forgotPassword (req, res) {
     const email = req.input('email')
-    const user = yield User.findOne({ email })
+    let date = new Date()
+    let resetToken = yield Hash.make(date.toISOString())
+    date.setDate(date.getDate() + 7)
+    let resetExp = date
+    const user = yield User.findOneAndUpdate({email: email}, {$set: {reset_token: resetToken, reset_exp: resetExp}}).exec()
     if (!user) {
       return res.send('Email!')
     }
-    let date = new Date()
-    user.reset_token = yield Hash.make(date.toISOString())
-    date.setDate(date.getDate() + 7)
-    user.reset_exp = date
-    yield user.save()
-    const resetUrl = `http://${Env.get('DOMAIN')}/reset?re=${user.reset_token}`
+    const resetUrl = `http://${Env.get('DOMAIN')}/user/passwordreset?re=${user.reset_token}`
     yield Mail.raw('', message => {
       message.to(email, email)
       message.from('no-reply@backportal.com')
@@ -126,17 +125,17 @@ class UserController {
     const user = yield User.findOne({ reset_token: resetToken })
 
     if (!user) {
-      return res.send('Wrong url!')
+      return res.send({ success: 'Wrong url!' })
     }
     if (user.reset_exp < new Date()) {
-      return res.send('Reset link expired!')
+      return res.send({ success: 'Reset link expired!' })
     }
     user.password = newPassword
     user.reset_token = ''
     user.reset_exp = null
-    yield user.save()
+    user.save()
 
-    return res.send({ success: true })
+    return res.send({success: 'success'})
   }
   /**
    * Assign a role to the user
