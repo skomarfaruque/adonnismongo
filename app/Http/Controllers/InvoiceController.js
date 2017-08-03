@@ -14,14 +14,14 @@ const Mail = use('Mail')
 use('App/Model/User')
 use('App/Model/Customer')
 // ups api
-var upsAPI = require('shipping-ups')
-var ups = new upsAPI({
-  environment: 'sandbox', // or live
-  username: 'UPSUSERNAME',
-  password: 'UPSPASSWORD',
-  access_key: 'UPSACCESSTOKEN',
-  imperial: true // set to false for metric
-})
+// var upsAPI = require('shipping-ups')
+// var ups = new upsAPI({
+//   environment: 'sandbox', // or live
+//   username: 'UPSUSERNAME',
+//   password: 'UPSPASSWORD',
+//   access_key: 'UPSACCESSTOKEN',
+//   imperial: true // set to false for metric
+// })
 
 class InvoiceController {
 
