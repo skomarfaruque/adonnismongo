@@ -56,6 +56,12 @@ class DatabaseSeeder {
       role: roles[0]
     })
     yield user.create({
+      name: 'Admin',
+      email: 'crystal@phostorian.com',
+      password: '123456',
+      role: roles[0]
+    })
+    yield user.create({
       name: 'Staff',
       email: 'staff@email.com',
       password: '123456',
