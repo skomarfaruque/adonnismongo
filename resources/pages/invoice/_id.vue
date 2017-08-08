@@ -556,7 +556,7 @@
       <div class="modal-background"></div>
       <div class="modal-content">
         <div class="box">
-          <h1 class="title">Pay Via Credit Card</h1>{{card.exp_date}}
+          <h1 class="title">Pay Via Credit Card</h1>
           <div class="box">
             <div class="columns invoice-label">
               <div class="column is-6">

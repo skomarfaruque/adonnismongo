@@ -516,12 +516,13 @@ export default {
     async payment () {
        this.card.exp_date = this.card.exp_month + this.card.exp_year
        const card = await this.axios.post(`storeinfo/payment`, { id: this.cart_id, card:this.card })
-       if(card.error === 'no'){
+       if(card.data.error === 'no'){
          this.$store.commit('SET_CART_ITEM',0)
-         this.$toasted.show(card.invoiceinfo.description, { duration: 4500 })
+         this.$toasted.show('Payment is successfull', { duration: 4500 })
          this.$router.push(`/dashboard`)
        }else{
-         return this.$toasted.show(card.error, { duration: 4500 })
+         let error = card.error
+         this.$toasted.show(card.data.error, { duration: 4500 })
        }
     },
     async updateCart (item, ind){

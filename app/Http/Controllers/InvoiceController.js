@@ -160,16 +160,16 @@ class InvoiceController {
   * newFunc (res, invoiceInfo, paymentDescription, paymentTypeApp, discount, shippingAmount, tax) {
     var errorInfo = 'no'
     var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
-    merchantAuthenticationType.setName('2Hj65WGkT')
-    merchantAuthenticationType.setTransactionKey('5V8t4sR7Bq3yP39z')
+    merchantAuthenticationType.setName('3x2uZZ6s')
+    merchantAuthenticationType.setTransactionKey('79p7Ax97XLe7hLf2')
 
     var creditCard = new ApiContracts.CreditCardType()
-    creditCard.setCardNumber('4242424242424242')
-    creditCard.setExpirationDate('0822')
-    creditCard.setCardCode('999')
-    // creditCard.setCardNumber(paymentDescription.card_no)
-    // creditCard.setExpirationDate(paymentDescription.exp_date)
-    // creditCard.setCardCode(paymentDescription.card_code)
+    // creditCard.setCardNumber('4242424242424242')
+    // creditCard.setExpirationDate('0822')
+    // creditCard.setCardCode('999')
+    creditCard.setCardNumber(paymentDescription.card_no)
+    creditCard.setExpirationDate(paymentDescription.exp_date)
+    creditCard.setCardCode(paymentDescription.card_code)
 
     var paymentType = new ApiContracts.PaymentType()
     paymentType.setCreditCard(creditCard)
@@ -251,8 +251,8 @@ class InvoiceController {
     createRequest.setMerchantAuthentication(merchantAuthenticationType)
     createRequest.setTransactionRequest(transactionRequestType)
     var ctrl = new ApiControllers.CreateTransactionController(createRequest.getJSON())
-    ctrl.setEnvironment('https://apitest.authorize.net/xml/v1/request.api') // sandbox
-    // ctrl.setEnvironment('https://api.authorize.net/xml/v1/request.api') // production
+    // ctrl.setEnvironment('https://apitest.authorize.net/xml/v1/request.api') // sandbox
+    ctrl.setEnvironment('https://api.authorize.net/xml/v1/request.api') // production
     ctrl.execute(function () {
       var apiResponse = ctrl.getResponse()
       var response = new ApiContracts.CreateTransactionResponse(apiResponse)
