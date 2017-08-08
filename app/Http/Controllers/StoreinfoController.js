@@ -1,5 +1,6 @@
 'use strict'
-
+var ApiContracts = require('authorizenet').APIContracts
+var ApiControllers = require('authorizenet').APIControllers
 const Storeinfo = use('App/Model/Storeinfo')
 const Cart = use('App/Model/Cart')
 const Helpers = use('Helpers')
@@ -9,7 +10,7 @@ class StoreinfoController {
   * index (req, res) {
     const stores = yield Storeinfo.find().exec()
     res.send(stores)
-  } 
+  }
   * cartInfo (req, res) {
     const cartinfo = yield Cart.findOne({agentId: req.currentUser._id, is_paid: false}).exec()
     res.send(cartinfo)
@@ -137,8 +138,133 @@ class StoreinfoController {
     const cartsId = req.input('id')
     const card = req.input('card')
     const date = new Date()
-    yield Cart.update({ _id: cartsId }, { payment: card, is_paid: true, paymentDate: date})
-    res.send('cart payment add')
+    let invoiceInfo = {description: 'Item has been purchased successfully.'}
+    return yield this.newFunc(res, invoiceInfo, cartsId, card, date)
+  }
+  * newFunc (res, invoiceInfo, cartsId, card, date) {
+    var errorInfo = 'no'
+    var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
+    merchantAuthenticationType.setName('2Hj65WGkT')
+    merchantAuthenticationType.setTransactionKey('5V8t4sR7Bq3yP39z')
+
+    var creditCard = new ApiContracts.CreditCardType()
+    creditCard.setCardNumber('4012888818888')
+    creditCard.setExpirationDate('0822')
+    creditCard.setCardCode('999')
+    // creditCard.setCardNumber(card.card_no)
+    // creditCard.setExpirationDate(card.exp_date)
+    // creditCard.setCardCode(card.card_code)
+
+    var paymentType = new ApiContracts.PaymentType()
+    paymentType.setCreditCard(creditCard)
+
+    var orderDetails = new ApiContracts.OrderType()
+    orderDetails.setInvoiceNumber('demo id')
+    orderDetails.setDescription(invoiceInfo.description)
+    var shipping = new ApiContracts.ExtendedAmountType()
+    shipping.setAmount('1')
+    shipping.setName('shipping name')
+    shipping.setDescription(invoiceInfo.description)
+
+    var billTo = new ApiContracts.CustomerAddressType()
+    billTo.setFirstName(card.bill_first_name)
+    billTo.setLastName(card.bill_last_name)
+    billTo.setCompany(card.bill_company)
+    billTo.setAddress(card.bill_address)
+    billTo.setCity(card.bill_city)
+    billTo.setState(card.bill_state)
+    billTo.setZip(card.bill_zip)
+    billTo.setCountry(card.bill_country)
+
+    var shipTo = new ApiContracts.CustomerAddressType()
+    shipTo.setFirstName(card.ship_first_name)
+    shipTo.setLastName(card.ship_last_name)
+    shipTo.setCompany(card.ship_company)
+    shipTo.setAddress(card.ship_address)
+    shipTo.setCity(card.ship_city)
+    shipTo.setState(card.ship_state)
+    shipTo.setZip(card.ship_zip)
+    shipTo.setCountry(card.ship_ountry)
+
+    var lineItemId1 = new ApiContracts.LineItemType()
+    lineItemId1.setItemId('1')
+    lineItemId1.setName('vase')
+    lineItemId1.setDescription('cannes logo')
+    lineItemId1.setQuantity('18')
+    lineItemId1.setUnitPrice(45.00)
+
+    var lineItemId2 = new ApiContracts.LineItemType()
+    lineItemId2.setItemId('2')
+    lineItemId2.setName('vase2')
+    lineItemId2.setDescription('cannes logo2')
+    lineItemId2.setQuantity('28')
+    lineItemId2.setUnitPrice('25.00')
+
+    var lineItemList = []
+    lineItemList.push(lineItemId1)
+    lineItemList.push(lineItemId2)
+
+    var lineItems = new ApiContracts.ArrayOfLineItem()
+    lineItems.setLineItem(lineItemList)
+
+    var userFieldA = new ApiContracts.UserField()
+    userFieldA.setName('A')
+    userFieldA.setValue('Aval')
+
+    var userFieldB = new ApiContracts.UserField()
+    userFieldB.setName('B')
+    userFieldB.setValue('Bval')
+
+    var userFieldList = []
+    userFieldList.push(userFieldA)
+    userFieldList.push(userFieldB)
+
+    var userFields = new ApiContracts.TransactionRequestType.UserFields()
+    userFields.setUserField(userFieldList)
+    var transactionRequestType = new ApiContracts.TransactionRequestType()
+    transactionRequestType.setTransactionType(ApiContracts.TransactionTypeEnum.AUTHONLYTRANSACTION)
+    transactionRequestType.setPayment(paymentType)
+    transactionRequestType.setAmount(1)
+    transactionRequestType.setLineItems(lineItems)
+    transactionRequestType.setUserFields(userFields)
+    transactionRequestType.setOrder(orderDetails)
+    transactionRequestType.setShipping(shipping)
+    transactionRequestType.setBillTo(billTo)
+    transactionRequestType.setShipTo(shipTo)
+    var createRequest = new ApiContracts.CreateTransactionRequest()
+    createRequest.setMerchantAuthentication(merchantAuthenticationType)
+    createRequest.setTransactionRequest(transactionRequestType)
+    var ctrl = new ApiControllers.CreateTransactionController(createRequest.getJSON())
+    ctrl.setEnvironment('https://apitest.authorize.net/xml/v1/request.api') // sandbox
+    // ctrl.setEnvironment('https://api.authorize.net/xml/v1/request.api') // production
+    ctrl.execute(function () {
+      var apiResponse = ctrl.getResponse()
+      var response = new ApiContracts.CreateTransactionResponse(apiResponse)
+      console.log(response)
+      if (response != null) {
+        if (response.getMessages().getResultCode() === ApiContracts.MessageTypeEnum.OK) {
+          if (response.getTransactionResponse().getMessages() != null) {
+            Cart.update({ _id: cartsId }, { payment: card, is_paid: true, paymentDate: date })
+            res.send({invoiceinfo: invoiceInfo, error: errorInfo})
+          } else {
+            if (response.getTransactionResponse().getErrors() != null) {
+              errorInfo = response.getTransactionResponse().getErrors().getError()[0].getErrorText()
+              res.send({invoiceinfo: invoiceInfo, error: errorInfo})
+            }
+          }
+        } else {
+          if (response.getTransactionResponse() != null && response.getTransactionResponse().getErrors() != null) {
+            errorInfo = response.getTransactionResponse().getErrors().getError()[0].getErrorText()
+            res.send({invoiceinfo: invoiceInfo, error: errorInfo})
+          } else {
+            errorInfo = response.getMessages().getMessage()[0].getText()
+            res.send({invoiceinfo: invoiceInfo, error: errorInfo})
+          }
+        }
+      } else {
+        console.log('Null Response.')
+      }
+    })
   }
 
   * import (req, res) {

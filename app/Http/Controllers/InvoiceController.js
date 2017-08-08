@@ -160,16 +160,16 @@ class InvoiceController {
   * newFunc (res, invoiceInfo, paymentDescription, paymentTypeApp, discount, shippingAmount, tax) {
     var errorInfo = 'no'
     var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
-    merchantAuthenticationType.setName('44ZAqX44dc')
-    merchantAuthenticationType.setTransactionKey('4G9CH39r9f2LgJ3V')
+    merchantAuthenticationType.setName('2Hj65WGkT')
+    merchantAuthenticationType.setTransactionKey('5V8t4sR7Bq3yP39z')
 
     var creditCard = new ApiContracts.CreditCardType()
-    // creditCard.setCardNumber('4242424242424242')
-    // creditCard.setExpirationDate('0822')
-    // creditCard.setCardCode('999')
-    creditCard.setCardNumber(paymentDescription.card_no)
-    creditCard.setExpirationDate(paymentDescription.exp_date)
-    creditCard.setCardCode(paymentDescription.card_code)
+    creditCard.setCardNumber('4242424242424242')
+    creditCard.setExpirationDate('0822')
+    creditCard.setCardCode('999')
+    // creditCard.setCardNumber(paymentDescription.card_no)
+    // creditCard.setExpirationDate(paymentDescription.exp_date)
+    // creditCard.setCardCode(paymentDescription.card_code)
 
     var paymentType = new ApiContracts.PaymentType()
     paymentType.setCreditCard(creditCard)
@@ -177,17 +177,6 @@ class InvoiceController {
     var orderDetails = new ApiContracts.OrderType()
     orderDetails.setInvoiceNumber('demo id')
     orderDetails.setDescription(invoiceInfo.description)
-
-    // var tax = new ApiContracts.ExtendedAmountType();
-    // tax.setAmount('4.26');
-    // tax.setName('level2 tax name');
-    // tax.setDescription('level2 tax');
-
-    // var duty = new ApiContracts.ExtendedAmountType();
-    // duty.setAmount('8.55');
-    // duty.setName('duty name');
-    // duty.setDescription('duty description');
-
     var shipping = new ApiContracts.ExtendedAmountType()
     shipping.setAmount('1')
     shipping.setName('shipping name')
@@ -248,22 +237,6 @@ class InvoiceController {
 
     var userFields = new ApiContracts.TransactionRequestType.UserFields()
     userFields.setUserField(userFieldList)
-
-    // var transactionSetting1 = new ApiContracts.SettingType();
-    // transactionSetting1.setSettingName('testRequest');
-    // transactionSetting1.setSettingValue('s1val');
-
-    // var transactionSetting2 = new ApiContracts.SettingType();
-    // transactionSetting2.setSettingName('testRequest');
-    // transactionSetting2.setSettingValue('s2val');
-
-    // var transactionSettingList = [];
-    // transactionSettingList.push(transactionSetting1);
-    // transactionSettingList.push(transactionSetting2);
-
-    // var transactionSettings = new ApiContracts.ArrayOfSetting();
-    // transactionSettings.setSetting(transactionSettingList);
-
     var transactionRequestType = new ApiContracts.TransactionRequestType()
     transactionRequestType.setTransactionType(ApiContracts.TransactionTypeEnum.AUTHONLYTRANSACTION)
     transactionRequestType.setPayment(paymentType)
@@ -271,26 +244,21 @@ class InvoiceController {
     transactionRequestType.setLineItems(lineItems)
     transactionRequestType.setUserFields(userFields)
     transactionRequestType.setOrder(orderDetails)
-    // transactionRequestType.setTax(tax);
-    // transactionRequestType.setDuty(duty);
     transactionRequestType.setShipping(shipping)
     transactionRequestType.setBillTo(billTo)
     transactionRequestType.setShipTo(shipTo)
-    // transactionRequestType.setTransactionSettings(transactionSettings);
-
     var createRequest = new ApiContracts.CreateTransactionRequest()
     createRequest.setMerchantAuthentication(merchantAuthenticationType)
     createRequest.setTransactionRequest(transactionRequestType)
-
     var ctrl = new ApiControllers.CreateTransactionController(createRequest.getJSON())
-
+    ctrl.setEnvironment('https://apitest.authorize.net/xml/v1/request.api') // sandbox
+    // ctrl.setEnvironment('https://api.authorize.net/xml/v1/request.api') // production
     ctrl.execute(function () {
       var apiResponse = ctrl.getResponse()
       var response = new ApiContracts.CreateTransactionResponse(apiResponse)
       if (response != null) {
         if (response.getMessages().getResultCode() === ApiContracts.MessageTypeEnum.OK) {
           if (response.getTransactionResponse().getMessages() != null) {
-          //  console.log('success')
             Appointment.update({ _id: invoiceInfo._id }, { $set: { invoice_settled: true, payment_method: paymentTypeApp, payment_method_desc: paymentDescription, invoice_date: new Date(), invoice_comment: invoiceInfo.invoice_comment, discount: discount, shipping: shippingAmount, tax: tax } }).exec()
             let updatedInvoice = Appointment.findOne({ _id: invoiceInfo._id }).exec()
             res.send({invoiceinfo: updatedInvoice, error: errorInfo})
@@ -301,7 +269,6 @@ class InvoiceController {
             }
           }
         } else {
-          // console.log('Failed tran.')
           if (response.getTransactionResponse() != null && response.getTransactionResponse().getErrors() != null) {
             errorInfo = response.getTransactionResponse().getErrors().getError()[0].getErrorText()
             res.send({invoiceinfo: invoiceInfo, error: errorInfo})
