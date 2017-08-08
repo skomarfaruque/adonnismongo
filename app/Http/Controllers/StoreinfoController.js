@@ -145,18 +145,18 @@ class StoreinfoController {
   * newFunc (res, invoiceInfo, cartsId, card, date) {
     var errorInfo = 'no'
     var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
-    // merchantAuthenticationType.setName('3x2uZZ6s') // clients real info for production
-    // merchantAuthenticationType.setTransactionKey('79p7Ax97XLe7hLf2')
-    merchantAuthenticationType.setName('2Hj65WGkT') // sandbox info
-    merchantAuthenticationType.setTransactionKey('5V8t4sR7Bq3yP39z')
+    merchantAuthenticationType.setName('3x2uZZ6s') // clients real info for production
+    merchantAuthenticationType.setTransactionKey('79p7Ax97XLe7hLf2')
+    // merchantAuthenticationType.setName('2Hj65WGkT') // sandbox info
+    // merchantAuthenticationType.setTransactionKey('5V8t4sR7Bq3yP39z')
 
     var creditCard = new ApiContracts.CreditCardType()
-    creditCard.setCardNumber('4012888818888')
-    creditCard.setExpirationDate('0822')
-    creditCard.setCardCode('999')
-    // creditCard.setCardNumber(card.card_no)
-    // creditCard.setExpirationDate(card.exp_date)
-    // creditCard.setCardCode(card.card_code)
+    // creditCard.setCardNumber('4012888818888')
+    // creditCard.setExpirationDate('0822')
+    // creditCard.setCardCode('999')
+    creditCard.setCardNumber(card.card_no)
+    creditCard.setExpirationDate(card.exp_date)
+    creditCard.setCardCode(card.card_code)
 
     var paymentType = new ApiContracts.PaymentType()
     paymentType.setCreditCard(creditCard)
@@ -164,11 +164,6 @@ class StoreinfoController {
     var orderDetails = new ApiContracts.OrderType()
     // orderDetails.setInvoiceNumber('demo id')
     orderDetails.setDescription(invoiceInfo.description)
-    var shipping = new ApiContracts.ExtendedAmountType()
-    shipping.setAmount('1')
-    shipping.setName('shipping name')
-    shipping.setDescription(invoiceInfo.description)
-
     var billTo = new ApiContracts.CustomerAddressType()
     billTo.setFirstName(card.bill_first_name)
     billTo.setLastName(card.bill_last_name)
@@ -187,23 +182,20 @@ class StoreinfoController {
     shipTo.setCity(card.ship_city)
     shipTo.setState(card.ship_state)
     shipTo.setZip(card.ship_zip)
-    shipTo.setCountry(card.ship_ountry)
+    shipTo.setCountry(card.ship_country)
     var transactionRequestType = new ApiContracts.TransactionRequestType()
     transactionRequestType.setTransactionType(ApiContracts.TransactionTypeEnum.AUTHONLYTRANSACTION)
     transactionRequestType.setPayment(paymentType)
     transactionRequestType.setAmount(card.total_price)
-    // transactionRequestType.setLineItems(lineItems)
-    // transactionRequestType.setUserFields(userFields)
     transactionRequestType.setOrder(orderDetails)
-    transactionRequestType.setShipping(shipping)
     transactionRequestType.setBillTo(billTo)
-    // transactionRequestType.setShipTo(shipTo)
+    transactionRequestType.setShipTo(shipTo)
     var createRequest = new ApiContracts.CreateTransactionRequest()
     createRequest.setMerchantAuthentication(merchantAuthenticationType)
     createRequest.setTransactionRequest(transactionRequestType)
     var ctrl = new ApiControllers.CreateTransactionController(createRequest.getJSON())
-    ctrl.setEnvironment('https://apitest.authorize.net/xml/v1/request.api') // sandbox
-    // ctrl.setEnvironment('https://api.authorize.net/xml/v1/request.api') // production
+    // ctrl.setEnvironment('https://apitest.authorize.net/xml/v1/request.api') // sandbox
+    ctrl.setEnvironment('https://api.authorize.net/xml/v1/request.api') // production
     ctrl.execute(function () {
       var apiResponse = ctrl.getResponse()
       var response = new ApiContracts.CreateTransactionResponse(apiResponse)
