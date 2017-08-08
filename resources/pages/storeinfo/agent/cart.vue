@@ -473,7 +473,8 @@ export default {
         bill_city:'',
         bill_state:'',
         bill_zip:'',
-        bill_country:''
+        bill_country:'',
+        total_price: 0,
       },
     }
   },
@@ -487,7 +488,7 @@ export default {
       if(newValue < 1 ){
         this.$router.push(`/storeinfo/agent`)
       }
-    },
+    }
   },
   computed: {
     total () {
@@ -497,6 +498,7 @@ export default {
         item.total = item.order_price
         total += item.order_price
       })
+      this.card.total_price = total
       return total
     }
   },
