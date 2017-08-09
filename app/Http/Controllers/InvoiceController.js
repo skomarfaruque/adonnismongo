@@ -158,13 +158,16 @@ class InvoiceController {
   }
 
   * newFunc (res, invoiceInfo, paymentDescription, paymentTypeApp, discount, shippingAmount, tax) {
+    console.log(invoiceInfo)
     var errorInfo = 'no'
     var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
-    merchantAuthenticationType.setName('3x2uZZ6s')
+    merchantAuthenticationType.setName('3x2uZZ6s') // clients real info for production
     merchantAuthenticationType.setTransactionKey('79p7Ax97XLe7hLf2')
+    // merchantAuthenticationType.setName('2Hj65WGkT') // sandbox info
+    // merchantAuthenticationType.setTransactionKey('5V8t4sR7Bq3yP39z')
 
     var creditCard = new ApiContracts.CreditCardType()
-    // creditCard.setCardNumber('4242424242424242')
+    // creditCard.setCardNumber('4012888818888')
     // creditCard.setExpirationDate('0822')
     // creditCard.setCardCode('999')
     creditCard.setCardNumber(paymentDescription.card_no)
@@ -175,7 +178,8 @@ class InvoiceController {
     paymentType.setCreditCard(creditCard)
 
     var orderDetails = new ApiContracts.OrderType()
-    orderDetails.setInvoiceNumber('demo id')
+    orderDetails.setInvoiceNumber(invoiceInfo._id)
+    orderDetails.setInvoiceNumber('12')
     orderDetails.setDescription(invoiceInfo.description)
     var shipping = new ApiContracts.ExtendedAmountType()
     shipping.setAmount('1')
@@ -202,47 +206,10 @@ class InvoiceController {
     shipTo.setZip(paymentDescription.ship_zip)
     shipTo.setCountry(paymentDescription.ship_ountry)
 
-    var lineItemId1 = new ApiContracts.LineItemType()
-    lineItemId1.setItemId('1')
-    lineItemId1.setName('vase')
-    lineItemId1.setDescription('cannes logo')
-    lineItemId1.setQuantity('18')
-    lineItemId1.setUnitPrice(45.00)
-
-    var lineItemId2 = new ApiContracts.LineItemType()
-    lineItemId2.setItemId('2')
-    lineItemId2.setName('vase2')
-    lineItemId2.setDescription('cannes logo2')
-    lineItemId2.setQuantity('28')
-    lineItemId2.setUnitPrice('25.00')
-
-    var lineItemList = []
-    lineItemList.push(lineItemId1)
-    lineItemList.push(lineItemId2)
-
-    var lineItems = new ApiContracts.ArrayOfLineItem()
-    lineItems.setLineItem(lineItemList)
-
-    var userFieldA = new ApiContracts.UserField()
-    userFieldA.setName('A')
-    userFieldA.setValue('Aval')
-
-    var userFieldB = new ApiContracts.UserField()
-    userFieldB.setName('B')
-    userFieldB.setValue('Bval')
-
-    var userFieldList = []
-    userFieldList.push(userFieldA)
-    userFieldList.push(userFieldB)
-
-    var userFields = new ApiContracts.TransactionRequestType.UserFields()
-    userFields.setUserField(userFieldList)
     var transactionRequestType = new ApiContracts.TransactionRequestType()
     transactionRequestType.setTransactionType(ApiContracts.TransactionTypeEnum.AUTHONLYTRANSACTION)
     transactionRequestType.setPayment(paymentType)
-    transactionRequestType.setAmount(1)
-    transactionRequestType.setLineItems(lineItems)
-    // transactionRequestType.setUserFields(userFields)
+    transactionRequestType.setAmount(paymentDescription.grandTotal)
     transactionRequestType.setOrder(orderDetails)
     // transactionRequestType.setShipping(shipping)
     transactionRequestType.setBillTo(billTo)

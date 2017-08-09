@@ -966,7 +966,8 @@ export default {
       isCashOff: false,
       isCheckOff: false,
       isCreditOff: false,
-      showInput:false
+      showInput:false,
+      grandTotal: 0
     }
   },
   data () {
@@ -1011,6 +1012,7 @@ watch: {
       let tax = (this.total - parseFloat(!this.discount_final || this.discount_final<0?0:this.discount_final) + parseFloat(!this.shipping || this.shipping<0?0:this.shipping))*parseFloat(!this.totalTax || this.totalTax<0?0:this.totalTax)/100
       let price = (this.total - parseFloat(!this.discount_final || this.discount_final<0?0:this.discount_final) + parseFloat(!this.shipping || this.shipping<0?0:this.shipping))
       let grandTotal = tax + price
+      this.grandTotal = grandTotal
       return grandTotal
     },
     returnAmount (){
@@ -1072,6 +1074,7 @@ watch: {
       var self = this
       if (type === 'card') {
         this.card.exp_date = this.card.exp_month + this.card.exp_year
+        this.card.grandTotal = this.grandTotal
         paymentDescription = this.card
         console.log(paymentDescription)
       }  else {
