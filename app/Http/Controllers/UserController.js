@@ -102,11 +102,12 @@ class UserController {
     let resetToken = yield Hash.make(date.toISOString())
     date.setDate(date.getDate() + 7)
     let resetExp = date
-    const user = yield User.findOneAndUpdate({email: email}, {$set: {reset_token: resetToken, reset_exp: resetExp}}).exec()
+    const user = User.findOneAndUpdate({email: email}, {$set: {reset_token: resetToken, reset_exp: resetExp}}).exec()
+    console.log(user)
     if (!user) {
       return res.send('Email!')
     }
-    const resetUrl = `http://${Env.get('DOMAIN')}/user/passwordreset?re=${user.reset_token}`
+    const resetUrl = `http://${Env.get('DOMAIN')}/user/passwordreset?re=${resetToken}`
     yield Mail.raw('', message => {
       message.to(email, email)
       message.from('no-reply@backportal.com')
