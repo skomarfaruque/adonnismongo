@@ -203,7 +203,7 @@ class StoreinfoController {
       if (response != null) {
         if (response.getMessages().getResultCode() === ApiContracts.MessageTypeEnum.OK) {
           if (response.getTransactionResponse().getMessages() != null) {
-            Cart.update({ _id: cartsId }, { payment: card, is_paid: true, paymentDate: date })
+            Cart.update({ _id: cartsId }, { payment: card, is_paid: true, paymentDate: date }).exec()
             res.send({invoiceinfo: invoiceInfo, error: errorInfo})
           } else {
             if (response.getTransactionResponse().getErrors() != null) {
