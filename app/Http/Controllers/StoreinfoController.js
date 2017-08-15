@@ -146,7 +146,7 @@ class StoreinfoController {
     var errorInfo = 'no'
     var merchantAuthenticationType = new ApiContracts.MerchantAuthenticationType()
     merchantAuthenticationType.setName('3x2uZZ6s') // clients real info for production
-    merchantAuthenticationType.setTransactionKey('79p7Ax97XLe7hLf2')
+    merchantAuthenticationType.setTransactionKey('8A225r6g7RW3JrXD')
     // merchantAuthenticationType.setName('2Hj65WGkT') // sandbox info
     // merchantAuthenticationType.setTransactionKey('5V8t4sR7Bq3yP39z')
 
