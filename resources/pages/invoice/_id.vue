@@ -63,7 +63,7 @@
               </td>
               <td>{{i + 1}} </td>
               <td>{{item.description}}</td>
-              <td><input type="number" class="input" min="0"  step="any"  v-model="item.price"></td>
+              <td><input type="number" class="input" min="0"  step="any" @change="updateItemWithNewPrice"  v-model="item.price"></td>
               <td>{{item.quantity}}</td>
               <td>${{twoDigitFormat(item.price * item.quantity)}}</td>
 
@@ -1025,7 +1025,9 @@ watch: {
     save () {
 
     },
-
+    async updateItemWithNewPrice () {
+      await this.axios.post(`invoice/item-add`, { id: this.invoice._id, items: this.invoice.items })
+    },
     dateFormated (date) {
     return moment(date, 'YYYY-MM-DD').format('MM/DD/YYYY')
     },
