@@ -460,8 +460,9 @@
                     </div>
                     <div class="level-right">
                       <div class="level-item">
-                        <span><input class="input"  name="amount"  required type="number" v-model="check.amount" placeholder="Enter Amount">
+                        <span><input class="input"  name="amount"  required type="hidden" v-bind:value="twoDigitFormat(priceDisShipTax)" placeholder="Enter Amount">
                         </span>
+                        <span>${{twoDigitFormat(priceDisShipTax) }}</span>
                       </div>
                     </div>
                   </nav><br>
@@ -942,7 +943,7 @@ export default {
         bill_country:''
       },
       check: {
-        amount:'',
+        amount: '',
         check_no:'',
         account_no:'',
         check_front:'/_nuxt/img/logo.9fd5444.png',
@@ -1126,6 +1127,7 @@ watch: {
         }
         this.isCheckOff = false
         this.processing = true
+        console.log(formData)
         let newinfo = await this.axios.post(`invoice/payment`, formData)
           if (newinfo.data.error !=='no'){
             this.processing = false
